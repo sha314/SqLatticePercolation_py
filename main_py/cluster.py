@@ -16,6 +16,11 @@ class OneCluster:
         ret_str = ret_str.format(self.id, self.gid, len(self.site_ids), len(self.bond_ids))
         return ret_str
 
+    def is_empty(self):
+        if len(self.site_ids) == 0 and len(self.bond_ids) == 0:
+            return True
+        return False
+
     def set_id(self, id):
         """
         `id` of the cluster will allow us to isolate one particular cluster in `ClusterPool`
@@ -57,7 +62,15 @@ class OneCluster:
             self.bond_ids.append(bond_ids)
         pass
 
+    def get_bond_count(self):
+        return len(self.bond_ids)
+
+    def get_site_count(self):
+        return len(self.site_ids)
+
     def view(self):
+        if self.is_empty():
+            return
         print("cluster [", self.id, "] (gid ", self.gid, ") :{")
         print("  sites ({}) ".format(len(self.site_ids)), self.site_ids)
         print("  bonds ({}) ".format(len(self.bond_ids)), self.bond_ids)
@@ -77,6 +90,12 @@ class ClusterPool:
     def reset(self):
 
         pass
+
+    def get_cluster_bond_count(self, id):
+        return self.cluster_list[id].get_bond_count()
+
+    def get_cluster_site_count(self, id):
+        return self.cluster_list[id].get_site_count()
 
     def create_new_cluster(self, site_ids=[], bond_ids=[], lattice_ref=None):
         print("method : create_new_cluster")
@@ -98,6 +117,13 @@ class ClusterPool:
         self.cluster_list.append(clsstr)
         pass
 
+    def add_sites(self, index, site_ids):
+        self.cluster_list[index].add_sites(site_ids)
+        pass
+
+    def add_bonds(self, index, bond_ids):
+        self.cluster_list[index].add_bonds(bond_ids)
+        pass
     def get_cluster(self, cluster_id):
         if cluster_id >= len(self.cluster_list):
             print("Cluster does not exists")
@@ -112,6 +138,20 @@ class ClusterPool:
         :param lattice_ref:   so that it gid of sites and bonds can be modified here
         :return:
         """
+        gid = self.cluster_list[cluster_A_id].get_gid()
+        print("cluster ", cluster_A_id, " gid ", gid)
+        for bb in self.cluster_list[cluster_B_id].bond_ids:
+            lattice_ref.set_bond_gid_by_id(bb, gid)
+            pass
+        for ss in self.cluster_list[cluster_B_id].site_ids:
+            lattice_ref.set_site_gid_by_id(ss, gid)
+
+            pass
+        self.cluster_list[cluster_A_id].bond_ids += self.cluster_list[cluster_B_id].bond_ids
+        self.cluster_list[cluster_B_id].bond_ids = []
+        self.cluster_list[cluster_A_id].site_ids += self.cluster_list[cluster_B_id].site_ids
+        self.cluster_list[cluster_B_id].site_ids = []
+
 
         pass
 
@@ -123,7 +163,7 @@ class ClusterPool:
         :return:
         """
         print("View cluster < BEGIN")
-        print("self.cluster_list ", self.cluster_list)
+        # print("self.cluster_list ", self.cluster_list)
         for clstr in self.cluster_list:
             # print("clstr ", clstr)
             clstr.view()

@@ -7,10 +7,10 @@
 def print_hi():
     from main_py import lattice
     # lattice.test(5)
-    lattice.test_neighbors(6)
+    # lattice.test_neighbors(6)
 
-    # from main_py import percolation_sq_lattice
-    # percolation_sq_lattice.test_site_percolation()
+    from main_py import percolation_sq_lattice
+    percolation_sq_lattice.test_site_percolation()
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

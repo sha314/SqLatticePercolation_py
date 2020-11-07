@@ -62,14 +62,38 @@ class SitePercolation(Percolation):
 
     def place_one_site(self):
         print("place_one_site")
+        if self.current_idx >= self.lattice_ref.site_count:
+            print("No sites to occupy")
+            return False
         selected_id = self.site_ids_indices[self.current_idx]
         site = self.lattice_ref.get_site_by_id(selected_id)
-        print(site)
-        print(site.connecting_bonds())
+        print("selected site ", site)
+        bond_neighbors = site.connecting_bonds()
+        merged_cluster_index = self.merge_clusters(bond_neighbors)
+        self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
+        self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
         self.current_idx += 1
+        return True
+
+    def merge_clusters(self, bond_neighbors):
+        ref_sz = 0
+        root_clstr = 0
+        for bb in bond_neighbors:
+            sz = self.cluster_pool_ref.get_cluster_bond_count(bb)
+            if sz >= ref_sz:
+                root_clstr = bb
+                ref_sz = sz
+                pass
+            pass
+        print("root cluster is ", root_clstr)
+        for bb in bond_neighbors:
+            if bb == root_clstr:
+                continue
+            self.cluster_pool_ref.merge_cluster_with(root_clstr, bb, self.lattice_ref)
+            pass
+
+        return root_clstr
         pass
-
-
 
 
 class BondPercolation(Percolation):
@@ -79,10 +103,16 @@ class BondPercolation(Percolation):
 
 
 def test_site_percolation():
-    sq_lattice_p = SitePercolation(length=5, seed=0)
+    sq_lattice_p = SitePercolation(length=3, seed=0)
     sq_lattice_p.viewCluster()
     sq_lattice_p.viewLattice(1)
 
     sq_lattice_p.place_one_site()
-    # sq_lattice_p.viewLattice()
-    # sq_lattice_p.viewCluster()
+
+    sq_lattice_p.viewLattice(1)
+    sq_lattice_p.viewCluster()
+
+    sq_lattice_p.place_one_site()
+
+    sq_lattice_p.viewLattice(1)
+    sq_lattice_p.viewCluster()

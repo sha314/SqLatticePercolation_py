@@ -5,12 +5,18 @@ from main_py.bond import Bond
 class Lattice:
     def __init__(self, length):
         self.length = length
+        self.bond_count = 2*length**2
+        self.site_count = length ** 2
         self.site_matrix = [0] * length**2
         self.site_ids = range(0, length**2)
         self.bond_ids = range(0, 2*length ** 2)
         self.bond_matrix = [0] * 2 * length ** 2
         self.init_lattice()
         self.init_ids()
+        pass
+
+    def reset(self):
+
         pass
 
     def init_lattice(self):
@@ -32,13 +38,68 @@ class Lattice:
         print(self.bond_matrix)
         pass
 
+    def bottom_bond_of_site(self, s0_index):
+        return s0_index + self.site_count
+        pass
+
+    def top_bond_of_site(self, s0_index):
+        """
+        top index of a site 'm' is the bottom index of some other site 'n'.
+        n = (m + 2*L*L - L) (mod L*L)
+        """
+        of_bottom_site = (s0_index+self.bond_count-self.length)%self.site_count
+        return self.bottom_bond_of_site(of_bottom_site)
+        pass
+
+    def right_bond_of_site(self, s0_index):
+        return s0_index
+
+    def left_bond_of_site(self, s0_index):
+        """
+        left index of a site 'm' is the right index of some other site 'n'.
+        n =
+        """
+        col, row = self.get_row_col_from_id(s0_index)
+        left_site = row*self.length + (col + self.length - 1) % self.length
+        print("left of ", s0_index, " is the right of ", left_site)
+        return self.right_bond_of_site(left_site)
+
+    def get_row_col_from_id(self, s0_index):
+        row = s0_index // self.length
+        col = s0_index % self.length
+        return col, row
+
+    def find_neighbor_bonds(self, s0_index):
+        right_bond = self.right_bond_of_site(s0_index)
+        # bottom_bond = s0_index + self.site_count
+        bottom_bond = self.bottom_bond_of_site(s0_index)
+        # left_bond = (s0_index + self.length - 1) % self.length
+        left_bond = self.left_bond_of_site(s0_index)
+        # top_bond = (s0_index+self.bond_count-self.length)%self.site_count + self.site_count
+        top_bond = self.top_bond_of_site(s0_index)
+        return [right_bond, bottom_bond, left_bond, top_bond]
+        pass
+
+    def get_neighbor_bonds(self, s0_index):
+        return self.site_matrix[s0_index].connecting_bonds()
+        pass
+
+    def get_neighbor_sites(self, b0_index):
+        return self.bond_matrix[b0_index].connected_sites()
+
     def init_ids(self):
         for rr in range(self.length):
             for cc in range(self.length):
                 s0_index = rr*self.length + cc
-                s1_index = rr*self.length + (cc+1) % self.length
-                self.site_matrix[s0_index].add_connecting_bond(s0_index)
-                self.site_matrix[s1_index].add_connecting_bond(s1_index)
+                bonds = self.find_neighbor_bonds(s0_index)
+                self.site_matrix[s0_index].add_connecting_bond(bonds)
+                for bb in bonds:
+                    self.bond_matrix[bb].add_connected_site(s0_index)
+                    pass
+                # self.site_matrix[s0_index].add_connecting_bond(right_bond)
+                # self.site_matrix[s0_index].add_connecting_bond(bottom_bond)
+                # self.site_matrix[s0_index].add_connecting_bond(left_bond)
+                # self.site_matrix[s0_index].add_connecting_bond(top_bond)
                 # v_bond_index = s_index+self.length**2
                 # self.site_matrix[s_index] = Site(rr, cc)
                 # self.bond_matrix[s_index] = Bond(rr, cc)
@@ -97,15 +158,21 @@ class Lattice:
         print("{site}           {horizontal bond}")
         print("{vertical bond}  {               }")
         print("The lattice : ")
+        print("<--VIEW BEGIN-->")
+        self.print_row_separator()
         for rr in range(self.length):
             a = self.get_row_str(rr, formatt)
             print(a)
             b = self.get_row_v_str(rr, formatt)
             print(b)
+            self.print_row_separator()
             pass
-        print("<--", end='')
+        print("<--VIEW END-->")
+        pass
+
+    def print_row_separator(self):
         for cc in range(self.length):
-            print("---------#---------", end='')
+            print("----------------------------------", end='')
             pass
         print()
         pass
@@ -144,4 +211,22 @@ def test(length):
     lattice.view(0)
     lattice.view(1)
     lattice.view(2)
+    # print(lattice.get_row_str(0))
+
+
+def test_neighbors(length):
+    lattice = Lattice(length)
+    # lattice.view(0)
+    lattice.view(1)
+    # lattice.view(2)
+
+    print(lattice.get_neighbor_bonds(0))
+    print(lattice.get_neighbor_bonds(2))
+    print(lattice.get_neighbor_bonds(5))
+    print(lattice.get_neighbor_bonds(13))
+    print(lattice.get_neighbor_bonds(19))
+    print(lattice.get_neighbor_sites(5))
+    print(lattice.get_neighbor_sites(8))
+    print(lattice.get_neighbor_sites(50))
+
     # print(lattice.get_row_str(0))

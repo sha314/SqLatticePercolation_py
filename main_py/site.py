@@ -32,7 +32,16 @@ class Site(Element):
         if len(self.connecting_bond_ids) >= 4:
             print("A site connects only four bonds")
             return
-        self.connecting_bond_ids.append(bond_id)
+
+        if type(bond_id) is list:
+            if len(bond_id) == 4:
+                self.connecting_bond_ids += bond_id
+                print("site ", self.id, " got bonds ", bond_id)
+                pass
+            pass
+        else:
+            print("site ", self.id, " got bond ", bond_id)
+            self.connecting_bond_ids.append(bond_id)
 
     def connecting_bonds(self):
         return self.connecting_bond_ids

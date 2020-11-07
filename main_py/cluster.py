@@ -74,6 +74,10 @@ class ClusterPool:
         self.cluster_id=0
         pass
 
+    def reset(self):
+
+        pass
+
     def create_new_cluster(self, site_ids=[], bond_ids=[], lattice_ref=None):
         print("method : create_new_cluster")
         clsstr = OneCluster()

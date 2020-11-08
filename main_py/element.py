@@ -18,3 +18,6 @@ class Element:
             print("!!warning!! id is not set.")
             pass
         self.g_id = gid
+
+    def get_gid(self):
+        return self.g_id

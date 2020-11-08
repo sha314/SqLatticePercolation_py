@@ -68,14 +68,21 @@ class OneCluster:
     def get_site_count(self):
         return len(self.site_ids)
 
+    def clear(self):
+        self.site_ids = []
+        self.bond_ids = []
+        self.gid = -1
+        self.id = -1
+        pass
+
     def view(self):
         if self.is_empty():
-            return
+            return 0
         print("cluster [", self.id, "] (gid ", self.gid, ") :{")
         print("  sites ({}) ".format(len(self.site_ids)), self.site_ids)
         print("  bonds ({}) ".format(len(self.bond_ids)), self.bond_ids)
         print("}")
-        pass
+        return 1
 
 
 class ClusterPool:
@@ -148,9 +155,8 @@ class ClusterPool:
 
             pass
         self.cluster_list[cluster_A_id].bond_ids += self.cluster_list[cluster_B_id].bond_ids
-        self.cluster_list[cluster_B_id].bond_ids = []
         self.cluster_list[cluster_A_id].site_ids += self.cluster_list[cluster_B_id].site_ids
-        self.cluster_list[cluster_B_id].site_ids = []
+        self.cluster_list[cluster_B_id].clear()
 
 
         pass
@@ -164,10 +170,12 @@ class ClusterPool:
         """
         print("View cluster < BEGIN")
         # print("self.cluster_list ", self.cluster_list)
+        counter = 0
         for clstr in self.cluster_list:
             # print("clstr ", clstr)
-            clstr.view()
+            counter += clstr.view()
             pass
         print("\n View cluster END >")
+        print("Number of clusters ", counter)
         pass
 

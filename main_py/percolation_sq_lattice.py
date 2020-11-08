@@ -69,13 +69,15 @@ class SitePercolation(Percolation):
         site = self.lattice_ref.get_site_by_id(selected_id)
         print("selected site ", site)
         bond_neighbors = site.connecting_bonds()
-        merged_cluster_index = self.merge_clusters(bond_neighbors)
+        bond_gids = self.get_bond_gids(bond_neighbors)
+        merged_cluster_index = self.merge_clusters(bond_gids)
         self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
         self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
         self.current_idx += 1
         return True
 
     def merge_clusters(self, bond_neighbors):
+        print("merging clusters ", bond_neighbors)
         ref_sz = 0
         root_clstr = 0
         for bb in bond_neighbors:
@@ -88,12 +90,21 @@ class SitePercolation(Percolation):
         print("root cluster is ", root_clstr)
         for bb in bond_neighbors:
             if bb == root_clstr:
+                print("bb ", bb, " is a root cluster")
                 continue
+            print("merging ", bb, " to ", root_clstr)
             self.cluster_pool_ref.merge_cluster_with(root_clstr, bb, self.lattice_ref)
             pass
 
         return root_clstr
         pass
+
+    def get_bond_gids(self, bond_ids):
+        gids = set()
+        for bb in bond_ids:
+            gid = self.lattice_ref.get_bond_by_id(bb).get_gid()
+            gids.add(gid)
+        return list(gids)
 
 
 class BondPercolation(Percolation):
@@ -103,7 +114,7 @@ class BondPercolation(Percolation):
 
 
 def test_site_percolation():
-    sq_lattice_p = SitePercolation(length=3, seed=0)
+    sq_lattice_p = SitePercolation(length=5, seed=0)
     sq_lattice_p.viewCluster()
     sq_lattice_p.viewLattice(1)
 
@@ -114,5 +125,14 @@ def test_site_percolation():
 
     sq_lattice_p.place_one_site()
 
+    sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.viewCluster()
+
+    sq_lattice_p.place_one_site()
+
+    sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.viewCluster()
+    while sq_lattice_p.place_one_site():
+        continue
     sq_lattice_p.viewLattice(1)
     sq_lattice_p.viewCluster()

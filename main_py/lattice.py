@@ -125,6 +125,15 @@ class Lattice:
         self.bond_matrix[id].set_gid(gid)
         pass
 
+    def get_site_gid_by_id(self, id):
+        return self.site_matrix[id].get_gid()
+        pass
+
+    def get_bond_gid_by_id(self, id):
+        print("id ", id)
+        return self.bond_matrix[id].get_gid()
+        pass
+
     def get_site_by_index(self, row, col):
         s0_index = row * self.length + col
         return self.site_matrix[s0_index]
@@ -229,8 +238,9 @@ class Lattice:
         self.site_matrix[s_index].init_relative_index()
         pass
 
-    def set_relative_index(self, relative_index):
-
+    def set_relative_index(self, id, relative_index):
+        s_index = self.site_ids[id]
+        self.site_matrix[s_index].set_relative_index(relative_index)
         pass
     pass
 

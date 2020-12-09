@@ -40,7 +40,7 @@ class RelativeIndex(Index):
         x value increases as we go downward
 
     """
-    def __init__(self, x_rel=-1, y_rel=-1):
+    def __init__(self, x_rel=0, y_rel=0):
         super().__init__(x_rel, y_rel)
         # self.x_coord = x_rel
         # self.y_coord = y_rel
@@ -59,6 +59,9 @@ class RelativeIndex(Index):
 if __name__ == '__main__':
     oldA = Index(2, 3)
     newA = Index(5, 7)
+    rnewA = RelativeIndex(5, 7)
     print(newA - oldA)
     newA -= oldA
     print(newA)
+    print(type(newA))
+    print(oldA - rnewA)

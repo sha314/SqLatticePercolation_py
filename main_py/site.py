@@ -67,4 +67,7 @@ class Site(Element, Index):
     def get_relative_index(self):
         return self.relative_index
 
+    def set_relative_index(self, r_index):
+        self.relative_index = r_index
+
 

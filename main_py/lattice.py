@@ -170,6 +170,26 @@ class Lattice:
         print("<--VIEW END-->")
         pass
 
+    def view_relative_index(self):
+        print("Upper Left corner is <0,0>")
+        print("<x,y> means relative index")
+        print("90 degree Clockwise rotated Coordinate system")
+        print("y value increases as we go rightward. Like columns")
+        print("x value increases as we go downward . Like rows")
+        print("<--Relative index - VIEW BEGIN-->")
+        self.print_row_separator()
+        for rr in range(self.length):
+            for cc in range(self.length):
+                s_index = rr * self.length + cc
+                a = self.site_matrix[s_index].relative_index
+                print(a, end=' |')
+                pass
+            print()
+            pass
+        self.print_row_separator()
+        print("<--Relative index - VIEW END-->")
+        pass
+
     def print_row_separator(self):
         for cc in range(self.length):
             print("----------------------------------", end='')
@@ -203,6 +223,15 @@ class Lattice:
 
             pass
         return r_string
+
+    def init_relative_index(self, id):
+        s_index = self.site_ids[id]
+        self.site_matrix[s_index].init_relative_index()
+        pass
+
+    def set_relative_index(self, relative_index):
+
+        pass
     pass
 
 

@@ -1,5 +1,5 @@
 from main_py.element import Element
-
+from main_py.index import RelativeIndex
 
 class Site(Element):
     def __init__(self, row, col):
@@ -8,6 +8,7 @@ class Site(Element):
         self.row = row
         self.col = col
         self.connecting_bond_ids = []
+        self.relative_index = RelativeIndex()
 
     def __str__(self):
         if self.g_id is not None:
@@ -17,6 +18,16 @@ class Site(Element):
         else:
             return self.get_str(0)
         pass
+
+    def get_index(self):
+        return self.row, self.col
+    pass
+
+    def get_gid(self):
+        return self.g_id
+
+    def get_id(self):
+        return self.id
 
     def get_str(self, formatt=0):
         if formatt == 1:
@@ -45,5 +56,9 @@ class Site(Element):
 
     def connecting_bonds(self):
         return self.connecting_bond_ids
+
+    def init_relative_index(self):
+        self.relative_index = RelativeIndex(0, 0)
+        pass
 
 

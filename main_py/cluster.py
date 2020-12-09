@@ -105,7 +105,7 @@ class ClusterPool:
         return self.cluster_list[id].get_site_count()
 
     def create_new_cluster(self, site_ids=[], bond_ids=[], lattice_ref=None):
-        print("method : create_new_cluster")
+        # print("method : create_new_cluster")
         clsstr = OneCluster()
         clsstr.add_sites(site_ids)
         clsstr.add_bonds(bond_ids)
@@ -120,7 +120,8 @@ class ClusterPool:
             lattice_ref.set_bond_gid_by_id(bb, self.cluster_id) # re assign group id
             pass
         self.cluster_id += 1
-        print(clsstr)
+        # print("clsstr ")
+        # print(clsstr)
         self.cluster_list.append(clsstr)
         pass
 

@@ -1,6 +1,7 @@
 from main_py import lattice
 from main_py import cluster
 import random
+from main_py.index import Index
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -37,6 +38,33 @@ class Percolation:
     def viewCluster(self):
         self.cluster_pool_ref.view()
         pass
+
+    def get_bond_gids(self, bond_ids):
+        gids = set()
+        for bb in bond_ids:
+            gid = self.lattice_ref.get_bond_by_id(bb).get_gid()
+            gids.add(gid)
+        return list(gids)
+
+    def get_site_gids(self, site_ids):
+        gids = set()
+        for ss in site_ids:
+            gid = self.lattice_ref.get_site_by_id(ss).get_gid()
+            gids.add(gid)
+        return list(gids)
+        pass
+
+    def get_relative_index(self, old_site_id, new_site_id):
+        old_index = self.lattice_ref.get_site_by_id(old_site_id).get_index()
+        new_index = self.lattice_ref.get_site_by_id(new_site_id).get_index()
+        del_r, del_c = new_index - old_index
+        old_relative_index = self.lattice_ref.get_site_by_id(old_site_id).get_relative_index()
+        # new_relative_index = self.lattice_ref.get_site_by_id(new_site_id).get_relative_index()
+        new_relative_index = old_relative_index + Index(del_r, del_c)
+        return new_relative_index
+
+    def get_change_in_relative_index(self, old_relative_index, new_relative_index):
+        return new_relative_index - old_relative_index
 
 
 class SitePercolation(Percolation):
@@ -99,7 +127,7 @@ class SitePercolation(Percolation):
         bond_neighbors = self.current_site.connecting_bonds()
         site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
         
-        merged_cluster_index = self.merge_clusters(site_neighbors, bond_neighbors)
+        merged_cluster_index = self.merge_clusters_v2(site_neighbors, bond_neighbors)
         self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
         self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
         self.current_idx += 1
@@ -129,19 +157,32 @@ class SitePercolation(Percolation):
         return root_clstr
         pass
 
-    def get_relative_index(self, old_site_id, new_site_id):
-        old_index = self.lattice_ref.get_site_by_id(old_site_id).get_index()
-        new_index = self.lattice_ref.get_site_by_id(new_site_id).get_index()
-        del_r, del_c = new_index - old_index
-        old_relative_index = self.lattice_ref.get_site_by_id(old_site_id).get_relative_index()
-        pass
+    def merge_clusters_v2(self, site_neighbors, bond_neighbors):
+        """
+        merging with relabeling relative indices
+        """
+        bond_gids = self.get_bond_gids(bond_neighbors)
+        print("merging clusters ", bond_gids)
+        ref_sz = 0
+        root_clstr = 0
+        for bb in bond_gids:
+            sz = self.cluster_pool_ref.get_cluster_bond_count(bb)
+            if sz >= ref_sz:
+                root_clstr = bb
+                ref_sz = sz
+                pass
+            pass
+        print("root cluster is ", root_clstr)
+        for bb in bond_gids:
+            if bb == root_clstr:
+                print("bb ", bb, " is a root cluster")
+                continue
+            print("merging ", bb, " to ", root_clstr)
+            self.cluster_pool_ref.merge_cluster_with(root_clstr, bb, self.lattice_ref)
+            pass
 
-    def get_bond_gids(self, bond_ids):
-        gids = set()
-        for bb in bond_ids:
-            gid = self.lattice_ref.get_bond_by_id(bb).get_gid()
-            gids.add(gid)
-        return list(gids)
+        return root_clstr
+        pass
 
 
 class BondPercolation(Percolation):

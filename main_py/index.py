@@ -1,5 +1,35 @@
 
-class RelativeIndex:
+
+
+class Index:
+    def __init__(self, row=-1, col=-1):
+        self.component_1 = row
+        self.component_2 = col
+        pass
+
+    def __sub__(self, other):
+        del_row = self.component_1 - other.component_1
+        del_col = self.component_2 - other.component_2
+        return del_row, del_col
+
+    def __add__(self, other):
+        component_1 = self.component_1 + other.component_1
+        component_2 = self.component_2 + other.component_2
+        return component_1, component_2
+    # def __rsub__(self, other):
+    #     return self.__sub__(other)
+
+    def row(self):
+        return self.component_1
+
+    def column(self):
+        return self.component_2
+
+    def __str__(self):
+        return "({},{})".format(self.component_1, self.component_2)
+    pass
+
+class RelativeIndex(Index):
     """
     To find the wrapping cluster we need to use the relative index of sites.
 
@@ -11,44 +41,21 @@ class RelativeIndex:
 
     """
     def __init__(self, x_rel=-1, y_rel=-1):
-        self.x_coord = x_rel
-        self.y_coord = y_rel
-        pass
+        super().__init__(x_rel, y_rel)
+        # self.x_coord = x_rel
+        # self.y_coord = y_rel
+
+    def x_coord(self):
+        return self.component_1
+
+    def y_coord(self):
+        return self.component_2
 
     def __str__(self):
-        return "<{},{}>".format(self.x_coord, self.y_coord)
+        return "<{},{}>".format(self.component_1, self.component_2)
 
-    def __add__(self, other):
-        x_coord = self.x_coord + other.x_coord
-        y_coord = self.y_coord + other.y_coord
-        return x_coord, y_coord
+
     pass
-
-class Index:
-    def __init__(self, row=-1, col=-1):
-        self._row = row
-        self._col = col
-        pass
-
-    def __sub__(self, other):
-        del_row = self._row - other._row
-        del_col = self._col - other._col
-        return del_row, del_col
-
-    # def __rsub__(self, other):
-    #     return self.__sub__(other)
-
-    def row(self):
-        return self._row
-
-    def column(self):
-        return self._col
-
-    def __str__(self):
-        return "({},{})".format(self._row, self._col)
-    pass
-
-
 if __name__ == '__main__':
     oldA = Index(2, 3)
     newA = Index(5, 7)

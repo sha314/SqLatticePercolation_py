@@ -46,6 +46,7 @@ class SitePercolation(Percolation):
         self.site_ids_indices = list(range(0, self.lattice_ref.length**2))
         self.current_idx = 0
         self.shuffle()
+        self.current_site = None
         pass
 
     def init_clusters(self):
@@ -92,11 +93,11 @@ class SitePercolation(Percolation):
             print("No sites to occupy")
             return False
         selected_id = self.site_ids_indices[self.current_idx]
-        site = self.lattice_ref.get_site_by_id(selected_id)
-        print("selected site ", site)
+        self.current_site = self.lattice_ref.get_site_by_id(selected_id)
+        print("selected site ", self.current_site)
         self.lattice_ref.init_relative_index(selected_id)  # initialize relative index
-        bond_neighbors = site.connecting_bonds()
-        site_neighbors = self.get_connected_sites(site, bond_neighbors)
+        bond_neighbors = self.current_site.connecting_bonds()
+        site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
         
         merged_cluster_index = self.merge_clusters(site_neighbors, bond_neighbors)
         self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
@@ -126,6 +127,13 @@ class SitePercolation(Percolation):
             pass
 
         return root_clstr
+        pass
+
+    def get_relative_index(self, old_site_id, new_site_id):
+        old_index = self.lattice_ref.get_site_by_id(old_site_id).get_index()
+        new_index = self.lattice_ref.get_site_by_id(new_site_id).get_index()
+        del_r, del_c = new_index - old_index
+        old_relative_index = self.lattice_ref.get_site_by_id(old_site_id).get_relative_index()
         pass
 
     def get_bond_gids(self, bond_ids):
@@ -164,6 +172,8 @@ def test_site_percolation():
     while sq_lattice_p.place_one_site():
         continue
     sq_lattice_p.viewLattice(1)
+    sq_lattice_p.viewLattice(2)
+    sq_lattice_p.viewLattice(0)
     sq_lattice_p.viewCluster()
 
 def test_relative_index():

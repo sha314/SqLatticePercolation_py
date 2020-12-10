@@ -10,12 +10,12 @@ class Index:
     def __sub__(self, other):
         del_row = self.component_1 - other.component_1
         del_col = self.component_2 - other.component_2
-        return del_row, del_col
+        return Index(del_row, del_col)
 
     def __add__(self, other):
         component_1 = self.component_1 + other.component_1
         component_2 = self.component_2 + other.component_2
-        return component_1, component_2
+        return Index(component_1, component_2)
     # def __rsub__(self, other):
     #     return self.__sub__(other)
 

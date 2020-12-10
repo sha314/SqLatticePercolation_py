@@ -66,15 +66,16 @@ class Percolation:
         new_index = self.lattice_ref.get_site_by_id(new_site_id).get_index()
         print("old_index ", old_index)
         print("new_index ", new_index)
-        del_r, del_c = new_index - old_index
+        idx = new_index - old_index
         old_relative_index = self.lattice_ref.get_site_by_id(old_site_id).get_relative_index()
         # new_relative_index = self.lattice_ref.get_site_by_id(new_site_id).get_relative_index()
         print(old_relative_index, " old_relative_index type ", type(old_relative_index))
-        new_relative_index = old_relative_index + Index(del_r, del_c)
-        return RelativeIndex(new_relative_index[0], new_relative_index[1])
+        new_relative_index = old_relative_index + idx
+        return new_relative_index
 
     def get_change_in_relative_index(self, old_relative_index, new_relative_index):
-        return new_relative_index - old_relative_index
+        change = new_relative_index - old_relative_index
+        return change
 
 
 class SitePercolation(Percolation):
@@ -194,7 +195,7 @@ class SitePercolation(Percolation):
         # print("set minus ", set(site_gids) - set(bond_gids))
         # print("merging clusters ", bond_gids)
         ref_sz = 0
-        root_clstr = 0
+        root_clstr = bond_gids[0]
         for bbg in bond_gids:
             sz = self.cluster_pool_ref.get_cluster_bond_count(bbg)
             if sz >= ref_sz:
@@ -203,6 +204,7 @@ class SitePercolation(Percolation):
                 pass
             pass
         print("root cluster is ", root_clstr)
+        print("Assign and relabel currently selected site")
         for bb in bond_neighbors:
             bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
             if bbg == root_clstr:
@@ -218,8 +220,27 @@ class SitePercolation(Percolation):
                 else:
                     print("does not belong to any cluster yet")
                 continue
-            # print("relabeling relative index ")
-            # self.relabel_relative_indices(bbg)
+                pass
+            pass
+        pass
+        print("Relabel all cluster according to root cluster and selected site")
+        for bb in bond_neighbors:
+            bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
+            if bbg == root_clstr:
+                print("bb ", bbg, " is a root cluster")
+                # # relabel and assign the current site here
+                # self.lattice_ref.set_site_gid_by_id(self.selected_id, root_clstr)
+                # self.cluster_pool_ref.add_sites(root_clstr, self.selected_id)
+                # # relabeling current site. relative index
+                # neighbor_site = self.get_neighbor_site(self.current_site.get_id(), bb)
+                # if self.lattice_ref.get_site_gid_by_id(neighbor_site) >= 0:
+                #     rri = self.get_relative_index(neighbor_site, self.selected_id)
+                #     self.lattice_ref.set_relative_index(self.selected_id, rri)
+                # else:
+                #     print("does not belong to any cluster yet")
+                continue
+            print("relabeling relative index of cluster ", bbg)
+            self.relabel_relative_indices(bb)
             print("merging ", bbg, " to ", root_clstr)
             self.cluster_pool_ref.merge_cluster_with(root_clstr, bbg, self.lattice_ref)
             pass
@@ -233,10 +254,24 @@ class SitePercolation(Percolation):
         return root_clstr
         pass
 
-    def relabel_relative_indices(self, bond_gid):
-        neighbor_site = self.get_neighbor_site(self.current_site, bond_gid)
-        self.get_relative_index(self.current_site, self.nei)
-        self.cluster_list[bond_gid].bond_ids
+    def relabel_relative_indices(self, connecting_bond):
+        bond = self.lattice_ref.get_bond_by_id(connecting_bond)
+        bbg = bond.get_gid()
+        neighbor_site = self.get_neighbor_site(self.current_site.get_id(), bond.get_id())
+        sites_to_relabel = self.cluster_pool_ref.get_sites(bbg)
+        print("sites_to_relabel ", sites_to_relabel)
+        if self.lattice_ref.get_site_gid_by_id(neighbor_site) >= 0:
+            old_relative_index = self.get_relative_index(neighbor_site, self.selected_id)
+            for ss in sites_to_relabel:
+                new_relative_index = self.lattice_ref.get_site_by_id(ss).get_relative_index()
+                change = self.get_change_in_relative_index(old_relative_index, new_relative_index)
+                print(type(change))
+                print("new_relative_index type ", type(new_relative_index))
+                new_relative_index = new_relative_index + change
+                self.lattice_ref.get_site_by_id(ss).set_relative_index(new_relative_index)
+                pass
+            pass
+
         pass
 
 
@@ -321,10 +356,10 @@ def test_relative_index():
     #
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
-    while sq_lattice_p.place_one_site():
-        continue
-    sq_lattice_p.place_one_site()
-    sq_lattice_p.viewLattice(3)
+    # while sq_lattice_p.place_one_site():
+    #     continue
+    # sq_lattice_p.place_one_site()
+    # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
     pass

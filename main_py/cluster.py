@@ -54,6 +54,9 @@ class OneCluster:
             pass
         pass
 
+    def get_sites(self):
+        return self.site_ids
+
     def add_bonds(self, bond_ids):
         if type(bond_ids) is list:
             self.bond_ids += bond_ids
@@ -61,6 +64,9 @@ class OneCluster:
         else:
             self.bond_ids.append(bond_ids)
         pass
+
+    def get_bonds(self):
+        return self.bond_ids
 
     def get_bond_count(self):
         return len(self.bond_ids)
@@ -132,6 +138,13 @@ class ClusterPool:
     def add_bonds(self, index, bond_ids):
         self.cluster_list[index].add_bonds(bond_ids)
         pass
+
+    def get_sites(self, index):
+        return self.cluster_list[index].get_sites()
+
+    def get_bonds(self, index):
+        return self.cluster_list[index].get_bonds()
+
     def get_cluster(self, cluster_id):
         if cluster_id >= len(self.cluster_list):
             print("Cluster does not exists")

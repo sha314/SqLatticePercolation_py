@@ -169,10 +169,10 @@ class ClusterPool:
             lattice_ref.set_bond_gid_by_id(bb, gid)
             pass
         for ss in self.cluster_list[cluster_B_id].site_ids:
-            print("todo: site ", ss, " gid => ", gid)
+            # print("todo: site ", ss, " gid => ", gid)
             lattice_ref.set_site_gid_by_id(ss, gid)
             tmp = lattice_ref.get_site_by_id(ss).get_gid()
-            print("done: site ", ss, " gid => ", tmp)
+            # print("done: site ", ss, " gid => ", tmp)
             pass
         self.cluster_list[cluster_A_id].bond_ids += self.cluster_list[cluster_B_id].bond_ids
         self.cluster_list[cluster_A_id].site_ids += self.cluster_list[cluster_B_id].site_ids

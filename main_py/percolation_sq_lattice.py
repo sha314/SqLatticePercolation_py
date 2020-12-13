@@ -71,11 +71,13 @@ class Percolation:
         # new_relative_index = self.lattice_ref.get_site_by_id(new_site_id).get_relative_index()
         print(old_relative_index, " old_relative_index type ", type(old_relative_index))
         new_relative_index = old_relative_index + idx
-        return new_relative_index
+        # print("new_relative_index type ", type(new_relative_index))
+        # print("new_relative_index type ", type(RelativeIndex(index=new_relative_index)))
+        return RelativeIndex(index=new_relative_index)
 
     def get_change_in_relative_index(self, old_relative_index, new_relative_index):
         change = new_relative_index - old_relative_index
-        return change
+        return RelativeIndex(index=change)
 
 
 class SitePercolation(Percolation):
@@ -149,7 +151,7 @@ class SitePercolation(Percolation):
             return False
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        print("selected site ", self.current_site)
+        print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
         self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
         bond_neighbors = self.current_site.connecting_bonds()
         # site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
@@ -268,6 +270,7 @@ class SitePercolation(Percolation):
                 print(type(change))
                 print("new_relative_index type ", type(new_relative_index))
                 new_relative_index = new_relative_index + change
+                new_relative_index = RelativeIndex(index=new_relative_index)
                 self.lattice_ref.get_site_by_id(ss).set_relative_index(new_relative_index)
                 pass
             pass
@@ -315,15 +318,15 @@ def test_relative_index():
 
     sq_lattice_p.place_one_site()
     # sq_lattice_p.viewLattice(1)
-    # sq_lattice_p.viewLattice(3)
+    sq_lattice_p.viewLattice(3)
 
     sq_lattice_p.place_one_site()
     # sq_lattice_p.viewLattice(1)
-    # sq_lattice_p.viewLattice(3)
+    sq_lattice_p.viewLattice(3)
 
     sq_lattice_p.place_one_site()
     # sq_lattice_p.viewLattice(1)
-    # sq_lattice_p.viewLattice(3)
+    sq_lattice_p.viewLattice(3)
     # print("***** THISIS ****")
     sq_lattice_p.place_one_site()
     sq_lattice_p.viewLattice(1)

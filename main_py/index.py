@@ -26,7 +26,7 @@ class Index:
         return self.component_2
 
     def __str__(self):
-        return "({},{})".format(self.component_1, self.component_2)
+        return "({:3},{:3})".format(self.component_1, self.component_2)
     pass
 
 class RelativeIndex(Index):
@@ -40,8 +40,12 @@ class RelativeIndex(Index):
         x value increases as we go downward
 
     """
-    def __init__(self, x_rel=0, y_rel=0):
-        super().__init__(x_rel, y_rel)
+    def __init__(self, x_rel=0, y_rel=0, index=None):
+        if index is None:
+            super().__init__(x_rel, y_rel)
+            pass
+        if type(index) is Index:
+            super().__init__(index.component_1, index.component_2)
         # self.x_coord = x_rel
         # self.y_coord = y_rel
 
@@ -52,7 +56,7 @@ class RelativeIndex(Index):
         return self.component_2
 
     def __str__(self):
-        return "<{},{}>".format(self.component_1, self.component_2)
+        return "<{:3},{:3}>".format(self.component_1, self.component_2)
 
 
     pass
@@ -65,3 +69,4 @@ if __name__ == '__main__':
     print(newA)
     print(type(newA))
     print(oldA - rnewA)
+    print(RelativeIndex(index=oldA))

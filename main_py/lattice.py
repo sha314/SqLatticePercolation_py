@@ -35,7 +35,7 @@ class Lattice:
 
                 pass
             pass
-        print(self.bond_matrix)
+        # print("self.bond_matrix ", self.bond_matrix)
         pass
 
     def bottom_bond_of_site(self, s0_index):
@@ -61,7 +61,7 @@ class Lattice:
         """
         col, row = self.get_row_col_from_id(s0_index)
         left_site = row*self.length + (col + self.length - 1) % self.length
-        print("left of ", s0_index, " is the right of ", left_site)
+        # print("left of ", s0_index, " is the right of ", left_site)
         return self.right_bond_of_site(left_site)
 
     def get_row_col_from_id(self, s0_index):
@@ -121,7 +121,7 @@ class Lattice:
         pass
 
     def set_bond_gid_by_id(self, id, gid):
-        print("id ", id)
+        # print("id ", id)
         self.bond_matrix[id].set_gid(gid)
         pass
 
@@ -130,7 +130,7 @@ class Lattice:
         pass
 
     def get_bond_gid_by_id(self, id):
-        print("id ", id)
+        # print("id ", id)
         return self.bond_matrix[id].get_gid()
         pass
 
@@ -168,13 +168,13 @@ class Lattice:
         print("{vertical bond}  {               }")
         print("The lattice : ")
         print("<--VIEW BEGIN-->")
-        self.print_row_separator()
+        self.print_row_separator(34)
         for rr in range(self.length):
             a = self.get_row_str(rr, formatt)
             print(a)
             b = self.get_row_v_str(rr, formatt)
             print(b)
-            self.print_row_separator()
+            self.print_row_separator(34)
             pass
         print("<--VIEW END-->")
         pass
@@ -186,22 +186,34 @@ class Lattice:
         print("y value increases as we go rightward. Like columns")
         print("x value increases as we go downward . Like rows")
         print("<--Relative index - VIEW BEGIN-->")
-        self.print_row_separator()
+        self.print_row_separator(12)
+        print("{:>5}".format("|"), end="")
+        for cc in range(self.length):
+            print("{:6}{:>4}".format(cc, "|"), end="")
+            pass
+        print()
+        self.print_row_separator(12)
         for rr in range(self.length):
+            print("{:3} |".format(rr), end="")
             for cc in range(self.length):
                 s_index = rr * self.length + cc
                 a = self.site_matrix[s_index].relative_index
-                print(a, end=' |')
+                print(a, end='|')
+                # print("{:7}".foramt(a), end=' |')
                 pass
             print()
             pass
-        self.print_row_separator()
+        self.print_row_separator(12)
         print("<--Relative index - VIEW END-->")
         pass
 
-    def print_row_separator(self):
+    def print_row_separator(self, str_sz=10):
+        str_str = ""
+        for i in range(str_sz):
+            str_str += "-"
+            pass
         for cc in range(self.length):
-            print("----------------------------------", end='')
+            print(str_str, end='')
             pass
         print()
         pass

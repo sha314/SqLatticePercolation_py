@@ -2,7 +2,7 @@ from main_py.element import Element
 from main_py.index import RelativeIndex
 from main_py.index import Index
 
-class Site(Element, Index):
+class Site(Element):
     def __init__(self, row, col):
         super(Site, self).__init__()
         self.classname = "Site"
@@ -50,11 +50,11 @@ class Site(Element, Index):
         if type(bond_id) is list:
             if len(bond_id) == 4:
                 self.connecting_bond_ids += bond_id
-                print("site ", self.id, " got bonds ", bond_id)
+                # print("site ", self.id, " got bonds ", bond_id)
                 pass
             pass
         else:
-            print("site ", self.id, " got bond ", bond_id)
+            # print("site ", self.id, " got bond ", bond_id)
             self.connecting_bond_ids.append(bond_id)
 
     def connecting_bonds(self):

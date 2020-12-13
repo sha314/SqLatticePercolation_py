@@ -185,6 +185,7 @@ class Lattice:
         print("90 degree Clockwise rotated Coordinate system")
         print("y value increases as we go rightward. Like columns")
         print("x value increases as we go downward . Like rows")
+        print("Format 'gid<x,y>'")
         print("<--Relative index - VIEW BEGIN-->")
         self.print_row_separator(12)
         print("{:>5}".format("|"), end="")
@@ -197,8 +198,9 @@ class Lattice:
             print("{:3} |".format(rr), end="")
             for cc in range(self.length):
                 s_index = rr * self.length + cc
-                a = self.site_matrix[s_index].relative_index
-                print(a, end='|')
+                site_s = self.site_matrix[s_index]
+                a = site_s.relative_index
+                print("{:2}".format(site_s.get_gid()), a, end='|')
                 # print("{:7}".foramt(a), end=' |')
                 pass
             print()

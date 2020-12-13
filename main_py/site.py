@@ -69,5 +69,10 @@ class Site(Element):
 
     def set_relative_index(self, r_index):
         self.relative_index = r_index
+        pass
+
+    def is_root(self):
+        return self.relative_index.row() == 0 and self.relative_index.column() == 0
+
 
 

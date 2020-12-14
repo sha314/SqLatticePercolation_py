@@ -66,7 +66,7 @@ class Percolation:
         neighbor_index = self.lattice_ref.get_site_by_id(neighbor_site_id).get_index()
         # print("central_index ", central_index)
         # print("neighbor_index ", neighbor_index)
-        idx = neighbor_index - central_index
+        idx = RelativeIndex(index=neighbor_index) - RelativeIndex(index=central_index)
         old_relative_index = self.lattice_ref.get_site_by_id(central_site_id).get_relative_index()
         # new_relative_index = self.lattice_ref.get_site_by_id(new_site_id).get_relative_index()
         # print(old_relative_index, " old_relative_index type ", type(old_relative_index))
@@ -77,6 +77,8 @@ class Percolation:
 
     def get_change_in_relative_index(self, old_relative_index, new_relative_index):
         change = new_relative_index - old_relative_index
+        print("get_change_in_relative_index. type of change ", type(change))
+        print(change)
         return RelativeIndex(index=change)
 
 
@@ -145,7 +147,7 @@ class SitePercolation(Percolation):
         pass
 
     def place_one_site(self):
-        print("place_one_site")
+        print("place_one_site. count ", self.current_idx)
         if self.current_idx >= self.lattice_ref.site_count:
             print("No sites to occupy")
             return False
@@ -280,8 +282,8 @@ class SitePercolation(Percolation):
                     continue
                 new_relative_index = self.lattice_ref.get_site_by_id(ss).get_relative_index()
                 change = self.get_change_in_relative_index(old_relative_index, new_relative_index)
-                # print("change ", change)
-                # print("new_relative_index type ", type(new_relative_index))
+                print("change ", change)
+                print("new_relative_index type ", type(new_relative_index))
                 new_relative_index = new_relative_index + change
                 new_relative_index = RelativeIndex(index=new_relative_index)
                 # print("new_relative_index ", new_relative_index)
@@ -328,7 +330,7 @@ def test_relative_index():
     # take arguments from commandline
     sq_lattice_p = SitePercolation(length=5, seed=0)
     # sq_lattice_p.viewCluster()
-    sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.viewLattice(1)
 
     sq_lattice_p.place_one_site()
     # sq_lattice_p.viewLattice(1)
@@ -369,7 +371,11 @@ def test_relative_index():
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
 
-    # sq_lattice_p.place_one_site()
+    sq_lattice_p.place_one_site()
+    sq_lattice_p.viewLattice(3)
+
+    sq_lattice_p.place_one_site()
+    sq_lattice_p.viewLattice(3)
     #
     # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewCluster()

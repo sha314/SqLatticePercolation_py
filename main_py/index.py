@@ -3,6 +3,14 @@
 
 class Index:
     def __init__(self, row=-1, col=-1):
+        if type(row) is not int:
+            print("warning : row index is not integer")
+            row = int(row)
+            pass
+        if type(col) is not int:
+            print("warning : col index is not integer")
+            col = int(col)
+            pass
         self.component_1 = row
         self.component_2 = col
         pass
@@ -13,6 +21,8 @@ class Index:
         return Index(del_row, del_col)
 
     def __add__(self, other):
+        print("self ", self)
+        print("other ", other)
         component_1 = self.component_1 + other.component_1
         component_2 = self.component_2 + other.component_2
         return Index(component_1, component_2)
@@ -44,8 +54,15 @@ class RelativeIndex(Index):
         if index is None:
             super().__init__(x_rel, y_rel)
             pass
-        if type(index) is Index:
+        elif type(index) is Index:
             super().__init__(index.component_1, index.component_2)
+            pass
+        elif type(index) is RelativeIndex:
+            super().__init__(index.component_1, index.component_2)
+            pass
+        else:
+            print("Wrong type. RelativeIndex")
+            pass
         # self.x_coord = x_rel
         # self.y_coord = y_rel
 
@@ -58,8 +75,27 @@ class RelativeIndex(Index):
     def __str__(self):
         return "<{:3},{:3}>".format(self.component_1, self.component_2)
 
+    def __sub__(self, other):
+        """
+        subtraction of relative index
+        """
+        print("RelativeIndex.__sub__")
+        del_row = self.component_1 - other.component_1
+        del_col = self.component_2 - other.component_2
+        if abs(del_row) > 1 and del_col == 0:
+            print("vertical_wrapping")
+            del_row /= -del_row
+            del_row = int(del_row)
+        if abs(del_col) > 1 and del_row == 0:
+            print("horizontal_wrapping")
+            del_col /= -del_col
+            del_col = int(del_col)
+        return RelativeIndex(del_row, del_col)
+
 
     pass
+
+
 if __name__ == '__main__':
     oldA = Index(2, 3)
     newA = Index(5, 7)

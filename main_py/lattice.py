@@ -187,13 +187,14 @@ class Lattice:
         print("x value increases as we go downward . Like rows")
         print("Format 'gid<x,y>'")
         print("<--Relative index - VIEW BEGIN-->")
-        self.print_row_separator(12)
+        row_unit_str = 14
+        self.print_row_separator(row_unit_str)
         print("{:>5}".format("|"), end="")
         for cc in range(self.length):
-            print("{:6}{:>4}".format(cc, "|"), end="")
+            print("{:<6}{:>7}".format(cc, "|"), end="")
             pass
         print()
-        self.print_row_separator(12)
+        self.print_row_separator(row_unit_str)
         for rr in range(self.length):
             print("{:3} |".format(rr), end="")
             for cc in range(self.length):
@@ -205,7 +206,7 @@ class Lattice:
                 pass
             print()
             pass
-        self.print_row_separator(12)
+        self.print_row_separator(row_unit_str)
         print("<--Relative index - VIEW END-->")
         pass
 

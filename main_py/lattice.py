@@ -210,6 +210,38 @@ class Lattice:
         print("<--Relative index - VIEW END-->")
         pass
 
+    def view_site_gids(self):
+        print("Upper Left corner is <0,0>")
+        print("<x,y> means relative index")
+        print("90 degree Clockwise rotated Coordinate system")
+        print("y value increases as we go rightward. Like columns")
+        print("x value increases as we go downward . Like rows")
+        print("Format 'gid<x,y>'")
+        print("<--Relative index - VIEW BEGIN-->")
+        row_unit_str = 5
+        self.print_row_separator(row_unit_str)
+        print("{:>5}".format("|"), end="")
+        for cc in range(self.length):
+            print("{:<3}{:>1}".format(cc, "|"), end="")
+            pass
+        print()
+        self.print_row_separator(row_unit_str)
+        for rr in range(self.length):
+            print("{:3} |".format(rr), end="")
+            for cc in range(self.length):
+                s_index = rr * self.length + cc
+                site_s = self.site_matrix[s_index]
+                a = site_s.relative_index
+                print("{:3}".format(site_s.get_gid()), end='|')
+                # print("{:7}".foramt(a), end=' |')
+                pass
+            print()
+            pass
+        self.print_row_separator(row_unit_str)
+        print("<--Relative index - VIEW END-->")
+        pass
+        pass
+
     def print_row_separator(self, str_sz=10):
         str_str = ""
         for i in range(str_sz):

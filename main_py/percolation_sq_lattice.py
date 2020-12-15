@@ -150,7 +150,7 @@ class SitePercolation(Percolation):
         pass
 
     def place_one_site(self):
-        print("place_one_site. count ", self.current_idx)
+        print("************************ place_one_site. count ", self.current_idx)
         if self.current_idx >= self.lattice_ref.site_count:
             print("No sites to occupy")
             return False
@@ -308,11 +308,21 @@ class SitePercolation(Percolation):
         pass
 
     def detect_wrapping(self):
-        print("detect_wrapping")
-        neighbors = self.lattice_ref.get_site_neighbor_of_site(self.selected_id)
-        print("neighbors of self.selected_id : ", neighbors)
-
-        pass
+        # print("detect_wrapping")
+        neighbors = self.lattice_ref.get_sites_for_wrapping_test(self.selected_id)
+        print("neighbors of self.selected_id with same gid : ", neighbors)
+        central_r_index = self.current_site.get_relative_index()
+        for ss in neighbors:
+            rss = self.lattice_ref.get_site_by_id(ss).get_relative_index()
+            delta_x = central_r_index.x_coord() - rss.x_coord()
+            delta_y = central_r_index.y_coord() - rss.y_coord()
+            if (abs(delta_x) > 1) or (abs(delta_y) > 1):
+                print(self.selected_id, " and ", ss, " are connected via wrapping")
+                print("indices are ", self.lattice_ref.get_site_by_id(self.selected_id).get_index(),
+                      " and ", self.lattice_ref.get_site_by_id(ss).get_index())
+                return True
+            pass
+        return False
 
 
 class BondPercolation(Percolation):
@@ -446,10 +456,11 @@ def test_detect_wrapping():
     while sq_lattice_p.place_one_site():
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewLattice(4)
-        sq_lattice_p.lattice_ref.print_bonds()
-        # sq_lattice_p.detect_wrapping()
+        # sq_lattice_p.lattice_ref.print_bonds()
+        if(sq_lattice_p.detect_wrapping()):
+            print("Wrapping detected")
+            break
         continue
-    sq_lattice_p.place_one_site()
     sq_lattice_p.viewLattice(3)
     sq_lattice_p.viewLattice(4)
     sq_lattice_p.viewLattice(1)

@@ -10,9 +10,9 @@ def print_hi():
     # lattice.test_neighbors(6)
 
     from main_py import percolation_sq_lattice
-    percolation_sq_lattice.test_site_percolation()
+    # percolation_sq_lattice.test_site_percolation()
     # percolation_sq_lattice.test_relative_index()
-    # percolation_sq_lattice.test_detect_wrapping()
+    percolation_sq_lattice.test_detect_wrapping()
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

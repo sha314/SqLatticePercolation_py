@@ -163,6 +163,7 @@ class ClusterPool:
         :param lattice_ref:   so that it gid of sites and bonds can be modified here
         :return:
         """
+        print("merge_cluster_with")
         gid = self.cluster_list[cluster_A_id].get_gid()
         print("cluster ", cluster_A_id, " gid ", gid)
         for bb in self.cluster_list[cluster_B_id].bond_ids:
@@ -175,7 +176,10 @@ class ClusterPool:
             # print("done: site ", ss, " gid => ", tmp)
             pass
         self.cluster_list[cluster_A_id].bond_ids += self.cluster_list[cluster_B_id].bond_ids
+        print("before ", self.cluster_list[cluster_A_id].site_ids)
+        print("adding ", self.cluster_list[cluster_B_id].site_ids)
         self.cluster_list[cluster_A_id].site_ids += self.cluster_list[cluster_B_id].site_ids
+        print("after ", self.cluster_list[cluster_A_id].site_ids)
         # self.cluster_list[cluster_B_id].clear()
 
 

@@ -191,10 +191,25 @@ class SitePercolation(Percolation):
         return root_clstr
         pass
 
+    def uniqe_gid_bond_neighbors(self, bond_neighbors):
+        gids = []
+        unique_bond_ids = []
+        for bb in bond_neighbors:
+            bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
+            if bbg in gids:
+                continue
+            else:
+                gids.append(bbg)
+                unique_bond_ids.append(bb)
+                pass
+            pass
+        return unique_bond_ids
+
     def merge_clusters_v2(self, bond_neighbors):
         """
         merging with relabeling relative indices
         """
+        bond_neighbors = self.uniqe_gid_bond_neighbors(bond_neighbors)
         bond_gids = self.get_bond_gids(bond_neighbors)
         # site_gids = self.get_site_gids(site_neighbors)
         # print("site_gids ", site_gids)
@@ -328,8 +343,8 @@ def test_site_percolation():
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
     while sq_lattice_p.place_one_site():
-        sq_lattice_p.lattice_ref.print_bonds()
-        sq_lattice_p.lattice_ref.print_sites()
+        # sq_lattice_p.lattice_ref.print_bonds()
+        # sq_lattice_p.lattice_ref.print_sites()
         continue
     sq_lattice_p.viewLattice(1)
     sq_lattice_p.viewLattice(2)

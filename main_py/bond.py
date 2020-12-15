@@ -49,7 +49,6 @@ class Bond(Element):
             # print("bond ", self.id, " got site ", site_id)
             self.connected_site_ids.append(site_id)
 
-
     def connected_sites(self):
         return self.connected_site_ids
 

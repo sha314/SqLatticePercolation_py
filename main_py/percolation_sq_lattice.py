@@ -119,12 +119,12 @@ class SitePercolation(Percolation):
         # central_id = current_site.get_id()
         # print("central site id : ", central_id)
 
-        sb2 = self.lattice_ref.get_bond_by_id(connecting_bond_id)
-        connected_sites = list(sb2.connected_sites())
-        # print("connected ", connected_sites)
+        sb2 = self.lattice_ref.get_neighbor_sites(connecting_bond_id)
+        connected_sites = sb2.copy()
+        print("connected ", connected_sites)
         connected_sites.remove(central_id)
-        if len(connected_sites) > 1:
-            print("Number of neighbors cannot exceed 2 : get_connected_sites()")
+        if len(connected_sites) != 1:
+            print("Number of neighbors must be exactly 1 : get_connected_sites()")
             pass
         # print("neighbor site ids ", neighbor_sites)
         return connected_sites[0]
@@ -264,7 +264,8 @@ class SitePercolation(Percolation):
             return
         old_relative_idx = self.lattice_ref.get_site_by_id(neighbor_site).get_relative_index()
         new_relative_idx = self.get_relative_index(central_site, neighbor_site)
-        self.lattice_ref.set_relative_index(neighbor_site, new_relative_idx)
+        # if the BBB lines are commented then it sould not affect the result. so why extra lines
+        # self.lattice_ref.set_relative_index(neighbor_site, new_relative_idx)  # BBB
 
         # then relabel all sites belonging to the cluster according to the neighbor
         if self.lattice_ref.get_site_gid_by_id(central_site) >= 0:
@@ -273,9 +274,9 @@ class SitePercolation(Percolation):
             print("change ", change)
             # print("old_relative_index ", old_relative_index)
             for ss in sites_to_relabel:
-                if ss == neighbor_site:
-                    print("already got relabeled")
-                    continue
+                # if ss == neighbor_site:  # BBB
+                #     print("already got relabeled") # BBB
+                #     continue # BBB
                 ss_relative_index = self.lattice_ref.get_site_by_id(ss).get_relative_index()
                 # change = self.get_change_in_relative_index(old_relative_index, ss_relative_index)
                 # print("change ", change)
@@ -291,6 +292,13 @@ class SitePercolation(Percolation):
 
         pass
 
+    def detect_wrapping(self):
+        print("detect_wrapping")
+        neighbors = self.lattice_ref.get_site_neighbor_of_site(self.selected_id)
+        print("neighbors of self.selected_id : ", neighbors)
+
+        pass
+
 
 class BondPercolation(Percolation):
     def __init__(self, **kwargs):
@@ -300,24 +308,28 @@ class BondPercolation(Percolation):
 
 def test_site_percolation():
     sq_lattice_p = SitePercolation(length=5, seed=0)
+    sq_lattice_p.lattice_ref.print_bonds()
+    sq_lattice_p.lattice_ref.print_sites()
     sq_lattice_p.viewCluster()
     sq_lattice_p.viewLattice(1)
 
-    sq_lattice_p.place_one_site()
-
-    sq_lattice_p.viewLattice(1)
-    sq_lattice_p.viewCluster()
-
-    sq_lattice_p.place_one_site()
-
-    sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.place_one_site()
+    #
+    # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
-
-    sq_lattice_p.place_one_site()
-
-    sq_lattice_p.viewLattice(1)
+    #
+    # sq_lattice_p.place_one_site()
+    #
+    # sq_lattice_p.viewLattice(1)
+    # # sq_lattice_p.viewCluster()
+    #
+    # sq_lattice_p.place_one_site()
+    #
+    # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
     while sq_lattice_p.place_one_site():
+        sq_lattice_p.lattice_ref.print_bonds()
+        sq_lattice_p.lattice_ref.print_sites()
         continue
     sq_lattice_p.viewLattice(1)
     sq_lattice_p.viewLattice(2)
@@ -407,4 +419,24 @@ def test_relative_index():
     # sq_lattice_p.viewLattice(4)
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
+    pass
+
+
+def test_detect_wrapping():
+    # take arguments from commandline
+    sq_lattice_p = SitePercolation(length=5, seed=0)
+
+    sq_lattice_p.viewLattice(3)
+    sq_lattice_p.viewCluster()
+    while sq_lattice_p.place_one_site():
+        # sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.viewLattice(4)
+        sq_lattice_p.lattice_ref.print_bonds()
+        # sq_lattice_p.detect_wrapping()
+        continue
+    sq_lattice_p.place_one_site()
+    sq_lattice_p.viewLattice(3)
+    sq_lattice_p.viewLattice(4)
+    sq_lattice_p.viewLattice(1)
+    sq_lattice_p.viewCluster()
     pass

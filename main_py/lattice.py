@@ -87,6 +87,39 @@ class Lattice:
     def get_neighbor_sites(self, b0_index):
         return self.bond_matrix[b0_index].connected_sites()
 
+    def get_site_neighbor_of_site(self, s0_index):
+        print("get_site_neighbor_of_site : ", s0_index)
+        bonds = self.site_matrix[s0_index].connecting_bonds()
+        print("bonds ", bonds)
+        out_list = []
+        for bb in bonds:
+            nn = self.get_neighbor_sites(bb)
+            print("nn ", nn)
+            nn.remove(s0_index)
+            out_list.append(nn[0])
+            pass
+        return out_list
+
+    def print_bonds(self):
+        print("print_bonds")
+        for i in self.bond_ids:
+            bbonds = self.bond_matrix[i]
+            c_sites = bbonds.connected_sites()
+            if len(c_sites) != 2:
+                print("warning : number of connected sites must be 2")
+            print("[", i, "] gid=", bbonds.get_gid(), " id=", bbonds.get_id(), " sites=", c_sites)
+            pass
+
+    def print_sites(self):
+        print("print_sites")
+        for i in self.site_ids:
+            ssite = self.site_matrix[i]
+            c_bonds = ssite.connecting_bonds()
+            if len(c_bonds) != 4:
+                print("warning : number of connecting bonds must be 4")
+            print("[", i, "] gid=", ssite.get_gid(), " id=", ssite.get_id(), " sites=", c_bonds)
+            pass
+
     def init_ids(self):
         for rr in range(self.length):
             for cc in range(self.length):

@@ -1,0 +1,5 @@
+# December 16th, 2020
+Length  | time       | MB
+100     | 1.12   sec | 25 MB
+500     | 31.475 sec | 580 MB
+1000    | 133.30 sec | 2.3 GB

@@ -80,8 +80,8 @@ class Percolation:
 
     def get_change_in_relative_index(self, old_relative_index, new_relative_index):
         change = new_relative_index - old_relative_index
-        print("get_change_in_relative_index. type of change ", type(change))
-        print(change)
+        # print("get_change_in_relative_index. type of change ", type(change))
+        # print("change ", change)
         return RelativeIndex(index=change)
 
 
@@ -121,7 +121,7 @@ class SitePercolation(Percolation):
 
         sb2 = self.lattice_ref.get_neighbor_sites(connecting_bond_id)
         connected_sites = sb2.copy()
-        print("connected ", connected_sites)
+        # print("connected ", connected_sites)
         connected_sites.remove(central_id)
         if len(connected_sites) != 1:
             print("Number of neighbors must be exactly 1 : get_connected_sites()")
@@ -150,13 +150,13 @@ class SitePercolation(Percolation):
         pass
 
     def place_one_site(self):
-        print("************************ place_one_site. count ", self.current_idx)
+        # print("************************ place_one_site. count ", self.current_idx)
         if self.current_idx >= self.lattice_ref.site_count:
-            print("No sites to occupy")
+            # print("No sites to occupy")
             return False
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
+        # print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
         self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
         bond_neighbors = self.current_site.connecting_bonds()
         # site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
@@ -179,7 +179,7 @@ class SitePercolation(Percolation):
                 ref_sz = sz
                 pass
             pass
-        print("root cluster is ", root_clstr)
+        # print("root cluster is ", root_clstr)
         for bb in bond_gids:
             if bb == root_clstr:
                 # print("bb ", bb, " is a root cluster")
@@ -225,8 +225,8 @@ class SitePercolation(Percolation):
                 ref_sz = sz
                 pass
             pass
-        print("root cluster is ", root_clstr)
-        print("Assign and relabel currently selected site")
+        # print("root cluster is ", root_clstr)
+        # print("Assign and relabel currently selected site")
         for bb in bond_neighbors:
             bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
             if bbg == root_clstr:
@@ -240,18 +240,19 @@ class SitePercolation(Percolation):
                     rri = self.get_relative_index(neighbor_site, self.selected_id)
                     self.lattice_ref.set_relative_index(self.selected_id, rri)
                 else:
-                    print("does not belong to any cluster yet")
+                    # print("does not belong to any cluster yet")
+                    pass
                 continue
                 pass
             pass
         pass
-        print("Relabel all cluster according to root cluster and selected site")
+        # print("Relabel all cluster according to root cluster and selected site")
         for bb in bond_neighbors:
             bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
             if bbg == root_clstr:
 
                 continue
-            print("relabeling relative index of cluster ", bbg)
+            # print("relabeling relative index of cluster ", bbg)
             self.relabel_relative_indices(bb)
             # print("merging ", bbg, " to ", root_clstr)
             self.cluster_pool_ref.merge_cluster_with(root_clstr, bbg, self.lattice_ref)
@@ -286,7 +287,7 @@ class SitePercolation(Percolation):
         if self.lattice_ref.get_site_gid_by_id(central_site) >= 0:
             # old_relative_index = self.get_relative_index(central_site, self.selected_id)
             change = self.get_change_in_relative_index(old_relative_idx, new_relative_idx)
-            print("change ", change)
+            # print("change ", change)
             # print("old_relative_index ", old_relative_index)
             for ss in sites_to_relabel:
                 # if ss == neighbor_site:  # BBB
@@ -295,11 +296,11 @@ class SitePercolation(Percolation):
                 ss_relative_index = self.lattice_ref.get_site_by_id(ss).get_relative_index()
                 # change = self.get_change_in_relative_index(old_relative_index, ss_relative_index)
                 # print("change ", change)
-                print("new_relative_index type ", type(ss_relative_index))
-                print("relative index before : ", ss_relative_index)
+                # print("new_relative_index type ", type(ss_relative_index))
+                # print("relative index before : ", ss_relative_index)
                 ss_relative_index = ss_relative_index + change
                 ss_relative_index = RelativeIndex(index=ss_relative_index)
-                print("relative index after  : ", ss_relative_index)
+                # print("relative index after  : ", ss_relative_index)
                 # print("new_relative_index ", new_relative_index)
                 self.lattice_ref.get_site_by_id(ss).set_relative_index(ss_relative_index)
                 pass
@@ -310,16 +311,16 @@ class SitePercolation(Percolation):
     def detect_wrapping(self):
         # print("detect_wrapping")
         neighbors = self.lattice_ref.get_sites_for_wrapping_test(self.selected_id)
-        print("neighbors of self.selected_id with same gid : ", neighbors)
+        # print("neighbors of self.selected_id with same gid : ", neighbors)
         central_r_index = self.current_site.get_relative_index()
         for ss in neighbors:
             rss = self.lattice_ref.get_site_by_id(ss).get_relative_index()
             delta_x = central_r_index.x_coord() - rss.x_coord()
             delta_y = central_r_index.y_coord() - rss.y_coord()
             if (abs(delta_x) > 1) or (abs(delta_y) > 1):
-                print(self.selected_id, " and ", ss, " are connected via wrapping")
-                print("indices are ", self.lattice_ref.get_site_by_id(self.selected_id).get_index(),
-                      " and ", self.lattice_ref.get_site_by_id(ss).get_index())
+                # print(self.selected_id, " and ", ss, " are connected via wrapping")
+                # print("indices are ", self.lattice_ref.get_site_by_id(self.selected_id).get_index(),
+                #       " and ", self.lattice_ref.get_site_by_id(ss).get_index())
                 return True
             pass
         return False
@@ -465,4 +466,28 @@ def test_detect_wrapping():
     sq_lattice_p.viewLattice(4)
     sq_lattice_p.viewLattice(1)
     sq_lattice_p.viewCluster()
+    pass
+
+def test_large(lengthL):
+    # take arguments from commandline
+    sq_lattice_p = SitePercolation(length=lengthL, seed=0)
+
+    # sq_lattice_p.viewLattice(3)
+    # sq_lattice_p.viewCluster()
+    while sq_lattice_p.place_one_site():
+        # sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.viewLattice(4)
+        # sq_lattice_p.lattice_ref.print_bonds()
+        if(sq_lattice_p.detect_wrapping()):
+            print("Wrapping detected")
+            break
+        continue
+    # sq_lattice_p.viewLattice(3)
+    # sq_lattice_p.viewLattice(4)
+    # sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.viewCluster()
+
+    while sq_lattice_p.place_one_site():
+        continue
+    # sq_lattice_p.viewCluster()
     pass

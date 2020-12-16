@@ -101,15 +101,15 @@ class Lattice:
         return out_list
 
     def get_sites_for_wrapping_test(self, s0_index):
-        print("get_site_neighbor_of_site : ", s0_index)
+        # print("get_site_neighbor_of_site : ", s0_index)
         central_site = self.site_matrix[s0_index]
         gid_central = central_site.get_gid()
         bonds = central_site.connecting_bonds()
-        print("bonds ", bonds)
+        # print("bonds ", bonds)
         out_list = []
         for bb in bonds:
             nn = self.get_neighbor_sites(bb).copy()
-            print("nn ", nn)
+            # print("nn ", nn)
             nn.remove(s0_index)
             gid = self.site_matrix[nn[0]].get_gid()
             if gid == gid_central:

@@ -21,8 +21,8 @@ class Index:
         return Index(del_row, del_col)
 
     def __add__(self, other):
-        print("self ", self)
-        print("other ", other)
+        # print("self ", self)
+        # print("other ", other)
         component_1 = self.component_1 + other.component_1
         component_2 = self.component_2 + other.component_2
         return Index(component_1, component_2)
@@ -79,15 +79,15 @@ class RelativeIndex(Index):
         """
         subtraction of relative index
         """
-        print("RelativeIndex.__sub__")
+        # print("RelativeIndex.__sub__")
         del_row = self.component_1 - other.component_1
         del_col = self.component_2 - other.component_2
         if abs(del_row) > 1 and del_col == 0:
-            print("vertical_wrapping")
+            # print("vertical_wrapping")
             del_row /= -del_row
             del_row = int(del_row)
         if abs(del_col) > 1 and del_row == 0:
-            print("horizontal_wrapping")
+            # print("horizontal_wrapping")
             del_col /= -del_col
             del_col = int(del_col)
         return RelativeIndex(del_row, del_col)

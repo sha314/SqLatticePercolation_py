@@ -35,7 +35,7 @@ class Lattice:
 
                 pass
             pass
-        print(self.bond_matrix)
+        # print("self.bond_matrix ", self.bond_matrix)
         pass
 
     def bottom_bond_of_site(self, s0_index):
@@ -61,7 +61,7 @@ class Lattice:
         """
         col, row = self.get_row_col_from_id(s0_index)
         left_site = row*self.length + (col + self.length - 1) % self.length
-        print("left of ", s0_index, " is the right of ", left_site)
+        # print("left of ", s0_index, " is the right of ", left_site)
         return self.right_bond_of_site(left_site)
 
     def get_row_col_from_id(self, s0_index):
@@ -86,6 +86,57 @@ class Lattice:
 
     def get_neighbor_sites(self, b0_index):
         return self.bond_matrix[b0_index].connected_sites()
+
+    def get_site_neighbor_of_site(self, s0_index):
+        print("get_site_neighbor_of_site : ", s0_index)
+        bonds = self.site_matrix[s0_index].connecting_bonds()
+        print("bonds ", bonds)
+        out_list = []
+        for bb in bonds:
+            nn = self.get_neighbor_sites(bb).copy()
+            print("nn ", nn)
+            nn.remove(s0_index)
+            out_list.append(nn[0])
+            pass
+        return out_list
+
+    def get_sites_for_wrapping_test(self, s0_index):
+        # print("get_site_neighbor_of_site : ", s0_index)
+        central_site = self.site_matrix[s0_index]
+        gid_central = central_site.get_gid()
+        bonds = central_site.connecting_bonds()
+        # print("bonds ", bonds)
+        out_list = []
+        for bb in bonds:
+            nn = self.get_neighbor_sites(bb).copy()
+            # print("nn ", nn)
+            nn.remove(s0_index)
+            gid = self.site_matrix[nn[0]].get_gid()
+            if gid == gid_central:
+                out_list.append(nn[0])
+                pass
+            pass
+        return out_list
+
+    def print_bonds(self):
+        print("print_bonds")
+        for i in self.bond_ids:
+            bbonds = self.bond_matrix[i]
+            c_sites = bbonds.connected_sites()
+            if len(c_sites) != 2:
+                print("warning : number of connected sites must be 2")
+            print("[", i, "] gid=", bbonds.get_gid(), " id=", bbonds.get_id(), " sites=", c_sites)
+            pass
+
+    def print_sites(self):
+        print("print_sites")
+        for i in self.site_ids:
+            ssite = self.site_matrix[i]
+            c_bonds = ssite.connecting_bonds()
+            if len(c_bonds) != 4:
+                print("warning : number of connecting bonds must be 4")
+            print("[", i, "] gid=", ssite.get_gid(), " id=", ssite.get_id(), " sites=", c_bonds)
+            pass
 
     def init_ids(self):
         for rr in range(self.length):
@@ -121,8 +172,17 @@ class Lattice:
         pass
 
     def set_bond_gid_by_id(self, id, gid):
-        print("id ", id)
+        # print("id ", id)
         self.bond_matrix[id].set_gid(gid)
+        pass
+
+    def get_site_gid_by_id(self, id):
+        return self.site_matrix[id].get_gid()
+        pass
+
+    def get_bond_gid_by_id(self, id):
+        # print("id ", id)
+        return self.bond_matrix[id].get_gid()
         pass
 
     def get_site_by_index(self, row, col):
@@ -159,20 +219,87 @@ class Lattice:
         print("{vertical bond}  {               }")
         print("The lattice : ")
         print("<--VIEW BEGIN-->")
-        self.print_row_separator()
+        self.print_row_separator(34)
         for rr in range(self.length):
             a = self.get_row_str(rr, formatt)
             print(a)
             b = self.get_row_v_str(rr, formatt)
             print(b)
-            self.print_row_separator()
+            self.print_row_separator(34)
             pass
         print("<--VIEW END-->")
         pass
 
-    def print_row_separator(self):
+    def view_relative_index(self):
+        print("Upper Left corner is <0,0>")
+        print("<x,y> means relative index")
+        print("90 degree Clockwise rotated Coordinate system")
+        print("y value increases as we go rightward. Like columns")
+        print("x value increases as we go downward . Like rows")
+        print("Format 'gid<x,y>'")
+        print("<--Relative index - VIEW BEGIN-->")
+        row_unit_str = 14
+        self.print_row_separator(row_unit_str)
+        print("{:>5}".format("|"), end="")
         for cc in range(self.length):
-            print("----------------------------------", end='')
+            print("{:<6}{:>7}".format(cc, "|"), end="")
+            pass
+        print()
+        self.print_row_separator(row_unit_str)
+        for rr in range(self.length):
+            print("{:3} |".format(rr), end="")
+            for cc in range(self.length):
+                s_index = rr * self.length + cc
+                site_s = self.site_matrix[s_index]
+                a = site_s.relative_index
+                print("{:2}".format(site_s.get_gid()), a, end='|')
+                # print("{:7}".foramt(a), end=' |')
+                pass
+            print()
+            pass
+        self.print_row_separator(row_unit_str)
+        print("<--Relative index - VIEW END-->")
+        pass
+
+    def view_site_gids(self):
+        print("Upper Left corner is <0,0>")
+        print("<x,y> means relative index")
+        print("90 degree Clockwise rotated Coordinate system")
+        print("y value increases as we go rightward. Like columns")
+        print("x value increases as we go downward . Like rows")
+        print("Format 'gid<x,y>'")
+        print("<--Relative index - VIEW BEGIN-->")
+        row_unit_str = 5
+        self.print_row_separator(row_unit_str)
+        print("{:>5}".format("|"), end="")
+        for cc in range(self.length):
+            print("{:<3}{:>1}".format(cc, "|"), end="")
+            pass
+        print()
+        self.print_row_separator(row_unit_str)
+        for rr in range(self.length):
+            print("{:3} |".format(rr), end="")
+            for cc in range(self.length):
+                s_index = rr * self.length + cc
+                site_s = self.site_matrix[s_index]
+                a = site_s.relative_index
+                print("{:3}".format(site_s.get_gid()), end='|')
+                # print("{:7}".foramt(a), end=' |')
+                pass
+            print()
+            pass
+        self.print_row_separator(row_unit_str)
+        print("<--Relative index - VIEW END-->")
+        pass
+        pass
+
+    def print_row_separator(self, str_sz=10):
+        str_str = ""
+        for i in range(str_sz):
+            str_str += "-"
+            pass
+        for cc in range(self.length):
+            print(str_str, end='')
             pass
         print()
         pass
@@ -203,6 +330,16 @@ class Lattice:
 
             pass
         return r_string
+
+    def init_relative_index(self, id):
+        s_index = self.site_ids[id]
+        self.site_matrix[s_index].init_relative_index()
+        pass
+
+    def set_relative_index(self, id, relative_index):
+        s_index = self.site_ids[id]
+        self.site_matrix[s_index].set_relative_index(relative_index)
+        pass
     pass
 
 

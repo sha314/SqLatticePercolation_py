@@ -54,6 +54,9 @@ class OneCluster:
             pass
         pass
 
+    def get_sites(self):
+        return self.site_ids
+
     def add_bonds(self, bond_ids):
         if type(bond_ids) is list:
             self.bond_ids += bond_ids
@@ -61,6 +64,9 @@ class OneCluster:
         else:
             self.bond_ids.append(bond_ids)
         pass
+
+    def get_bonds(self):
+        return self.bond_ids
 
     def get_bond_count(self):
         return len(self.bond_ids)
@@ -105,7 +111,7 @@ class ClusterPool:
         return self.cluster_list[id].get_site_count()
 
     def create_new_cluster(self, site_ids=[], bond_ids=[], lattice_ref=None):
-        print("method : create_new_cluster")
+        # print("method : create_new_cluster")
         clsstr = OneCluster()
         clsstr.add_sites(site_ids)
         clsstr.add_bonds(bond_ids)
@@ -120,7 +126,8 @@ class ClusterPool:
             lattice_ref.set_bond_gid_by_id(bb, self.cluster_id) # re assign group id
             pass
         self.cluster_id += 1
-        print(clsstr)
+        # print("clsstr ")
+        # print(clsstr)
         self.cluster_list.append(clsstr)
         pass
 
@@ -131,11 +138,22 @@ class ClusterPool:
     def add_bonds(self, index, bond_ids):
         self.cluster_list[index].add_bonds(bond_ids)
         pass
+
+    def get_sites(self, index):
+        return self.cluster_list[index].get_sites()
+
+    def get_bonds(self, index):
+        return self.cluster_list[index].get_bonds()
+
     def get_cluster(self, cluster_id):
         if cluster_id >= len(self.cluster_list):
             print("Cluster does not exists")
             return None
         return self.cluster_list[cluster_id]
+
+    def clear_cluster(self, cluster_id):
+        self.cluster_list[cluster_id].clear()
+        pass
 
     def merge_cluster_with(self, cluster_A_id, cluster_B_id, lattice_ref):
         """
@@ -145,18 +163,24 @@ class ClusterPool:
         :param lattice_ref:   so that it gid of sites and bonds can be modified here
         :return:
         """
+        # print("merge_cluster_with")
         gid = self.cluster_list[cluster_A_id].get_gid()
-        print("cluster ", cluster_A_id, " gid ", gid)
+        # print("cluster ", cluster_A_id, " gid ", gid)
         for bb in self.cluster_list[cluster_B_id].bond_ids:
             lattice_ref.set_bond_gid_by_id(bb, gid)
             pass
         for ss in self.cluster_list[cluster_B_id].site_ids:
+            # print("todo: site ", ss, " gid => ", gid)
             lattice_ref.set_site_gid_by_id(ss, gid)
-
+            tmp = lattice_ref.get_site_by_id(ss).get_gid()
+            # print("done: site ", ss, " gid => ", tmp)
             pass
         self.cluster_list[cluster_A_id].bond_ids += self.cluster_list[cluster_B_id].bond_ids
+        # print("before ", self.cluster_list[cluster_A_id].site_ids)
+        # print("adding ", self.cluster_list[cluster_B_id].site_ids)
         self.cluster_list[cluster_A_id].site_ids += self.cluster_list[cluster_B_id].site_ids
-        self.cluster_list[cluster_B_id].clear()
+        # print("after ", self.cluster_list[cluster_A_id].site_ids)
+        # self.cluster_list[cluster_B_id].clear()
 
 
         pass

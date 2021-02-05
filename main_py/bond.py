@@ -42,13 +42,12 @@ class Bond(Element):
         if type(site_id) is list:
             if len(site_id) == 2:
                 self.connected_site_ids += site_id
-                print("bond ", self.id, " got sites ", site_id)
+                # print("bond ", self.id, " got sites ", site_id)
                 pass
             pass
         else:
-            print("bond ", self.id, " got site ", site_id)
+            # print("bond ", self.id, " got site ", site_id)
             self.connected_site_ids.append(site_id)
-
 
     def connected_sites(self):
         return self.connected_site_ids

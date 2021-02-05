@@ -8,6 +8,9 @@ class Element:
     def set_id(self, id):
         self.id = id
 
+    def get_id(self):
+        return self.id
+
     def set_gid(self, gid):
         """
         Group id. elements with same g_id belongs to same cluster

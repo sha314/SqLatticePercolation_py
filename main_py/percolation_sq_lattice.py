@@ -149,23 +149,31 @@ class SitePercolation(Percolation):
         return neighbor_sites
         pass
 
-    def place_one_site(self):
-        # print("************************ place_one_site. count ", self.current_idx)
+    def select_site(self):
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
             return False
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        # print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
-        self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
-        bond_neighbors = self.current_site.connecting_bonds()
-        # site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
-        
-        merged_cluster_index = self.merge_clusters_v2(bond_neighbors)
-        # self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
-        # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
-        self.current_idx += 1
+        print("selected id ", self.selected_id)
         return True
+
+    def place_one_site(self):
+        # print("************************ place_one_site. count ", self.current_idx)
+        flag = self.select_site()
+        if flag:
+
+            # print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
+            self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
+            bond_neighbors = self.current_site.connecting_bonds()
+            # site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
+            
+            merged_cluster_index = self.merge_clusters_v2(bond_neighbors)
+            # self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
+            # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
+            self.current_idx += 1
+            pass
+        return flag
 
     def merge_clusters(self, bond_neighbors):
         bond_gids = self.get_bond_gids(bond_neighbors)
@@ -325,6 +333,22 @@ class SitePercolation(Percolation):
             pass
         return False
 
+class SitePercolation_L1(SitePercolation):
+    def __init__(self, **kwargs):
+        super(SitePercolation_L1, self).__init__(**kwargs)
+        self.entropy = 0
+        pass
+
+    # def place_one_site(self):
+    #     subtract_entropy(root_a, root_b);
+    #     auto
+    #     root = mergeClusters(root_a, root_b);
+    #     add_entropy(root);
+    #     track_largest_cluster(root);
+    #     track_cluster_count(root_a, root_b);
+
+
+    pass
 
 class BondPercolation(Percolation):
     def __init__(self, **kwargs):
@@ -489,5 +513,5 @@ def test_large(lengthL):
 
     while sq_lattice_p.place_one_site():
         continue
-    # sq_lattice_p.viewCluster()
+    sq_lattice_p.viewCluster()
     pass

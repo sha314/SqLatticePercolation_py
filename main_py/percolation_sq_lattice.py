@@ -1,6 +1,7 @@
 from main_py import lattice
 from main_py import cluster
 import random
+import math
 from main_py.index import *
 
 Lattice = lattice.Lattice
@@ -94,6 +95,10 @@ class SitePercolation(Percolation):
         self.shuffle()
         self.current_site = None
         self.selected_id = None
+        self.cluster_count = self.lattice_ref.bond_count
+        self.largest_cluster_sz = 0
+        self.largest_cluster_id = 0
+        self.entropy_value = 0
         pass
 
     def init_clusters(self):
@@ -155,7 +160,7 @@ class SitePercolation(Percolation):
             return False
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        print("selected id ", self.selected_id)
+        # print("selected id ", self.selected_id)
         return True
 
     def place_one_site(self):
@@ -167,13 +172,60 @@ class SitePercolation(Percolation):
             self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
             bond_neighbors = self.current_site.connecting_bonds()
             # site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
-            
+
+            # self.entropy_substract()
+
             merged_cluster_index = self.merge_clusters_v2(bond_neighbors)
+
+            self.track_largest_cluster(merged_cluster_index)
+            # self.entropy_add(merged_cluster_index)
+
             # self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
             # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
             self.current_idx += 1
             pass
         return flag
+
+    def track_largest_cluster(self, new_cluster):
+        new_size = self.cluster_pool_ref.get_cluster_bond_count(new_cluster)
+        # self.cluster_pool_ref.get_cluster_site_count(new_cluster)
+        if new_size > self.largest_cluster_sz:
+            self.largest_cluster_id = new_cluster
+            self.largest_cluster_sz = new_size
+            pass
+
+        # self.entropy_value = 0
+
+    def entropy_substract(self):
+
+        pass
+
+    def entropy_add(self):
+
+        pass
+
+    def occupation_prob(self):
+        return self.current_idx / self.lattice_ref.site_count
+
+    def entropy(self):
+        H = 0
+        for i in range(self.cluster_count):
+            b_count = self.cluster_pool_ref.get_cluster_bond_count(i)
+            mu = b_count / self.lattice_ref.bond_count
+            if mu == 0:
+                # print("empty cluster")
+                continue
+            log_mu = math.log(mu)
+            H += mu*log_mu
+            pass
+        self.entropy_value = -H
+        return self.entropy_value
+
+    def largest_cluster(self):
+        return self.largest_cluster_sz
+
+    def order_param(self):
+        return self.largest_cluster_sz / self.lattice_ref.bond_count
 
     def merge_clusters(self, bond_neighbors):
         bond_gids = self.get_bond_gids(bond_neighbors)
@@ -326,9 +378,10 @@ class SitePercolation(Percolation):
             delta_x = central_r_index.x_coord() - rss.x_coord()
             delta_y = central_r_index.y_coord() - rss.y_coord()
             if (abs(delta_x) > 1) or (abs(delta_y) > 1):
-                # print(self.selected_id, " and ", ss, " are connected via wrapping")
-                # print("indices are ", self.lattice_ref.get_site_by_id(self.selected_id).get_index(),
-                #       " and ", self.lattice_ref.get_site_by_id(ss).get_index())
+                print(self.selected_id, " and ", ss, " are connected via wrapping")
+                print("indices are ", self.lattice_ref.get_site_by_id(self.selected_id).get_index(),
+                      " and ", self.lattice_ref.get_site_by_id(ss).get_index())
+                print("relative ", central_r_index, " - ", rss)
                 return True
             pass
         return False
@@ -499,19 +552,23 @@ def test_large(lengthL):
     # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewCluster()
     while sq_lattice_p.place_one_site():
+        # print("largest cluster ", sq_lattice_p.largest_cluster())
+        print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ", sq_lattice_p.order_param())
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewLattice(4)
         # sq_lattice_p.lattice_ref.print_bonds()
         if(sq_lattice_p.detect_wrapping()):
-            print("Wrapping detected")
+            print("Wrapping detected  ********** << ")
             break
         continue
-    # sq_lattice_p.viewLattice(3)
+    sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewLattice(4)
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
 
-    while sq_lattice_p.place_one_site():
-        continue
-    sq_lattice_p.viewCluster()
+    # while sq_lattice_p.place_one_site():
+    #     # print("largest cluster ", sq_lattice_p.largest_cluster())
+    #     print("entropy ", sq_lattice_p.entropy(), " order ", sq_lattice_p.order_param())
+    #     continue
+    # sq_lattice_p.viewCluster()
     pass

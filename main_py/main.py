@@ -15,7 +15,7 @@ def print_hi():
     # percolation_sq_lattice.test_detect_wrapping()
     import time
     start_t = time.time()
-    percolation_sq_lattice.test_large(100)
+    percolation_sq_lattice.test_large(8)
     end_t = time.time()
     print("time required ", (end_t - start_t), " sec")
 

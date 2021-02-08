@@ -82,14 +82,17 @@ class RelativeIndex(Index):
         # print("RelativeIndex.__sub__")
         del_row = self.component_1 - other.component_1
         del_col = self.component_2 - other.component_2
-        if abs(del_row) > 1 and del_col == 0:
-            # print("vertical_wrapping")
-            del_row /= -del_row
-            del_row = int(del_row)
-        if abs(del_col) > 1 and del_row == 0:
-            # print("horizontal_wrapping")
-            del_col /= -del_col
-            del_col = int(del_col)
+        # if abs(del_row) > 1 and del_col == 0:
+        #     # print("vertical_wrapping")
+        #     del_row /= -del_row
+        #     del_row = int(del_row)
+        # if abs(del_col) > 1 and del_row == 0:
+        #     # print("horizontal_wrapping")
+        #     del_col /= -del_col
+        #     del_col = int(del_col)
+        # if abs(del_row) > 1 and abs(del_col) > 1:
+        #     print("both row and column delta cannot be greater than 1 at the same time")
+        #     pass
         return RelativeIndex(del_row, del_col)
 
 

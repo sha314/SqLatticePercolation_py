@@ -13,13 +13,13 @@ class Site(Element):
         self.relative_index = RelativeIndex()
 
     def __str__(self):
-        if self.g_id is not None:
-            return self.get_str(1)
-        elif self.id is not None:
-            return self.get_str(2)
-        else:
-            return self.get_str(0)
-        pass
+        # if self.g_id is not None:
+        #     return self.get_str(1)
+        # elif self.id is not None:
+        #     return self.get_str(2)
+        # else:
+        #     return self.get_str(0)
+        return self.get_str(0)
 
     def get_index(self):
         # return self.row, self.col
@@ -39,6 +39,7 @@ class Site(Element):
             return "{:^5}({:^5},{:^5})".format(self.id, self.index.row(), self.index.column())
             pass
         else:
+            # print("row col")
             return "({:^5},{:^5})".format(self.index.row(), self.index.column())
         pass
 

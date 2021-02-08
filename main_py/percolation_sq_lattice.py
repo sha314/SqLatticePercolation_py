@@ -68,12 +68,12 @@ class Percolation:
         xx = delta_X.x_coord()
         yy = delta_X.y_coord()
         if abs(xx) > 1:
-            xx = -xx // xx
+            xx = -xx // abs(xx)
             pass
         if abs(yy) > 1:
-            yy = -yy // yy
+            yy = -yy // abs(yy)
             pass
-        print(type(xx), " and ", type(yy))
+        # print(type(xx), " and ", type(yy))
         return RelativeIndex(xx, yy)
         pass
 
@@ -558,23 +558,25 @@ def test_relative_index():
 
 def test_detect_wrapping():
     # take arguments from commandline
-    sq_lattice_p = SitePercolation(length=20, seed=12)
+    sq_lattice_p = SitePercolation(length=6, seed=18)
 
-    sq_lattice_p.viewLattice(3)
+    # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewCluster()
     i = 0
     while sq_lattice_p.place_one_site():
-        print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
-              sq_lattice_p.order_param())
+        # print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
+        #       sq_lattice_p.order_param())
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewLattice(4)
         # sq_lattice_p.lattice_ref.print_bonds()
         i += 1
         if(sq_lattice_p.detect_wrapping()):
+            print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
+                  sq_lattice_p.order_param())
             print("Wrapping detected ***************** <<<")
             break
-        # if i > 12:
-        #     break
+        if i > 5:
+            break
         continue
     sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewLattice(4)
@@ -584,21 +586,23 @@ def test_detect_wrapping():
 
 def test_large(lengthL):
     # take arguments from commandline
-    sq_lattice_p = SitePercolation(length=lengthL, seed=1)
+    sq_lattice_p = SitePercolation(length=lengthL, seed=9)
 
     # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewCluster()
     while sq_lattice_p.place_one_site():
         # print("largest cluster ", sq_lattice_p.largest_cluster())
-        print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ", sq_lattice_p.order_param())
+        # print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ", sq_lattice_p.order_param())
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewLattice(4)
         # sq_lattice_p.lattice_ref.print_bonds()
         if(sq_lattice_p.detect_wrapping()):
+            print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
+                  sq_lattice_p.order_param())
             print("Wrapping detected  ********** << ")
             break
         continue
-    sq_lattice_p.viewLattice(3)
+    # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewLattice(4)
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()

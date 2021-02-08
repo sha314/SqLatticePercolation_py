@@ -68,11 +68,12 @@ class Percolation:
         xx = delta_X.x_coord()
         yy = delta_X.y_coord()
         if abs(xx) > 1:
-            xx /= - xx
+            xx = -xx // xx
             pass
         if abs(yy) > 1:
-            yy /= -yy
+            yy = -yy // yy
             pass
+        print(type(xx), " and ", type(yy))
         return RelativeIndex(xx, yy)
         pass
 
@@ -583,7 +584,7 @@ def test_detect_wrapping():
 
 def test_large(lengthL):
     # take arguments from commandline
-    sq_lattice_p = SitePercolation(length=lengthL, seed=0)
+    sq_lattice_p = SitePercolation(length=lengthL, seed=1)
 
     # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewCluster()

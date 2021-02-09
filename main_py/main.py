@@ -1,4 +1,6 @@
-# This is a sample Python script.
+import time
+from datetime import datetime
+
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -20,7 +22,21 @@ def print_hi():
     # end_t = time.time()
     # print("time required ", (end_t - start_t), " sec")
 
+def run_simulations():
+    from main_py import ensemble
+    ensemble.run_ensemble_entropy_order(10, 10)
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi()
+    time_a = time.time()
+
+    # print_hi()
+    run_simulations()
+
     print("No errors")
+    total_time_spent = time.time() - time_a
+    print("Total time elapsed {:2.6f} sec".format(total_time_spent))
+    now = datetime.now()
+    current_time = now.strftime("%Y.%m.%d %H:%M:%S")
+    print("Current Time ", current_time)
+

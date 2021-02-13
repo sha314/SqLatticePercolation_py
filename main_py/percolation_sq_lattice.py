@@ -2,6 +2,7 @@ from main_py import lattice
 from main_py import cluster
 import random
 import math
+import numpy as np
 from main_py.index import *
 
 Lattice = lattice.Lattice
@@ -122,6 +123,8 @@ class SitePercolation(Percolation):
         self.largest_cluster_sz = 0
         self.largest_cluster_id = 0
         self.entropy_value = 0
+        self.after_wrapping = False
+        self.wrapping_cluster_id = -1
         pass
 
     def init_clusters(self):
@@ -141,6 +144,8 @@ class SitePercolation(Percolation):
         super(SitePercolation, self).reset()
         self.current_idx = 0
         self.shuffle()
+        self.after_wrapping = False
+        self.wrapping_cluster_id = -1
         pass
 
     def get_neighbor_site(self, central_id, connecting_bond_id):
@@ -247,8 +252,17 @@ class SitePercolation(Percolation):
     def largest_cluster(self):
         return self.largest_cluster_sz
 
-    def order_param(self):
+    def order_param_largest_clstr(self):
         return self.largest_cluster_sz / self.lattice_ref.bond_count
+
+    def order_param_wrapping(self):
+        if self.after_wrapping:
+            # print("wrapping cluster id ", self.wrapping_cluster_id)
+            count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
+            return count / self.lattice_ref.bond_count
+        return 0.
+        pass
+
 
     def merge_clusters(self, bond_neighbors):
         bond_gids = self.get_bond_gids(bond_neighbors)
@@ -400,6 +414,8 @@ class SitePercolation(Percolation):
         pass
 
     def detect_wrapping(self):
+        if self.after_wrapping:
+            return True
         # print("detect_wrapping")
         neighbors = self.lattice_ref.get_sites_for_wrapping_test(self.selected_id)
         # print("neighbors of self.selected_id with same gid : ", neighbors)
@@ -413,6 +429,8 @@ class SitePercolation(Percolation):
                 # print("indices are ", self.lattice_ref.get_site_by_id(self.selected_id).get_index(),
                 #       " and ", self.lattice_ref.get_site_by_id(ss).get_index())
                 # print("relative ", central_r_index, " - ", rss)
+                self.after_wrapping = True
+                self.wrapping_cluster_id = self.lattice_ref.get_site_by_id(self.selected_id).get_gid()
                 return True
             pass
         return False
@@ -420,7 +438,72 @@ class SitePercolation(Percolation):
 class SitePercolation_L1(SitePercolation):
     def __init__(self, **kwargs):
         super(SitePercolation_L1, self).__init__(**kwargs)
-        self.entropy = 0
+        self.first_run = True
+
+        self.occupation_prob_list = None
+        self.entropy_list = None
+        self.order_wrapping_list = None
+        self.order_largest_list = None
+        pass
+
+    def reset(self):
+        super(SitePercolation_L1, self).reset()
+        self.occupation_prob_list = list()
+        self.entropy_list = list()
+        self.order_wrapping_list = list()
+        self.order_largest_list = list()
+
+    def get_entropy_array(self):
+        return self.entropy_list
+
+    def get_occupation_prob_array(self):
+        return self.occupation_prob_list
+
+    def get_order_param_wrapping_array(self):
+        return self.order_wrapping_list
+
+    def get_order_param_largest_array(self):
+        return self.order_largest_list
+
+    def get_data_array(self):
+        pp = self.get_occupation_prob_array()
+        HH = self.get_entropy_array()
+        PP1 = self.get_order_param_wrapping_array()
+        PP2 = self.get_order_param_largest_array()
+        print(pp)
+        print(HH)
+        return np.c_[pp, HH, PP1, PP2]
+
+    def run_once(self):
+        # sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.viewCluster()
+        if self.first_run:
+            while self.place_one_site():
+                self.detect_wrapping()
+                p = self.occupation_prob()
+                H = self.entropy()
+                P1 = self.order_param_wrapping()
+                P2 = self.order_param_largest_clstr()
+                self.occupation_prob_list.append(p)
+                self.entropy_list.append(H)
+                self.order_wrapping_list.append(P1)
+                self.order_largest_list.append(P2)
+
+                pass
+        else:
+            while self.place_one_site():
+                self.detect_wrapping()
+                H = self.entropy()
+                P1 = self.order_param_wrapping()
+                P2 = self.order_param_largest_clstr()
+                self.entropy_list.append(H)
+                self.order_wrapping_list.append(P1)
+                self.order_largest_list.append(P2)
+
+
+
+                pass
+        self.first_run = False
         pass
 
     # def place_one_site(self):
@@ -572,7 +655,7 @@ def test_detect_wrapping():
         i += 1
         if(sq_lattice_p.detect_wrapping()):
             print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
-                  sq_lattice_p.order_param())
+                  sq_lattice_p.order_param_largest_clstr())
             print("Wrapping detected ***************** <<<")
             break
         if i > 5:
@@ -598,7 +681,7 @@ def test_large(lengthL):
         # sq_lattice_p.lattice_ref.print_bonds()
         if(sq_lattice_p.detect_wrapping()):
             print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
-                  sq_lattice_p.order_param())
+                  sq_lattice_p.order_param_largest_clstr())
             print("Wrapping detected  ********** << ")
             break
         continue

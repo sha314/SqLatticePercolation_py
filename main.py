@@ -25,7 +25,7 @@ def print_hi():
 
 def run_simulations():
     from main_py import ensemble
-    LL = 10
+    LL = 100
     En = 10
     ensemble.run_ensemble_entropy_order(LL, En)
 

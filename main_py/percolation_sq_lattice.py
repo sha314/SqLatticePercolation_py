@@ -147,12 +147,14 @@ class SitePercolation(Percolation):
         reset for next
         """
         super(SitePercolation, self).reset()
+        self.init_clusters()
+        self.shuffle()
         self.current_idx = 0
         self.shuffle()
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
         self.entropy_value = self.max_entropy
-        print("Initial entropy ", self.entropy_value)
+        # print("Initial entropy ", self.entropy_value)
         pass
 
     def get_neighbor_site(self, central_id, connecting_bond_id):
@@ -482,7 +484,7 @@ class SitePercolation_L1(SitePercolation):
     def __init__(self, **kwargs):
         super(SitePercolation_L1, self).__init__(**kwargs)
         self.signature = super(SitePercolation_L1, self).get_signature()
-        self.signature += "_L1"
+        self.signature += "L1_"
         self.first_run = True
 
         self.occupation_prob_list = None

@@ -15,7 +15,8 @@ def run_ensemble_entropy_order(length, ensembleSize, interaction=0):
         start_t = time.time()
 
         percolation.reset()
-
+        # percolation.viewCluster()
+        # percolation.viewLattice()
         percolation.run_once()
         aaa = percolation.get_data_array()
         if data is None:
@@ -24,16 +25,16 @@ def run_ensemble_entropy_order(length, ensembleSize, interaction=0):
             data += aaa
             pass
         pass
-        print("temp ")
-        print(aaa)
+        # print("temp ")
+        # print(aaa)
         end_t = time.time() - start_t
-        print("Iteration {:4f} | Time elapsed {:.5f} sec".format(en, end_t))
+        print("Iteration {:4} | Time elapsed {:.5f} sec".format(en, end_t))
         pass
 
     data /= ensembleSize  # taking average
     # print(data)
     signature = percolation.get_signature()
-    signature += "_entropy_order_"
+    signature += "_entropy_order_L{}".format(length)
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H%M%S")
     print("current_time ", current_time)

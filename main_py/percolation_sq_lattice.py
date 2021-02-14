@@ -448,7 +448,9 @@ class SitePercolation_L1(SitePercolation):
 
     def reset(self):
         super(SitePercolation_L1, self).reset()
-        self.occupation_prob_list = list()
+        if self.first_run:
+            self.occupation_prob_list = list()
+            pass
         self.entropy_list = list()
         self.order_wrapping_list = list()
         self.order_largest_list = list()
@@ -470,8 +472,8 @@ class SitePercolation_L1(SitePercolation):
         HH = self.get_entropy_array()
         PP1 = self.get_order_param_wrapping_array()
         PP2 = self.get_order_param_largest_array()
-        print(pp)
-        print(HH)
+        # print(pp)
+        # print(HH)
         return np.c_[pp, HH, PP1, PP2]
 
     def run_once(self):

@@ -122,7 +122,7 @@ class SitePercolation(Percolation):
         self.selected_id = None
         self.cluster_count = self.lattice_ref.bond_count
         self.largest_cluster_sz = 0
-        self.largest_cluster_id = 0
+        self.largest_cluster_id = -1
         self.max_entropy = math.log(self.lattice_ref.bond_count)
         self.entropy_value = self.max_entropy
         self.after_wrapping = False
@@ -153,6 +153,8 @@ class SitePercolation(Percolation):
         self.shuffle()
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
+        self.largest_cluster_sz = 0
+        self.largest_cluster_id = -1
         self.entropy_value = self.max_entropy
         # print("Initial entropy ", self.entropy_value)
         pass

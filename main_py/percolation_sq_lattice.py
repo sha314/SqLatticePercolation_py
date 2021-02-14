@@ -113,6 +113,7 @@ class Percolation:
 class SitePercolation(Percolation):
     def __init__(self, **kwargs):
         super(SitePercolation, self).__init__(**kwargs)
+        self.signature = "SitePercolation"
         self.init_clusters()
         self.site_ids_indices = list(range(0, self.lattice_ref.length**2))
         self.current_idx = 0
@@ -126,6 +127,9 @@ class SitePercolation(Percolation):
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
         pass
+
+    def get_signature(self):
+        return self.signature
 
     def init_clusters(self):
         for bb in self.lattice_ref.get_bond_id_list():
@@ -438,6 +442,8 @@ class SitePercolation(Percolation):
 class SitePercolation_L1(SitePercolation):
     def __init__(self, **kwargs):
         super(SitePercolation_L1, self).__init__(**kwargs)
+        self.signature = super(SitePercolation_L1, self).get_signature()
+        self.signature += "_L1"
         self.first_run = True
 
         self.occupation_prob_list = None
@@ -445,6 +451,9 @@ class SitePercolation_L1(SitePercolation):
         self.order_wrapping_list = None
         self.order_largest_list = None
         pass
+
+    def get_signature(self):
+        return self.signature
 
     def reset(self):
         super(SitePercolation_L1, self).reset()

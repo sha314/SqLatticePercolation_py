@@ -22,9 +22,12 @@ def print_hi():
     # end_t = time.time()
     # print("time required ", (end_t - start_t), " sec")
 
+
 def run_simulations():
     from main_py import ensemble
-    ensemble.run_ensemble_entropy_order(10, 10)
+    LL = 10
+    En = 10
+    ensemble.run_ensemble_entropy_order(LL, En)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

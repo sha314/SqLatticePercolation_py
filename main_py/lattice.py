@@ -88,13 +88,13 @@ class Lattice:
         return self.bond_matrix[b0_index].connected_sites()
 
     def get_site_neighbor_of_site(self, s0_index):
-        print("get_site_neighbor_of_site : ", s0_index)
+        # print("get_site_neighbor_of_site : ", s0_index)
         bonds = self.site_matrix[s0_index].connecting_bonds()
-        print("bonds ", bonds)
+        # print("bonds ", bonds)
         out_list = []
         for bb in bonds:
             nn = self.get_neighbor_sites(bb).copy()
-            print("nn ", nn)
+            # print("nn ", nn)
             nn.remove(s0_index)
             out_list.append(nn[0])
             pass

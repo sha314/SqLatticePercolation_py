@@ -123,7 +123,8 @@ class SitePercolation(Percolation):
         self.cluster_count = self.lattice_ref.bond_count
         self.largest_cluster_sz = 0
         self.largest_cluster_id = 0
-        self.entropy_value = 0
+        self.max_entropy = math.log(self.lattice_ref.bond_count)
+        self.entropy_value = self.max_entropy
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
         pass
@@ -150,6 +151,8 @@ class SitePercolation(Percolation):
         self.shuffle()
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
+        self.entropy_value = self.max_entropy
+        print("Initial entropy ", self.entropy_value)
         pass
 
     def get_neighbor_site(self, central_id, connecting_bond_id):
@@ -205,12 +208,12 @@ class SitePercolation(Percolation):
             bond_neighbors = self.current_site.connecting_bonds()
             # site_neighbors = self.get_connected_sites(self.current_site, bond_neighbors)
 
-            # self.entropy_substract()
+            self.entropy_subtract(bond_neighbors)
 
             merged_cluster_index = self.merge_clusters_v2(bond_neighbors)
 
             self.track_largest_cluster(merged_cluster_index)
-            # self.entropy_add(merged_cluster_index)
+            self.entropy_add(merged_cluster_index)
 
             # self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
             # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
@@ -228,18 +231,53 @@ class SitePercolation(Percolation):
 
         # self.entropy_value = 0
 
-    def entropy_substract(self):
+    def entropy_subtract(self, bond_neighbors):
+        # print("entropy_subtract")
+        bonds = self.lattice_ref.get_neighbor_bonds(self.selected_id)
+        # print(self.current_site, " neighbors => ", sites)
+        gids = set()
+        for bb in bonds:
+            gid = self.lattice_ref.get_bond_gid_by_id(bb)
+            if gid == -1:
+                continue
+            gids.add(gid)
+            pass
+        # print("gids ", gids)
+        H = 0
+        for gg in gids:
+            b_count = self.cluster_pool_ref.get_cluster_bond_count(gg)
+            if b_count == 0:
+                continue
+                pass
+            mu = b_count / self.lattice_ref.bond_count
+            H += mu * math.log(mu)
+            pass
+        # print("before ", self.entropy_value)
+        self.entropy_value += H
+        # print("after ", self.entropy_value)
 
         pass
 
-    def entropy_add(self):
-
+    def entropy_add(self, new_cluster_id):
+        # print("entropy_add")
+        b_count = self.cluster_pool_ref.get_cluster_bond_count(new_cluster_id)
+        mu = b_count / self.lattice_ref.bond_count
+        # print("before ", self.entropy_value)
+        self.entropy_value -= mu*math.log(mu)
+        # print("after ", self.entropy_value)
         pass
 
     def occupation_prob(self):
         return self.current_idx / self.lattice_ref.site_count
 
     def entropy(self):
+        # return self.entropy_v1()
+        return self.entropy_v2()
+
+    def entropy_v2(self):
+        return self.entropy_value
+
+    def entropy_v1(self):
         H = 0
         for i in range(self.cluster_count):
             b_count = self.cluster_pool_ref.get_cluster_bond_count(i)
@@ -248,10 +286,11 @@ class SitePercolation(Percolation):
                 # print("empty cluster")
                 continue
             log_mu = math.log(mu)
-            H += mu*log_mu
+            H += mu * log_mu
             pass
-        self.entropy_value = -H
-        return self.entropy_value
+        # self.entropy_value = -H
+        # return self.entropy_value
+        return -H
 
     def largest_cluster(self):
         return self.largest_cluster_sz
@@ -658,21 +697,24 @@ def test_detect_wrapping():
     # sq_lattice_p.viewCluster()
     i = 0
     while sq_lattice_p.place_one_site():
-        # print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
-        #       sq_lattice_p.order_param())
+        print("p= ", sq_lattice_p.occupation_prob(),
+              " entropy_v1 ", sq_lattice_p.entropy_v1(),
+              " entropy_v2 ", sq_lattice_p.entropy_v2(),
+              " order ",             sq_lattice_p.order_param_wrapping())
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewLattice(4)
         # sq_lattice_p.lattice_ref.print_bonds()
         i += 1
-        if(sq_lattice_p.detect_wrapping()):
-            print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
-                  sq_lattice_p.order_param_largest_clstr())
-            print("Wrapping detected ***************** <<<")
-            break
-        if i > 5:
-            break
+        # if(sq_lattice_p.detect_wrapping()):
+        #     # print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
+        #     #       sq_lattice_p.order_param_largest_clstr())
+        #     print("Wrapping detected ***************** <<<")
+        #     # break
+        # if i > 2:
+        #     break
         continue
-    sq_lattice_p.viewLattice(3)
+        pass
+    # sq_lattice_p.viewLattice(3)
     # sq_lattice_p.viewLattice(4)
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()

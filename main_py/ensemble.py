@@ -17,13 +17,15 @@ def run_ensemble_entropy_order(length, ensembleSize, interaction=0):
         percolation.reset()
 
         percolation.run_once()
-
+        aaa = percolation.get_data_array()
         if data is None:
-            data = percolation.get_data_array()
+            data = aaa
         else:
-            data += percolation.get_data_array()
+            data += aaa
             pass
         pass
+        print("temp ")
+        print(aaa)
         end_t = time.time() - start_t
         print("Iteration {:4f} | Time elapsed {:.5f} sec".format(en, end_t))
         pass

@@ -2,3 +2,4 @@
 *.pyc
 main_py/__pycache__/*
 data/*
+copy_src_to_cloister.sh

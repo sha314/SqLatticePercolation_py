@@ -4,6 +4,7 @@ import random
 import math
 import numpy as np
 from main_py.index import *
+import gc
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -133,6 +134,7 @@ class SitePercolation(Percolation):
         return self.signature
 
     def init_clusters(self):
+        self.cluster_pool_ref.reset();
         for bb in self.lattice_ref.get_bond_id_list():
             self.cluster_pool_ref.create_new_cluster([], [bb], self.lattice_ref)
             pass
@@ -150,7 +152,7 @@ class SitePercolation(Percolation):
         self.init_clusters()
         self.shuffle()
         self.current_idx = 0
-        self.shuffle()
+        # self.shuffle()
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
         self.largest_cluster_sz = 0
@@ -499,12 +501,18 @@ class SitePercolation_L1(SitePercolation):
         return self.signature
 
     def reset(self):
+        # n = gc.collect()
+        # print("Number of unreachable objects collected by GC:", n)
+        # print("Uncollectable garbage:", gc.garbage)
         super(SitePercolation_L1, self).reset()
         if self.first_run:
             self.occupation_prob_list = list()
             pass
+        del self.entropy_list
         self.entropy_list = list()
+        del self.order_wrapping_list
         self.order_wrapping_list = list()
+        del self.order_largest_list
         self.order_largest_list = list()
 
     def get_entropy_array(self):

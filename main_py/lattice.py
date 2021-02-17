@@ -203,7 +203,7 @@ class Lattice:
             pass
         s0_index = row * self.length + col
         s0_index += hv_flag * self.length**2
-        return self.site_matrix[s0_index]
+        return self.bond_matrix[s0_index]
         pass
 
     def get_site_id_list(self):

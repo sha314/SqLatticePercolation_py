@@ -101,7 +101,8 @@ class ClusterPool:
         pass
 
     def reset(self):
-
+        self.cluster_list = []
+        self.cluster_id = 0
         pass
 
     def get_cluster_bond_count(self, id):

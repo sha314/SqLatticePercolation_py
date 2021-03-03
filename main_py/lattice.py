@@ -1,6 +1,6 @@
 from main_py.site import Site
 from main_py.bond import Bond
-
+from main_py.index import Index
 
 class Lattice:
     def __init__(self, length):
@@ -185,8 +185,10 @@ class Lattice:
         return self.bond_matrix[id].get_gid()
         pass
 
-    def get_site_by_index(self, row, col):
-        s0_index = row * self.length + col
+    def get_site_by_index(self, index):
+        if type(index) is Index:
+            print("got Index ")
+        s0_index = index.row() * self.length + index.column()
         return self.site_matrix[s0_index]
         pass
 

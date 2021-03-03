@@ -117,6 +117,7 @@ class SitePercolation(Percolation):
         self.signature = "SitePercolation"
         self.init_clusters()
         self.site_ids_indices = list(range(0, self.lattice_ref.length**2))
+        self.reverse_ids_indices = [0] * len(self.site_ids_indices)
         self.current_idx = 0
         self.shuffle()
         self.current_site = None
@@ -128,19 +129,24 @@ class SitePercolation(Percolation):
         self.entropy_value = self.max_entropy
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
+        self.occupation_prob_list = None
+        self.entropy_list = None
+        self.order_wrapping_list = None
+        self.order_largest_list = None
         pass
 
     def get_signature(self):
         return self.signature
 
     def init_clusters(self):
-        self.cluster_pool_ref.reset();
+        self.cluster_pool_ref.reset()
         for bb in self.lattice_ref.get_bond_id_list():
             self.cluster_pool_ref.create_new_cluster([], [bb], self.lattice_ref)
             pass
         pass
 
     def shuffle(self):
+        # print("warning ! shuffle off")
         random.shuffle(self.site_ids_indices)
         pass
 
@@ -202,10 +208,11 @@ class SitePercolation(Percolation):
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         # print("selected id ", self.selected_id)
+        self.current_idx += 1
         return True
 
     def place_one_site(self):
-        # print("************************ place_one_site. count ", self.current_idx)
+        # print("************************ place_one_site. count ", self.current_idx + 1)
         flag = self.select_site()
         if flag:
 
@@ -223,7 +230,7 @@ class SitePercolation(Percolation):
 
             # self.lattice_ref.set_site_gid_by_id(selected_id, merged_cluster_index)
             # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
-            self.current_idx += 1
+
             pass
         return flag
 
@@ -234,8 +241,6 @@ class SitePercolation(Percolation):
             self.largest_cluster_id = new_cluster
             self.largest_cluster_sz = new_size
             pass
-
-        # self.entropy_value = 0
 
     def entropy_subtract(self, bond_neighbors):
         # print("entropy_subtract")
@@ -428,7 +433,7 @@ class SitePercolation(Percolation):
         # print("neighbor_site ", neighbor_site)
         sites_to_relabel = self.cluster_pool_ref.get_sites(bbg)
         # print("sites_to_relabel ", sites_to_relabel)
-        # relabel neighbor according to central site
+        # relabel neighbor according to central siteoccupation_prob
         if len(sites_to_relabel) == 0:
             # print("len(sites_to_relabel) == 0 ")
             return
@@ -456,7 +461,9 @@ class SitePercolation(Percolation):
                 ss_relative_index = RelativeIndex(index=ss_relative_index)
                 # print("relative index after  : ", ss_relative_index)
                 # print("new_relative_index ", new_relative_index)
+                # print("before setting it up ", self.lattice_ref.get_site_by_id(ss).get_relative_index())
                 self.lattice_ref.get_site_by_id(ss).set_relative_index(ss_relative_index)
+                # print("after setting it up ", self.lattice_ref.get_site_by_id(ss).get_relative_index())
                 pass
             pass
 
@@ -484,100 +491,104 @@ class SitePercolation(Percolation):
             pass
         return False
 
-class SitePercolation_L1(SitePercolation):
-    def __init__(self, **kwargs):
-        super(SitePercolation_L1, self).__init__(**kwargs)
-        self.signature = super(SitePercolation_L1, self).get_signature()
-        self.signature += "L1_"
-        self.first_run = True
-
-        self.occupation_prob_list = None
-        self.entropy_list = None
-        self.order_wrapping_list = None
-        self.order_largest_list = None
-        pass
-
-    def get_signature(self):
-        return self.signature
-
-    def reset(self):
-        # n = gc.collect()
-        # print("Number of unreachable objects collected by GC:", n)
-        # print("Uncollectable garbage:", gc.garbage)
-        super(SitePercolation_L1, self).reset()
-        if self.first_run:
-            self.occupation_prob_list = list()
-            pass
-        del self.entropy_list
-        self.entropy_list = list()
-        del self.order_wrapping_list
-        self.order_wrapping_list = list()
-        del self.order_largest_list
-        self.order_largest_list = list()
-
-    def get_entropy_array(self):
-        return self.entropy_list
-
-    def get_occupation_prob_array(self):
-        return self.occupation_prob_list
-
-    def get_order_param_wrapping_array(self):
-        return self.order_wrapping_list
-
-    def get_order_param_largest_array(self):
-        return self.order_largest_list
-
-    def get_data_array(self):
-        pp = self.get_occupation_prob_array()
-        HH = self.get_entropy_array()
-        PP1 = self.get_order_param_wrapping_array()
-        PP2 = self.get_order_param_largest_array()
-        # print(pp)
-        # print(HH)
-        return np.c_[pp, HH, PP1, PP2]
-
-    def run_once(self):
-        # sq_lattice_p.viewLattice(3)
-        # sq_lattice_p.viewCluster()
-        if self.first_run:
-            while self.place_one_site():
-                self.detect_wrapping()
-                p = self.occupation_prob()
-                H = self.entropy()
-                P1 = self.order_param_wrapping()
-                P2 = self.order_param_largest_clstr()
-                self.occupation_prob_list.append(p)
-                self.entropy_list.append(H)
-                self.order_wrapping_list.append(P1)
-                self.order_largest_list.append(P2)
-
-                pass
-        else:
-            while self.place_one_site():
-                self.detect_wrapping()
-                H = self.entropy()
-                P1 = self.order_param_wrapping()
-                P2 = self.order_param_largest_clstr()
-                self.entropy_list.append(H)
-                self.order_wrapping_list.append(P1)
-                self.order_largest_list.append(P2)
 
 
 
-                pass
-        self.first_run = False
-        pass
-
-    # def place_one_site(self):
-    #     subtract_entropy(root_a, root_b);
-    #     auto
-    #     root = mergeClusters(root_a, root_b);
-    #     add_entropy(root);
-    #     track_largest_cluster(root);
-    #     track_cluster_count(root_a, root_b);
-
-
-    pass
+#
+# class SitePercolationL0(SitePercolation):
+#     def __init__(self, **kwargs):
+#         super(SitePercolationL0, self).__init__(**kwargs)
+#         self.signature = super(SitePercolationL0, self).get_signature()
+#         self.signature += "L0_"
+#         self.first_run = True
+#
+#         self.occupation_prob_list = None
+#         self.entropy_list = None
+#         self.order_wrapping_list = None
+#         self.order_largest_list = None
+#         pass
+#
+#     def get_signature(self):
+#         return self.signature
+#
+#     def reset(self):
+#         # n = gc.collect()
+#         # print("Number of unreachable objects collected by GC:", n)
+#         # print("Uncollectable garbage:", gc.garbage)
+#         super(SitePercolationL0, self).reset()
+#         if self.first_run:
+#             self.occupation_prob_list = list()
+#             pass
+#         del self.entropy_list
+#         self.entropy_list = list()
+#         del self.order_wrapping_list
+#         self.order_wrapping_list = list()
+#         del self.order_largest_list
+#         self.order_largest_list = list()
+#
+#     def get_entropy_array(self):
+#         return self.entropy_list
+#
+#     def get_occupation_prob_array(self):
+#         return self.occupation_prob_list
+#
+#     def get_order_param_wrapping_array(self):
+#         return self.order_wrapping_list
+#
+#     def get_order_param_largest_array(self):
+#         return self.order_largest_list
+#
+#     def get_data_array(self):
+#         pp = self.get_occupation_prob_array()
+#         HH = self.get_entropy_array()
+#         PP1 = self.get_order_param_wrapping_array()
+#         PP2 = self.get_order_param_largest_array()
+#         # print(pp)
+#         # print(HH)
+#         return np.c_[pp, HH, PP1, PP2]
+#
+#     def run_once(self):
+#         # sq_lattice_p.viewLattice(3)
+#         # sq_lattice_p.viewCluster()
+#         if self.first_run:
+#             while self.place_one_site():
+#                 self.detect_wrapping()
+#                 p = self.occupation_prob()
+#                 H = self.entropy()
+#                 P1 = self.order_param_wrapping()
+#                 P2 = self.order_param_largest_clstr()
+#                 self.occupation_prob_list.append(p)
+#                 self.entropy_list.append(H)
+#                 self.order_wrapping_list.append(P1)
+#                 self.order_largest_list.append(P2)
+#
+#                 pass
+#         else:
+#             while self.place_one_site():
+#                 self.detect_wrapping()
+#                 H = self.entropy()
+#                 P1 = self.order_param_wrapping()
+#                 P2 = self.order_param_largest_clstr()
+#                 self.entropy_list.append(H)
+#                 self.order_wrapping_list.append(P1)
+#                 self.order_largest_list.append(P2)
+#
+#
+#
+#                 pass
+#         self.first_run = False
+#         pass
+#
+#     # def place_one_site(self):
+#     #     subtract_entropy(root_a, root_b);
+#     #     auto
+#     #     root = mergeClusters(root_a, root_b);
+#     #     add_entropy(root);
+#     #     track_largest_cluster(root);
+#     #     track_cluster_count(root_a, root_b);
+#
+#
+#     pass
 
 class BondPercolation(Percolation):
     def __init__(self, **kwargs):
@@ -617,7 +628,7 @@ def test_site_percolation():
 
 def test_relative_index():
     # take arguments from commandline
-    sq_lattice_p = SitePercolation(length=5, seed=0)
+    sq_lattice_p = SitePercolation(length=6, seed=0)
     # sq_lattice_p.viewCluster()
     # sq_lattice_p.viewLattice(1)
 

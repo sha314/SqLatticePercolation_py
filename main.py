@@ -8,19 +8,30 @@ import multiprocessing
 
 def print_hi():
     from main_py import lattice
-    lattice.test(5)
+    # lattice.test(5)
     # lattice.test_neighbors(6)
 
-    from main_py import percolation_sq_lattice
+    # from main_py import percolation_sq_lattice
     # percolation_sq_lattice.test_site_percolation()
     # percolation_sq_lattice.test_relative_index()
-    percolation_sq_lattice.test_detect_wrapping()
+    # percolation_sq_lattice.test_detect_wrapping()
 
     # import time
     # start_t = time.time()
     # percolation_sq_lattice.test_large(100)
     # end_t = time.time()
     # print("time required ", (end_t - start_t), " sec")
+
+    # from main_py import percolation_sq_lattice_L0
+    # percolation_sq_lattice_L0.test_detect_wrapping()
+    # percolation_sq_lattice_L0.test_relative_index()
+    # percolation_sq_lattice.test_detect_wrapping()
+
+    from main_py import percolation_sq_lattice_L1L2
+    # percolation_sq_lattice.test_site_percolation()
+    percolation_sq_lattice_L1L2.test_L1()
+    percolation_sq_lattice_L1L2.test_L2()
+    # percolation_sq_lattice.test_detect_wrapping()
 
 def run_simulation_threads():
     from main_py import ensemble
@@ -98,11 +109,11 @@ def run_simulations():
 if __name__ == '__main__':
     time_a = time.time()
 
-    # print_hi()
+    print_hi()
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    run_simulation_threads_v3()
+    # run_simulation_threads_v3()
 
     print("No errors")
     total_time_spent = time.time() - time_a

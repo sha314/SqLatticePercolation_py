@@ -11,6 +11,8 @@ class Site(Element):
         self.connecting_bond_ids = []
         self.index = Index(row=row, col=col)
         self.relative_index = RelativeIndex()
+        self.first_nn_count = 4 # for L1 percolation
+        self.second_directional_nn_count = 4 # for L2 percolation
 
     def __str__(self):
         # if self.g_id is not None:
@@ -21,6 +23,27 @@ class Site(Element):
         #     return self.get_str(0)
         return self.get_str(0)
 
+    def get_nn_count(self):
+        return self.first_nn_count, self.second_directional_nn_count
+
+    def reduce_1st_nn(self):
+        if self.first_nn_count <=0:
+            return
+        self.first_nn_count -= 1
+
+    def reduce_2st_directional_nn(self):
+        if self.second_directional_nn_count <=0:
+            return
+        self.second_directional_nn_count -= 1
+
+    def is_removable(self, type=0):
+        if type == 1:
+            return self.first_nn_count == 0
+        elif type == 2:
+            return self.second_directional_nn_count == 0
+        else:
+            return False
+
     def get_index(self):
         # return self.row, self.col
         return self.index
@@ -28,6 +51,9 @@ class Site(Element):
 
     def get_gid(self):
         return self.g_id
+
+    def is_occupied(self):
+        return self.g_id >= 0
 
     def get_id(self):
         return self.id

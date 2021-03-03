@@ -1,4 +1,5 @@
-from main_py.percolation_sq_lattice import SitePercolation_L1
+# from main_py.percolation_sq_lattice import SitePercolationL0
+from main_py.percolation_sq_lattice_L0 import SitePercolationL0
 from datetime import datetime
 import json
 import numpy as np
@@ -9,7 +10,7 @@ def run_ensemble_entropy_order(length, ensembleSize, interaction=0):
     run simulation for site percolation on square lattice.
     """
 
-    percolation = SitePercolation_L1(length=length)
+    percolation = SitePercolationL0(length=length)
     data = None
     for en in range(ensembleSize):
         start_t = time.time()
@@ -67,7 +68,7 @@ def run_ensemble_entropy_order_threads(length, ensembleSize, thread_count=0):
     # print("ensembleSize ", ensembleSize)
     # print("thread_count ", thread_count)
 
-    percolation = SitePercolation_L1(length=length)
+    percolation = SitePercolationL0(length=length)
     data = None
     for en in range(1, ensembleSize+1):
         start_t = time.time()

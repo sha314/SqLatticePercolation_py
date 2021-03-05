@@ -109,8 +109,8 @@ def run_simulations():
     from main_py import ensemble
     from main_py import percolation_sq_lattice_L0
     from main_py import percolation_sq_lattice_L1L2
-    LL = 6
-    En = 10
+    LL = 100
+    En = 50
     ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
     ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
     ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)

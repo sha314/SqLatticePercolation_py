@@ -153,7 +153,7 @@ class SitePercolation(Percolation):
     #     pass
 
     def shuffle(self):
-        print("SitePercolation:shuffle")
+        # print("SitePercolation:shuffle")
         # print("warning ! shuffle off")
         random.shuffle(self.site_ids_indices)
         for i in range(len(self.site_ids_indices)):
@@ -214,10 +214,10 @@ class SitePercolation(Percolation):
         HH = self.get_entropy_array()
         PP1 = self.get_order_param_wrapping_array()
         PP2 = self.get_order_param_largest_array()
-        print(len(pp))
-        print(len(HH))
-        print(len(PP1))
-        print(len(PP2))
+        # print(len(pp))
+        # print(len(HH))
+        # print(len(PP1))
+        # print(len(PP2))
         return np.c_[pp, HH, PP1, PP2]
 
     def get_occupation_prob_array(self):
@@ -295,9 +295,10 @@ class SitePercolation(Percolation):
 
             pass
         elif self.selection_flag == 1:
-            print("current site is not empty but there are empty sites in the lattice")
+            # print("current site is not empty but there are empty sites in the lattice")
+            pass
         elif self.selection_flag == -1:
-            print("No remaining empty sites")
+            # print("No remaining empty sites")
             return False
         return True
 
@@ -563,9 +564,9 @@ class SitePercolation(Percolation):
     def run_once(self):
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewCluster()
-        print("get_occupation_prob_array ", self.get_occupation_prob_array())
+        # print("get_occupation_prob_array ", self.get_occupation_prob_array())
         while self.place_one_site():
-            print("self.selection_flag ", self.selection_flag)
+            # print("self.selection_flag ", self.selection_flag)
             if self.selection_flag == 0:
                 self.detect_wrapping()
                 p = self.occupation_prob()
@@ -609,7 +610,7 @@ class SitePercolation(Percolation):
         #
         #
         #         pass
-        print("get_occupation_prob_array ", self.get_occupation_prob_array())
+        # print("get_occupation_prob_array ", self.get_occupation_prob_array())
         self.first_run = False
         pass
 

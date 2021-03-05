@@ -46,7 +46,7 @@ class SitePercolationL1(SitePercolation):
                 pass
         #
         # sites.remove(central)
-        print(central, " has four neighbor sites : ", sites)
+        # print(central, " has four neighbor sites : ", sites)
         return sites
 
     def select_site(self):
@@ -55,28 +55,28 @@ class SitePercolationL1(SitePercolation):
                  1 -> sites are remaining but current site is not empty
                  -1 -> no remaining empty sites
         """
-        print("SitePercolationL1.select_site")
+        # print("SitePercolationL1.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
             return -1
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
         central_X = self.site_ids_indices[rnd]
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
-            print("X is occupied")
+            # print("X is occupied")
             self.x_occupied += 1
 
             sites = self.get_four_neighbor_sites(central_X)
-            print("four neighbors ", sites)
+            # print("four neighbors ", sites)
             central2 = sites[random.randint(0, len(sites)-1)]
             if self.lattice_ref.get_site_by_id(central2).is_occupied():
-                print("first neighbor is occupied")
+                # print("first neighbor is occupied")
                 self.lattice_ref.get_site_by_id(central_X).reduce_1st_nn()
                 if self.lattice_ref.get_site_by_id(central_X).is_removable(1):
-                    print("is_removable")
-                    print("self.site_ids_indices before ", self.site_ids_indices)
-                    print("rnd ", rnd, " self.current_idx ", self.current_idx)
+                    # print("is_removable")
+                    # print("self.site_ids_indices before ", self.site_ids_indices)
+                    # print("rnd ", rnd, " self.current_idx ", self.current_idx)
                     self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
-                    print("self.site_ids_indices after ", self.site_ids_indices)
+                    # print("self.site_ids_indices after ", self.site_ids_indices)
 
                     self.current_idx += 1
                     # return False
@@ -84,7 +84,7 @@ class SitePercolationL1(SitePercolation):
                 return 1
 
             # self.swap_ids(central, central2)
-            print("number of usable nn ", self.lattice_ref.get_site_by_id(central_X).get_nn_count())
+            # print("number of usable nn ", self.lattice_ref.get_site_by_id(central_X).get_nn_count())
 
             central_X = central2
 
@@ -92,7 +92,7 @@ class SitePercolationL1(SitePercolation):
         self.selected_id = central_X
 
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        print("selected id ", self.selected_id)
+        # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
 
         return 0
@@ -147,7 +147,7 @@ class SitePercolationL2(SitePercolation):
                 pass
         #
         # sites.remove(central)
-        print(central, " has four neighbor sites : ", sites)
+        # print(central, " has four neighbor sites : ", sites)
         return sites
 
     def correct_index_for_periodicity(self, index):
@@ -161,7 +161,7 @@ class SitePercolationL2(SitePercolation):
                  1 -> sites are remaining but current site is not empty
                  -1 -> no remaining empty sites
         """
-        print("SitePercolationL2.select_site")
+        # print("SitePercolationL2.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
             return -1
@@ -172,11 +172,11 @@ class SitePercolationL2(SitePercolation):
             sites = self.get_four_neighbor_sites(central_X)
             Y_id = sites[random.randint(0, len(sites) - 1)]
             Z_id = Y_id
-            print("X is occupied")
+            # print("X is occupied")
             self.x_occupied += 1
 
             if self.lattice_ref.get_site_by_id(Y_id).is_occupied():
-                print("Y is occupied")
+                # print("Y is occupied")
                 self.lattice_ref.get_site_by_id(central_X).reduce_1st_nn()
 
                 # if central2 is occupied then select the one in the direction
@@ -184,17 +184,17 @@ class SitePercolationL2(SitePercolation):
                 Y_index = self.lattice_ref.get_site_by_id(Y_id).get_index()
                 delta_X = Y_index - X_index
                 delta_X.normalize()
-                print(delta_X, " delta X = Y - X => Y ", Y_index, " - ", X_index)
+                # print(delta_X, " delta X = Y - X => Y ", Y_index, " - ", X_index)
                 Z_index = Y_index + delta_X
-                print("Z_index ", Z_index)
+                # print("Z_index ", Z_index)
                 Z_index = self.correct_index_for_periodicity(Z_index)
-                print("Z_index ", Z_index)
+                # print("Z_index ", Z_index)
                 Z_id = self.lattice_ref.get_site_by_index(Z_index).get_id()
                 if self.lattice_ref.get_site_by_id(Z_id).is_occupied():
                     self.y_occupied += 1
                     self.lattice_ref.get_site_by_id(central_X).reduce_2st_directional_nn()
                     if self.lattice_ref.get_site_by_id(central_X).is_removable(2):
-                        print("is_removable")
+                        # print("is_removable")
                         self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
 
                         self.current_idx += 1
@@ -204,10 +204,10 @@ class SitePercolationL2(SitePercolation):
 
             pass
         # self.swap_ids(central_X, central)
-        print("central ", Z_id)
+        # print("central ", Z_id)
         self.selected_id = Z_id
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        print("selected id ", self.selected_id)
+        # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
         return 0
 

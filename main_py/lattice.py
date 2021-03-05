@@ -190,7 +190,8 @@ class Lattice:
 
     def get_site_by_index(self, index):
         if type(index) is Index:
-            print("got Index ")
+            # print("got Index ")
+            pass
         s0_index = index.row() * self.length + index.column()
         return self.site_matrix[s0_index]
         pass

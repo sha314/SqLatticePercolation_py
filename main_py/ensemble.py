@@ -5,12 +5,12 @@ import json
 import numpy as np
 import time
 
-def run_ensemble_entropy_order(length, ensembleSize, interaction=0):
+def run_ensemble_entropy_order(percolationClass, length, ensembleSize, interaction=0):
     """
     run simulation for site percolation on square lattice.
     """
 
-    percolation = SitePercolationL0(length=length)
+    percolation = percolationClass(length=length)
     data = None
     for en in range(ensembleSize):
         start_t = time.time()
@@ -60,7 +60,7 @@ def run_ensemble_entropy_order(length, ensembleSize, interaction=0):
     pass
 
 
-def run_ensemble_entropy_order_threads(length, ensembleSize, thread_count=0):
+def run_ensemble_entropy_order_threads(percolationClass, length, ensembleSize, thread_count=0):
     """
     run simulation for site percolation on square lattice.
     """
@@ -68,7 +68,7 @@ def run_ensemble_entropy_order_threads(length, ensembleSize, thread_count=0):
     # print("ensembleSize ", ensembleSize)
     # print("thread_count ", thread_count)
 
-    percolation = SitePercolationL0(length=length)
+    percolation = percolationClass(length=length)
     data = None
     for en in range(1, ensembleSize+1):
         start_t = time.time()

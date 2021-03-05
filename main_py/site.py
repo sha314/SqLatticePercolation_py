@@ -14,6 +14,13 @@ class Site(Element):
         self.first_nn_count = 4 # for L1 percolation
         self.second_directional_nn_count = 4 # for L2 percolation
 
+    def reset(self):
+        super(Site, self).reset()
+        self.relative_index = RelativeIndex()
+        self.first_nn_count = 4  # for L1 percolation
+        self.second_directional_nn_count = 4  # for L2 percolation
+        pass
+
     def __str__(self):
         # if self.g_id is not None:
         #     return self.get_str(1)

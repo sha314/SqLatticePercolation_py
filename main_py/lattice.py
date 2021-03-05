@@ -16,7 +16,10 @@ class Lattice:
         pass
 
     def reset(self):
-
+        for i in range(len(self.site_matrix)):
+            self.site_matrix[i].reset()
+        for i in range(len(self.bond_matrix)):
+            self.bond_matrix[i].reset()
         pass
 
     def init_lattice(self):

@@ -30,7 +30,7 @@ def print_hi():
     from main_py import percolation_sq_lattice_L1L2
     # percolation_sq_lattice.test_site_percolation()
     percolation_sq_lattice_L1L2.test_L1()
-    percolation_sq_lattice_L1L2.test_L2()
+    # percolation_sq_lattice_L1L2.test_L2()
     # percolation_sq_lattice.test_detect_wrapping()
 
 def run_simulation_threads():
@@ -77,9 +77,14 @@ def run_simulation_threads_v2():
 
 def run_simulation_threads_v3():
     from main_py import ensemble
+    from main_py import percolation_sq_lattice_L1L2
+    from main_py import percolation_sq_lattice_L0
+    percolationClass = percolation_sq_lattice_L0.SitePercolationL0
+    percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
+    # percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
     length = 10
     thread_counts = 2
-    En = 1000
+    En = 500
     En_per_thread = En // thread_counts
 
     from threading import Thread
@@ -89,7 +94,8 @@ def run_simulation_threads_v3():
 
     for i in range(thread_counts):
         # inargs = {'length':LL, "ensembleSize":En, "thread_count":i}
-        process = multiprocessing.Process(target=ensemble.run_ensemble_entropy_order_threads,args=(length, En_per_thread, i))
+        process = multiprocessing.Process(target=ensemble.run_ensemble_entropy_order_threads,
+                                          args=(percolationClass, length, En_per_thread, i))
         all_processes.append(process)
         process.start()
 
@@ -101,16 +107,20 @@ def run_simulation_threads_v3():
 
 def run_simulations():
     from main_py import ensemble
-    LL = 100
+    from main_py import percolation_sq_lattice_L0
+    from main_py import percolation_sq_lattice_L1L2
+    LL = 6
     En = 10
-    ensemble.run_ensemble_entropy_order(LL, En)
+    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
+    ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
+    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     time_a = time.time()
 
-    print_hi()
-    # run_simulations()
+    # print_hi()
+    run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
     # run_simulation_threads_v3()

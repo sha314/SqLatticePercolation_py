@@ -119,6 +119,7 @@ class SitePercolation(Percolation):
         self.site_ids_indices = list(range(0, self.lattice_ref.length**2))
         self.reverse_ids_indices = [0] * len(self.site_ids_indices)
         self.current_idx = 0
+        self.occupied_site_count = 0  # for L1 and L2, current_idx is not a valid site counter
         self.shuffle()
         self.current_site = None
         self.selected_id = None
@@ -164,6 +165,8 @@ class SitePercolation(Percolation):
         self.largest_cluster_sz = 0
         self.largest_cluster_id = -1
         self.entropy_value = self.max_entropy
+        self.occupied_site_count = 0
+        self.selection_flag = None
         # print("Initial entropy ", self.entropy_value)
         pass
 
@@ -202,19 +205,25 @@ class SitePercolation(Percolation):
         pass
 
     def select_site(self):
+        """
+        return : 0 -> successfully chosen an empty site
+                 1 -> sites are remaining but current site is not empty
+                 -1 -> no remaining empty sites
+        """
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return False
+            return -1
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         # print("selected id ", self.selected_id)
         self.current_idx += 1
-        return True
+        self.occupied_site_count += 1
+        return 0
 
     def place_one_site(self):
         # print("************************ place_one_site. count ", self.current_idx + 1)
-        flag = self.select_site()
-        if flag:
+        self.selection_flag = self.select_site()
+        if self.selection_flag == 0:
 
             # print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
             self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
@@ -232,7 +241,12 @@ class SitePercolation(Percolation):
             # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
 
             pass
-        return flag
+        elif self.selection_flag == 1:
+            print("current site is not empty but there are empty sites in the lattice")
+        elif self.selection_flag == -1:
+            print("No remaining empty sites")
+            return False
+        return True
 
     def track_largest_cluster(self, new_cluster):
         new_size = self.cluster_pool_ref.get_cluster_bond_count(new_cluster)
@@ -279,7 +293,7 @@ class SitePercolation(Percolation):
         pass
 
     def occupation_prob(self):
-        return self.current_idx / self.lattice_ref.site_count
+        return self.occupied_site_count / self.lattice_ref.site_count
 
     def entropy(self):
         # return self.entropy_v1()

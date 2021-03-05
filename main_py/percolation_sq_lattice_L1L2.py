@@ -50,28 +50,42 @@ class SitePercolationL1(SitePercolationL0):
         return sites
 
     def select_site(self):
+        """
+        return : 0 -> successfully chosen an empty site
+                 1 -> sites are remaining but current site is not empty
+                 -1 -> no remaining empty sites
+        """
         print("SitePercolationL1.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return False
+            return -1
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
         central_X = self.site_ids_indices[rnd]
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
             print("X is occupied")
             self.x_occupied += 1
-            self.lattice_ref.get_site_by_id(central_X).reduce_1st_nn()
+
             sites = self.get_four_neighbor_sites(central_X)
             print("four neighbors ", sites)
             central2 = sites[random.randint(0, len(sites)-1)]
+            if self.lattice_ref.get_site_by_id(central2).is_occupied():
+                print("first neighbor is occupied")
+                self.lattice_ref.get_site_by_id(central_X).reduce_1st_nn()
+                if self.lattice_ref.get_site_by_id(central_X).is_removable(1):
+                    print("is_removable")
+                    print("self.site_ids_indices before ", self.site_ids_indices)
+                    print("rnd ", rnd, " self.current_idx ", self.current_idx)
+                    self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
+                    print("self.site_ids_indices after ", self.site_ids_indices)
+
+                    self.current_idx += 1
+                    # return False
+                    pass
+                return 1
+
             # self.swap_ids(central, central2)
-
             print("number of usable nn ", self.lattice_ref.get_site_by_id(central_X).get_nn_count())
-            if self.lattice_ref.get_site_by_id(central_X).is_removable(1):
-                print("is_removable")
-                self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
 
-                self.current_idx += 1
-                pass
             central_X = central2
 
             pass
@@ -79,8 +93,9 @@ class SitePercolationL1(SitePercolationL0):
 
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         print("selected id ", self.selected_id)
+        self.occupied_site_count += 1
 
-        return True
+        return 0
 
 
 
@@ -183,6 +198,7 @@ class SitePercolationL2(SitePercolationL0):
         self.selected_id = central
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         print("selected id ", self.selected_id)
+        self.occupied_site_count += 1
         return True
 
 
@@ -207,11 +223,12 @@ def test_L1():
     # sq_lattice_p.viewLattice(1)
 
     while sq_lattice_p.place_one_site():
-        sq_lattice_p.occupied_summary()
+        sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.occupied_summary()
         continue
     # sq_lattice_p.occupied_summary()
 
-    sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.viewLattice(1)
     sq_lattice_p.viewCluster()
 
 

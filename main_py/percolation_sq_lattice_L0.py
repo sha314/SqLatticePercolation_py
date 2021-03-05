@@ -15,7 +15,7 @@ class SitePercolationL0(SitePercolation):
         self.signature = super(SitePercolationL0, self).get_signature()
         self.signature += "L0_"
         self.first_run = True
-        self.occupation_prob_list = None
+        self.occupation_prob_list = list()
         self.entropy_list = None
         self.order_wrapping_list = None
         self.order_largest_list = None
@@ -29,9 +29,9 @@ class SitePercolationL0(SitePercolation):
         # print("Number of unreachable objects collected by GC:", n)
         # print("Uncollectable garbage:", gc.garbage)
         super(SitePercolationL0, self).reset()
-        if self.first_run:
-            self.occupation_prob_list = list()
-            pass
+        # if self.first_run:
+        #     self.occupation_prob_list = list()
+        #     pass
         del self.entropy_list
         self.entropy_list = list()
         del self.order_wrapping_list
@@ -73,8 +73,10 @@ class SitePercolationL0(SitePercolation):
         HH = self.get_entropy_array()
         PP1 = self.get_order_param_wrapping_array()
         PP2 = self.get_order_param_largest_array()
-        # print(pp)
-        # print(HH)
+        print(len(pp))
+        print(len(HH))
+        print(len(PP1))
+        print(len(PP2))
         return np.c_[pp, HH, PP1, PP2]
 
     def get_occupation_prob_array(self):
@@ -84,32 +86,53 @@ class SitePercolationL0(SitePercolation):
     def run_once(self):
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewCluster()
-        if self.first_run:
-            while self.place_one_site():
+        print("get_occupation_prob_array ", self.get_occupation_prob_array())
+        while self.place_one_site():
+            print("self.selection_flag ", self.selection_flag)
+            if self.selection_flag == 0:
                 self.detect_wrapping()
                 p = self.occupation_prob()
+                # print("p = ", p)
                 H = self.entropy()
                 P1 = self.order_param_wrapping()
                 P2 = self.order_param_largest_clstr()
-                self.occupation_prob_list.append(p)
+                if self.first_run:
+                    self.occupation_prob_list.append(p)
+                    pass
                 self.entropy_list.append(H)
                 self.order_wrapping_list.append(P1)
                 self.order_largest_list.append(P2)
 
-                pass
-        else:
-            while self.place_one_site():
-                self.detect_wrapping()
-                H = self.entropy()
-                P1 = self.order_param_wrapping()
-                P2 = self.order_param_largest_clstr()
-                self.entropy_list.append(H)
-                self.order_wrapping_list.append(P1)
-                self.order_largest_list.append(P2)
-
-
-
-                pass
+        # if self.first_run:
+        #     print("self.first_run")
+        #     while self.place_one_site():
+        #         self.detect_wrapping()
+        #         p = self.occupation_prob()
+        #         # print("p = ", p)
+        #         H = self.entropy()
+        #         P1 = self.order_param_wrapping()
+        #         P2 = self.order_param_largest_clstr()
+        #         self.occupation_prob_list.append(p)
+        #         self.entropy_list.append(H)
+        #         self.order_wrapping_list.append(P1)
+        #         self.order_largest_list.append(P2)
+        #
+        #         pass
+        # else:
+        #     print("not self.first_run")
+        #     while self.place_one_site():
+        #         self.detect_wrapping()
+        #         H = self.entropy()
+        #         P1 = self.order_param_wrapping()
+        #         P2 = self.order_param_largest_clstr()
+        #         self.entropy_list.append(H)
+        #         self.order_wrapping_list.append(P1)
+        #         self.order_largest_list.append(P2)
+        #
+        #
+        #
+        #         pass
+        print("get_occupation_prob_array ", self.get_occupation_prob_array())
         self.first_run = False
         pass
 

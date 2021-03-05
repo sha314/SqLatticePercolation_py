@@ -16,6 +16,10 @@ class Bond(Element):
         self.type = type
         self.connected_site_ids = [] # connected site ids
 
+    def reset(self):
+        super(Bond, self).reset()
+        pass
+
     def __str__(self):
         if self.g_id is not None:
             return self.get_str(1)

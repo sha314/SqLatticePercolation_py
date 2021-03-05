@@ -5,6 +5,9 @@ class Element:
 
         self.g_id = -1
 
+    def reset(self):
+        self.g_id = -1
+
     def set_id(self, id):
         self.id = id
 

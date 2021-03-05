@@ -156,27 +156,32 @@ class SitePercolationL2(SitePercolationL0):
         return Index(row, column)
 
     def select_site(self):
+        """
+        return : 0 -> successfully chosen an empty site
+                 1 -> sites are remaining but current site is not empty
+                 -1 -> no remaining empty sites
+        """
         print("SitePercolationL2.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return False
+            return -1
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
         central_X = self.site_ids_indices[rnd]
-        central = central_X
+        Z_id = central_X
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
             sites = self.get_four_neighbor_sites(central_X)
-            Y = sites[random.randint(0, len(sites) - 1)]
-            central = Y
+            Y_id = sites[random.randint(0, len(sites) - 1)]
+            Z_id = Y_id
             print("X is occupied")
             self.x_occupied += 1
-            self.lattice_ref.get_site_by_id(central_X).reduce_1st_nn()
-            if self.lattice_ref.get_site_by_id(Y).is_occupied():
+
+            if self.lattice_ref.get_site_by_id(Y_id).is_occupied():
                 print("Y is occupied")
-                self.y_occupied += 1
-                self.lattice_ref.get_site_by_id(central_X).reduce_2st_directional_nn()
+                self.lattice_ref.get_site_by_id(central_X).reduce_1st_nn()
+
                 # if central2 is occupied then select the one in the direction
                 X_index = self.lattice_ref.get_site_by_id(central_X).get_index()
-                Y_index = self.lattice_ref.get_site_by_id(Y).get_index()
+                Y_index = self.lattice_ref.get_site_by_id(Y_id).get_index()
                 delta_X = Y_index - X_index
                 delta_X.normalize()
                 print(delta_X, " delta X = Y - X => Y ", Y_index, " - ", X_index)
@@ -184,22 +189,27 @@ class SitePercolationL2(SitePercolationL0):
                 print("Z_index ", Z_index)
                 Z_index = self.correct_index_for_periodicity(Z_index)
                 print("Z_index ", Z_index)
-                if self.lattice_ref.get_site_by_id(central_X).is_removable(2):
-                    print("is_removable")
-                    self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
+                Z_id = self.lattice_ref.get_site_by_index(Z_index).get_id()
+                if self.lattice_ref.get_site_by_id(Z_id).is_occupied():
+                    self.y_occupied += 1
+                    self.lattice_ref.get_site_by_id(central_X).reduce_2st_directional_nn()
+                    if self.lattice_ref.get_site_by_id(central_X).is_removable(2):
+                        print("is_removable")
+                        self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
 
-                    self.current_idx += 1
-                    pass
-                central = self.lattice_ref.get_site_by_index(Z_index).get_id()
+                        self.current_idx += 1
+                        pass
+                    return 1
+
 
             pass
         # self.swap_ids(central_X, central)
-        print("central ", central)
-        self.selected_id = central
+        print("central ", Z_id)
+        self.selected_id = Z_id
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         print("selected id ", self.selected_id)
         self.occupied_site_count += 1
-        return True
+        return 0
 
 
 
@@ -226,7 +236,7 @@ def test_L1():
         sq_lattice_p.viewLattice(3)
         # sq_lattice_p.occupied_summary()
         continue
-    # sq_lattice_p.occupied_summary()
+    sq_lattice_p.occupied_summary()
 
     # sq_lattice_p.viewLattice(1)
     sq_lattice_p.viewCluster()
@@ -242,6 +252,7 @@ def test_L2():
     # sq_lattice_p.viewLattice(1)
 
     while sq_lattice_p.place_one_site():
+        sq_lattice_p.viewLattice(3)
         continue
 
     sq_lattice_p.occupied_summary()

@@ -29,8 +29,8 @@ def print_hi():
 
     from main_py import percolation_sq_lattice_L1L2
     # percolation_sq_lattice.test_site_percolation()
-    percolation_sq_lattice_L1L2.test_L1()
-    # percolation_sq_lattice_L1L2.test_L2()
+    # percolation_sq_lattice_L1L2.test_L1()
+    percolation_sq_lattice_L1L2.test_L2()
     # percolation_sq_lattice.test_detect_wrapping()
 
 def run_simulation_threads():
@@ -112,8 +112,8 @@ def run_simulations():
     LL = 6
     En = 10
     # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
-    ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
-    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
+    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
+    ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

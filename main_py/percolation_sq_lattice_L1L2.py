@@ -12,7 +12,7 @@ Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
 
 
-class SitePercolationL1(SitePercolationL0):
+class SitePercolationL1(SitePercolation):
     def __init__(self, **kwargs):
         super(SitePercolationL1, self).__init__(**kwargs)
         self.signature = super(SitePercolationL1, self).get_signature()
@@ -111,7 +111,7 @@ class SitePercolationL1(SitePercolationL0):
     pass
 
 
-class SitePercolationL2(SitePercolationL0):
+class SitePercolationL2(SitePercolation):
     def __init__(self, **kwargs):
         super(SitePercolationL2, self).__init__(**kwargs)
         self.signature = super(SitePercolationL2, self).get_signature()

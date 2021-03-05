@@ -130,6 +130,7 @@ class SitePercolation(Percolation):
         self.entropy_value = self.max_entropy
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
+        self.first_run = True
         self.occupation_prob_list = None
         self.entropy_list = None
         self.order_wrapping_list = None
@@ -146,10 +147,30 @@ class SitePercolation(Percolation):
             pass
         pass
 
+    # def shuffle(self):
+    #     # print("warning ! shuffle off")
+    #     random.shuffle(self.site_ids_indices)
+    #     pass
+
     def shuffle(self):
+        print("SitePercolation:shuffle")
         # print("warning ! shuffle off")
         random.shuffle(self.site_ids_indices)
+        for i in range(len(self.site_ids_indices)):
+            a = self.site_ids_indices[i]
+            self.reverse_ids_indices[a] = i
+            pass
         pass
+
+    def swap_ids(self, id1, id2):
+        if id1 == id2:
+            return -1
+        ix1 = self.reverse_ids_indices[id1]
+        ix2 = self.reverse_ids_indices[id2]
+        self.site_ids_indices[ix1] = id2
+        self.site_ids_indices[ix2] = id1
+        self.reverse_ids_indices[id2] = ix1
+        self.reverse_ids_indices[id1] = ix2
 
     def reset(self):
         """
@@ -168,7 +189,39 @@ class SitePercolation(Percolation):
         self.occupied_site_count = 0
         self.selection_flag = None
         # print("Initial entropy ", self.entropy_value)
+        if self.first_run:
+            self.occupation_prob_list = list()
+            pass
+        del self.entropy_list
+        self.entropy_list = list()
+        del self.order_wrapping_list
+        self.order_wrapping_list = list()
+        del self.order_largest_list
+        self.order_largest_list = list()
         pass
+
+    def get_order_param_wrapping_array(self):
+        return self.order_wrapping_list
+
+    def get_order_param_largest_array(self):
+        return self.order_largest_list
+
+    def get_entropy_array(self):
+        return self.entropy_list
+
+    def get_data_array(self):
+        pp = self.get_occupation_prob_array()
+        HH = self.get_entropy_array()
+        PP1 = self.get_order_param_wrapping_array()
+        PP2 = self.get_order_param_largest_array()
+        print(len(pp))
+        print(len(HH))
+        print(len(PP1))
+        print(len(PP2))
+        return np.c_[pp, HH, PP1, PP2]
+
+    def get_occupation_prob_array(self):
+        return self.occupation_prob_list
 
     def get_neighbor_site(self, central_id, connecting_bond_id):
         # central_id = current_site.get_id()
@@ -504,6 +557,61 @@ class SitePercolation(Percolation):
                 return True
             pass
         return False
+
+
+
+    def run_once(self):
+        # sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.viewCluster()
+        print("get_occupation_prob_array ", self.get_occupation_prob_array())
+        while self.place_one_site():
+            print("self.selection_flag ", self.selection_flag)
+            if self.selection_flag == 0:
+                self.detect_wrapping()
+                p = self.occupation_prob()
+                # print("p = ", p)
+                H = self.entropy()
+                P1 = self.order_param_wrapping()
+                P2 = self.order_param_largest_clstr()
+                if self.first_run:
+                    self.occupation_prob_list.append(p)
+                    pass
+                self.entropy_list.append(H)
+                self.order_wrapping_list.append(P1)
+                self.order_largest_list.append(P2)
+
+        # if self.first_run:
+        #     print("self.first_run")
+        #     while self.place_one_site():
+        #         self.detect_wrapping()
+        #         p = self.occupation_prob()
+        #         # print("p = ", p)
+        #         H = self.entropy()
+        #         P1 = self.order_param_wrapping()
+        #         P2 = self.order_param_largest_clstr()
+        #         self.occupation_prob_list.append(p)
+        #         self.entropy_list.append(H)
+        #         self.order_wrapping_list.append(P1)
+        #         self.order_largest_list.append(P2)
+        #
+        #         pass
+        # else:
+        #     print("not self.first_run")
+        #     while self.place_one_site():
+        #         self.detect_wrapping()
+        #         H = self.entropy()
+        #         P1 = self.order_param_wrapping()
+        #         P2 = self.order_param_largest_clstr()
+        #         self.entropy_list.append(H)
+        #         self.order_wrapping_list.append(P1)
+        #         self.order_largest_list.append(P2)
+        #
+        #
+        #
+        #         pass
+        print("get_occupation_prob_array ", self.get_occupation_prob_array())
+        self.first_run = False
+        pass
 
 
 

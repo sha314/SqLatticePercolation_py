@@ -111,8 +111,8 @@ def run_simulations():
     from main_py import percolation_sq_lattice_L1L2
     LL = 6
     En = 10
-    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
-    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
+    ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
+    ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
     ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
 
 # Press the green button in the gutter to run the script.

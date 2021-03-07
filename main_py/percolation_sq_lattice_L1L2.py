@@ -19,6 +19,7 @@ class SitePercolationL1(SitePercolation):
         self.signature += "L1_"
 
         self.x_occupied = 0
+        print("SitePercolationL1.init")
         pass
 
     def reset(self):
@@ -118,6 +119,7 @@ class SitePercolationL2(SitePercolation):
         self.signature += "L2_"
         self.x_occupied = 0
         self.y_occupied = 0
+        print("SitePercolationL2.init")
         pass
 
     def reset(self):
@@ -233,9 +235,11 @@ def test_L1():
     # sq_lattice_p.viewLattice(1)
 
     while sq_lattice_p.place_one_site():
+        sq_lattice_p.detect_wrapping()
         sq_lattice_p.viewLattice(3)
         # sq_lattice_p.occupied_summary()
         continue
+    print("tc = ", sq_lattice_p.get_tc())
     sq_lattice_p.occupied_summary()
 
     # sq_lattice_p.viewLattice(1)

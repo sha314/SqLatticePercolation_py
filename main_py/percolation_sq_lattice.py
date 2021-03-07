@@ -120,6 +120,7 @@ class SitePercolation(Percolation):
         self.reverse_ids_indices = [0] * len(self.site_ids_indices)
         self.current_idx = 0
         self.occupied_site_count = 0  # for L1 and L2, current_idx is not a valid site counter
+        self.tc_occupied_site_count = 0  # number of occupied sites at tc
         self.shuffle()
         self.current_site = None
         self.selected_id = None
@@ -180,6 +181,7 @@ class SitePercolation(Percolation):
         self.init_clusters()
         self.shuffle()
         self.current_idx = 0
+        self.tc_occupied_site_count = 0
         # self.shuffle()
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
@@ -199,6 +201,13 @@ class SitePercolation(Percolation):
         del self.order_largest_list
         self.order_largest_list = list()
         pass
+
+    def get_tc(self):
+        if self.after_wrapping:
+            return self.tc_occupied_site_count/self.lattice_ref.site_count
+        else:
+            print("no wrapping yet")
+            return 0
 
     def get_order_param_wrapping_array(self):
         return self.order_wrapping_list
@@ -555,6 +564,7 @@ class SitePercolation(Percolation):
                 # print("relative ", central_r_index, " - ", rss)
                 self.after_wrapping = True
                 self.wrapping_cluster_id = self.lattice_ref.get_site_by_id(self.selected_id).get_gid()
+                self.tc_occupied_site_count = self.occupied_site_count
                 return True
             pass
         return False
@@ -580,7 +590,6 @@ class SitePercolation(Percolation):
                 self.entropy_list.append(H)
                 self.order_wrapping_list.append(P1)
                 self.order_largest_list.append(P2)
-
         # if self.first_run:
         #     print("self.first_run")
         #     while self.place_one_site():

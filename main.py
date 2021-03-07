@@ -29,8 +29,8 @@ def print_hi():
 
     from main_py import percolation_sq_lattice_L1L2
     # percolation_sq_lattice.test_site_percolation()
-    # percolation_sq_lattice_L1L2.test_L1()
-    percolation_sq_lattice_L1L2.test_L2()
+    percolation_sq_lattice_L1L2.test_L1()
+    # percolation_sq_lattice_L1L2.test_L2()
     # percolation_sq_lattice.test_detect_wrapping()
 
 def run_simulation_threads():
@@ -75,16 +75,16 @@ def run_simulation_threads_v2():
         thread.join()
         pass
 
-def run_simulation_threads_v3():
+def run_simulation_threads_v3(length, ensemble_count, thread):
     from main_py import ensemble
     from main_py import percolation_sq_lattice_L1L2
     from main_py import percolation_sq_lattice_L0
     percolationClass = percolation_sq_lattice_L0.SitePercolationL0
-    percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
-    # percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
-    length = 10
-    thread_counts = 2
-    En = 500
+    # percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
+    percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
+    # length = 500
+    thread_counts = thread
+    En = ensemble_count
     En_per_thread = En // thread_counts
 
     from threading import Thread
@@ -94,7 +94,7 @@ def run_simulation_threads_v3():
 
     for i in range(thread_counts):
         # inargs = {'length':LL, "ensembleSize":En, "thread_count":i}
-        process = multiprocessing.Process(target=ensemble.run_ensemble_entropy_order_threads,
+        process = multiprocessing.Process(target=ensemble.run_ensemble_entropy_order_threads_v2,
                                           args=(percolationClass, length, En_per_thread, i))
         all_processes.append(process)
         process.start()
@@ -109,7 +109,7 @@ def run_simulations():
     from main_py import ensemble
     from main_py import percolation_sq_lattice_L0
     from main_py import percolation_sq_lattice_L1L2
-    LL = 100
+    LL = 50
     En = 50
     ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
     ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
@@ -120,10 +120,14 @@ if __name__ == '__main__':
     time_a = time.time()
 
     # print_hi()
-    run_simulations()
+    # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v3()
+    run_simulation_threads_v3(50, 100, 2)
+    # run_simulation_threads_v3(200, 5000, 20)
+    # run_simulation_threads_v3(300, 5000, 20)
+    # run_simulation_threads_v3(400, 5000, 20)
+    # run_simulation_threads_v3(500, 5000, 20)
 
     print("No errors")
     total_time_spent = time.time() - time_a

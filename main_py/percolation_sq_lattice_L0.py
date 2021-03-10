@@ -153,11 +153,11 @@ def test_detect_wrapping():
         # sq_lattice_p.lattice_ref.print_bonds()
         i += 1
         sq_lattice_p.detect_wrapping()
-        # if(sq_lattice_p.detect_wrapping()):
-            # print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
-            #       sq_lattice_p.order_param_largest_clstr())
-            # print("Wrapping detected ***************** <<<")
-            # break
+        if(sq_lattice_p.detect_wrapping()):
+            print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
+                  sq_lattice_p.order_param_largest_clstr())
+            print("Wrapping detected ***************** <<<")
+            break
         # if i > 2:
         #     break
         continue
@@ -196,4 +196,32 @@ def test_large(lengthL):
     #     print("entropy ", sq_lattice_p.entropy(), " order ", sq_lattice_p.order_param())
     #     continue
     # sq_lattice_p.viewCluster()
+    pass
+
+def test_simulation():
+    """
+        run simulation for site percolation on square lattice.
+        """
+
+    length = 6
+    ensembleSize = 100
+    for seeded in range(1000):
+        print("seed ={:4}".format(seeded))
+        percolation = SitePercolationL0(length=length, seed=seeded)
+        data = None
+        pcs = []
+
+        percolation.reset()
+        # percolation.viewCluster()
+        # percolation.viewLattice()
+        percolation.run_once()
+        pcs.append(percolation.get_tc())
+        aaa = percolation.get_data_array()
+        assert aaa[-1, -2] == 1.0
+        # if aaa[-1, -2] == 1:
+        #     break
+        print(aaa[-1, -2])
+
+        pass
+
     pass

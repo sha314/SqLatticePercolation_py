@@ -22,6 +22,7 @@ def run_ensemble_entropy_order(percolationClass, length, ensembleSize, interacti
         percolation.run_once()
         pcs.append(percolation.get_tc())
         aaa = percolation.get_data_array()
+        print(aaa[-1,:])
         if data is None:
             data = aaa
         else:

@@ -249,6 +249,41 @@ def test_L1():
 
     pass
 
+
+def test_detect_wrapping_L1L2():
+    # take arguments from commandline
+    sq_lattice_p = SitePercolationL1(length=100, seed=18)
+
+    # sq_lattice_p.viewLattice(3)
+    # sq_lattice_p.viewCluster()
+    i = 0
+    while sq_lattice_p.place_one_site():
+        print("p= ", sq_lattice_p.occupation_prob(),
+              " entropy_v1 ", sq_lattice_p.entropy_v1(),
+              " entropy_v2 ", sq_lattice_p.entropy_v2(),
+              " order wrapping ",             sq_lattice_p.order_param_wrapping(),
+              " order largest ", sq_lattice_p.order_param_largest_clstr())
+        # sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.viewLattice(4)
+        # sq_lattice_p.lattice_ref.print_bonds()
+        i += 1
+        sq_lattice_p.detect_wrapping()
+        # if(sq_lattice_p.detect_wrapping()):
+        #     print("p= ", sq_lattice_p.occupation_prob(), " entropy ", sq_lattice_p.entropy(), " order ",
+        #           sq_lattice_p.order_param_largest_clstr())
+        #     print("Wrapping detected ***************** <<<")
+        #     break
+        # if i > 2:
+        #     break
+        continue
+        pass
+    # sq_lattice_p.viewLattice(3)
+    # sq_lattice_p.viewLattice(4)
+    # sq_lattice_p.viewLattice(1)
+    # sq_lattice_p.viewCluster()
+    pass
+
+
 def test_L2():
     # take arguments from commandline
     sq_lattice_p = SitePercolationL2(length=6, seed=0)

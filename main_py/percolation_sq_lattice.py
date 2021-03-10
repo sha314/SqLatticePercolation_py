@@ -5,6 +5,8 @@ import math
 import numpy as np
 from main_py.index import *
 import gc
+# import unittest
+import pytest
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -620,6 +622,11 @@ class SitePercolation(Percolation):
         #
         #         pass
         # print("get_occupation_prob_array ", self.get_occupation_prob_array())
+
+        # print("P1 = ", P1)
+        if abs(P1-1.0) > 1e-6:
+            print("P1 must be 1.0")
+        # assert P1 != 1.0
         self.first_run = False
         pass
 

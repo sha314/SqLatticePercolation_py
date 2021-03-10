@@ -392,7 +392,9 @@ class SitePercolation(Percolation):
         if self.after_wrapping:
             # print("wrapping cluster id ", self.wrapping_cluster_id)
             count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
-            return count / self.lattice_ref.bond_count
+            ret_val = count / self.lattice_ref.bond_count
+            # print("wrapping cluster size ", count, " P = ", ret_val)
+            return ret_val
         return 0.
         pass
 
@@ -449,6 +451,10 @@ class SitePercolation(Percolation):
         ref_sz = 0
         root_clstr = bond_gids[0]
         for bbg in bond_gids:
+            if self.after_wrapping and (self.wrapping_cluster_id in bond_gids):
+                # print("After wrapping, the wrapping cluster is the root cluster even if other involved clusters are larger")
+                root_clstr = self.wrapping_cluster_id
+                break
             sz = self.cluster_pool_ref.get_cluster_bond_count(bbg)
             if sz >= ref_sz:
                 root_clstr = bbg

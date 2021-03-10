@@ -23,16 +23,17 @@ def print_hi():
     # print("time required ", (end_t - start_t), " sec")
 
     from main_py import percolation_sq_lattice_L0
-    percolation_sq_lattice_L0.test_detect_wrapping()
+    # percolation_sq_lattice_L0.test_detect_wrapping()
     # percolation_sq_lattice_L0.test_relative_index()
     # percolation_sq_lattice.test_detect_wrapping()
+    percolation_sq_lattice_L0.test_simulation_L0()
 
 
-    from main_py import percolation_sq_lattice_L1L2
+    # from main_py import percolation_sq_lattice_L1L2
     # percolation_sq_lattice.test_site_percolation()
     # percolation_sq_lattice_L1L2.test_L1()
     # percolation_sq_lattice_L1L2.test_L2()
-    percolation_sq_lattice_L1L2.test_detect_wrapping_L1L2()
+    # percolation_sq_lattice_L1L2.test_detect_wrapping_L1L2()
 
 def run_simulation_threads():
     from main_py import ensemble
@@ -121,14 +122,14 @@ if __name__ == '__main__':
     time_a = time.time()
 
     # print_hi()
-    run_simulations()
+    # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
     #run_simulation_threads_v3(50, 100, 2)
-    # run_simulation_threads_v3(200, 5000, 20)
-    # run_simulation_threads_v3(300, 5000, 20)
-    # run_simulation_threads_v3(400, 5000, 20)
-    # run_simulation_threads_v3(500, 5000, 20)
+    run_simulation_threads_v3(200, 3000, 20)
+    run_simulation_threads_v3(300, 3000, 20)
+    run_simulation_threads_v3(400, 3000, 20)
+    run_simulation_threads_v3(500, 3000, 20)
 
     print("No errors")
     total_time_spent = time.time() - time_a

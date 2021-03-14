@@ -1,9 +1,9 @@
-from main_py import lattice
-from main_py import cluster
+from source_py import lattice
+from source_py import cluster
 import random
 import numpy as np
 
-from main_py.percolation_sq_lattice import SitePercolation
+from source_py.percolation_sq_lattice import SitePercolation
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool

@@ -1,9 +1,9 @@
-from main_py import lattice
-from main_py import cluster
+from source_py import lattice
+from source_py import cluster
 import random
 import math
 import numpy as np
-from main_py.index import *
+from source_py.index import *
 import gc
 # import unittest
 import pytest

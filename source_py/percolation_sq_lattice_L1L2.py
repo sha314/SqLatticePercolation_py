@@ -1,12 +1,12 @@
-from main_py import lattice
-from main_py import cluster
+from source_py import lattice
+from source_py import cluster
 import random
 import math
-from main_py.index import *
+from source_py.index import *
 import gc
 
-from main_py.percolation_sq_lattice import SitePercolation
-from main_py.percolation_sq_lattice_L0 import SitePercolationL0
+from source_py.percolation_sq_lattice import SitePercolation
+from source_py.percolation_sq_lattice_L0 import SitePercolationL0
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool

@@ -195,8 +195,8 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
     current_time = now.strftime("%Y%m%d_%H%M%S")
     print("current_time ", current_time)
 
-    write_entropy_order(current_time, data, ensembleSize, length, now, signature)
-    write_pc_values(current_time, pcs, ensembleSize, length, now, signature)
+    write_entropy_order(current_time, data, ensembleSize, length, now, signature, thread_count=thread_count)
+    write_pc_values(current_time, pcs, ensembleSize, length, now, signature, thread_count=thread_count)
     pass
 
 

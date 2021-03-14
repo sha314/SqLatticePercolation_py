@@ -125,11 +125,11 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    #run_simulation_threads_v3(50, 100, 2)
-    run_simulation_threads_v3(200, 3000, 20)
-    run_simulation_threads_v3(300, 3000, 20)
-    run_simulation_threads_v3(400, 3000, 20)
-    run_simulation_threads_v3(500, 3000, 20)
+    run_simulation_threads_v3(10, 100, 4)
+    # run_simulation_threads_v3(200, 3000, 20)
+    # run_simulation_threads_v3(300, 3000, 20)
+    # run_simulation_threads_v3(400, 3000, 20)
+    # run_simulation_threads_v3(500, 3000, 20)
 
     print("No errors")
     total_time_spent = time.time() - time_a

@@ -20,6 +20,14 @@ class Bond(Element):
         super(Bond, self).reset()
         pass
 
+    def test_bond(self):
+        # for unit test
+        # print("test_bond")
+        assert len(self.connected_site_ids) == 2
+        sett = set(self.connected_site_ids)
+        assert len(sett) == 2  # repetition
+        pass
+
     def __str__(self):
         if self.g_id is not None:
             return self.get_str(1)

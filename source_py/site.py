@@ -21,6 +21,14 @@ class Site(Element):
         self.second_directional_nn_count = 4  # for L2 percolation
         pass
 
+    def test_site(self):
+        # for unit test
+        # print("test_site")
+        assert len(self.connecting_bond_ids) == 4
+        sett = set(self.connecting_bond_ids)
+        assert len(sett) == 4  # repetition
+        pass
+
     def __str__(self):
         # if self.g_id is not None:
         #     return self.get_str(1)

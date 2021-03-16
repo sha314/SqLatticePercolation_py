@@ -346,6 +346,18 @@ class Lattice:
         s_index = self.site_ids[id]
         self.site_matrix[s_index].set_relative_index(relative_index)
         pass
+
+    def test_lattice(self, gid):
+        # for unit test. When the percolation is complete
+        # print("test_lattice")
+        for ss in self.site_matrix:
+            ss.test_site()
+            assert ss.get_gid() == gid
+            pass
+        for bb in self.bond_matrix:
+            bb.test_bond()
+            assert bb.get_gid() == gid
+        pass
     pass
 
 

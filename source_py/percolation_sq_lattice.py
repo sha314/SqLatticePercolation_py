@@ -636,7 +636,7 @@ class SitePercolation(Percolation):
         self.first_run = False
         pass
 
-    def check_clusters(self):
+    def test_clusters(self):
         # for unit test. At the end of a simulation
 
 
@@ -657,6 +657,11 @@ class SitePercolation(Percolation):
         # no sites or bonds in other clusters
         assert bsum == 0
         assert ssum == 0
+        assert self.largest_cluster_sz == len(bond_ids_indices)
+
+    def test_lattice(self):
+        self.lattice_ref.test_lattice(self.wrapping_cluster_id)
+        pass
 
 
 

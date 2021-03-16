@@ -27,7 +27,8 @@ def test_simulation_L0_seed():
     if P1 != 1.0:
         print("P1 should be 1.0")
     assert P1 == 1.0
-    percolation.check_clusters()
+    percolation.test_clusters()
+    percolation.test_lattice()
     # percolation.viewCluster()
     # percolation.viewLattice()
     # pcs.append(percolation.get_tc())
@@ -39,7 +40,7 @@ def test_simulation_L0_seed():
     # print(aaa[-1, -2])
 
 # pytest fails for L=6, seed=310 for L0
-def test_simulation_L0():
+def test_simulation_L0_different_seeds():
     """
         run simulation for site percolation on square lattice.
         """
@@ -62,7 +63,40 @@ def test_simulation_L0():
         # if aaa[-1, -2] == 1:
         #     break
         # print(aaa[-1, -2])
-        percolation.check_clusters()
+        percolation.test_clusters()
+        percolation.test_lattice()
+        pass
+    # print("seed ={:4}".format(seeded))
+
+
+    pass
+
+# pytest fails for L=6, seed=310 for L0
+def test_simulation_L0_different_lengths():
+    """
+        run simulation for site percolation on square lattice.
+        """
+
+    length = 10
+    seeded = 310
+    for length in range(5, 50):
+        print("seed ={:4}".format(seeded))
+        percolation = SitePercolationL0(length=length, seed=seeded)
+        data = None
+        pcs = []
+
+        percolation.reset()
+        # percolation.viewCluster()
+        # percolation.viewLattice()
+        percolation.run_once()
+        # pcs.append(percolation.get_tc())
+        # aaa = percolation.get_data_array()
+        # assert aaa[-1, -2] == 1.0
+        # if aaa[-1, -2] == 1:
+        #     break
+        # print(aaa[-1, -2])
+        percolation.test_clusters()
+        percolation.test_lattice()
         pass
     # print("seed ={:4}".format(seeded))
 

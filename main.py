@@ -82,8 +82,8 @@ def run_simulation_threads_v3(length, ensemble_count, thread):
     from source_py import percolation_sq_lattice_L1L2
     from source_py import percolation_sq_lattice_L0
     percolationClass = percolation_sq_lattice_L0.SitePercolationL0
-    # percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
-    #percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
+    percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
+    percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
     # length = 500
     thread_counts = thread
     En = ensemble_count
@@ -113,7 +113,7 @@ def run_simulations():
     from source_py import percolation_sq_lattice_L1L2
     LL = 50
     En = 100
-    ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
+    ensemble.run_ensemble_entorpy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
     # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
     # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
 
@@ -125,11 +125,11 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    run_simulation_threads_v3(10, 100, 4)
-    # run_simulation_threads_v3(200, 3000, 20)
-    # run_simulation_threads_v3(300, 3000, 20)
-    # run_simulation_threads_v3(400, 3000, 20)
-    # run_simulation_threads_v3(500, 3000, 20)
+    #run_simulation_threads_v3(10, 100, 4)
+    run_simulation_threads_v3(200, 5000, 20)
+    run_simulation_threads_v3(300, 5000, 20)
+    run_simulation_threads_v3(400, 5000, 20)
+    run_simulation_threads_v3(500, 5000, 20)
 
     print("No errors")
     total_time_spent = time.time() - time_a

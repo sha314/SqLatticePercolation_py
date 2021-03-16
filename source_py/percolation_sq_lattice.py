@@ -630,11 +630,36 @@ class SitePercolation(Percolation):
         # print("get_occupation_prob_array ", self.get_occupation_prob_array())
 
         # print("P1 = ", P1)
-        if abs(P1-1.0) > 1e-6:
-            print("P1 must be 1.0")
+        # if abs(P1-1.0) > 1e-6:
+        #     print("P1 must be 1.0")
         # assert P1 != 1.0
         self.first_run = False
         pass
+
+    def check_clusters(self):
+        # for unit test. At the end of a simulation
+
+
+        bond_ids_indices = list(range(0, 2*self.lattice_ref.length ** 2))
+        bsum = ssum = 0
+        for gid in bond_ids_indices:
+            b1 = self.cluster_pool_ref.get_cluster_bond_count(gid)
+            s1 = self.cluster_pool_ref.get_cluster_site_count(gid)
+            if gid == self.wrapping_cluster_id:
+                assert b1 == self.lattice_ref.bond_count
+                assert s1 == self.lattice_ref.site_count
+                pass
+            else:
+                bsum += b1
+                ssum += s1
+                pass
+            pass
+        # no sites or bonds in other clusters
+        assert bsum == 0
+        assert ssum == 0
+
+
+
 
 
 

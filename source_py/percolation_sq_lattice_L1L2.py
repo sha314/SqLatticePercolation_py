@@ -239,7 +239,7 @@ def test_L1():
         sq_lattice_p.viewLattice(3)
         # sq_lattice_p.occupied_summary()
         continue
-    print("tc = ", sq_lattice_p.get_tc())
+    print("tc = ", sq_lattice_p.get_pc())
     sq_lattice_p.occupied_summary()
 
     # sq_lattice_p.viewLattice(1)

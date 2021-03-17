@@ -22,11 +22,15 @@ class Percolation:
             pass
         self.lattice_ref = Lattice(length)
         self.cluster_pool_ref = ClusterPool()
+        self.pc_bond_count_wrapping_cluster = None
+        self.pc_site_count_wrapping_cluster = None
         pass
 
     def reset(self):
         self.lattice_ref.reset()
         self.cluster_pool_ref.reset()
+        self.pc_bond_count_wrapping_cluster = None
+        self.pc_site_count_wrapping_cluster = None
         pass
 
     def viewLattice(self, formatt=0):
@@ -122,7 +126,7 @@ class SitePercolation(Percolation):
         self.reverse_ids_indices = [0] * len(self.site_ids_indices)
         self.current_idx = 0
         self.occupied_site_count = 0  # for L1 and L2, current_idx is not a valid site counter
-        self.tc_occupied_site_count = 0  # number of occupied sites at tc
+        self.pc_occupied_site_count = 0  # number of occupied sites at tc
         self.shuffle()
         self.current_site = None
         self.selected_id = None
@@ -183,7 +187,7 @@ class SitePercolation(Percolation):
         self.init_clusters()
         self.shuffle()
         self.current_idx = 0
-        self.tc_occupied_site_count = 0
+        self.pc_occupied_site_count = 0
         # self.shuffle()
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
@@ -204,11 +208,23 @@ class SitePercolation(Percolation):
         self.order_largest_list = list()
         pass
 
-    def get_tc(self):
+    def get_pc(self):
         if self.after_wrapping:
-            return self.tc_occupied_site_count/self.lattice_ref.site_count
+            return self.pc_occupied_site_count / self.lattice_ref.site_count
         else:
             print("no wrapping yet")
+            return 0
+
+    def get_site_count_wrapping_cluster_pc(self):
+        if self.pc_site_count_wrapping_cluster is not None:
+            return self.pc_site_count_wrapping_cluster
+        else:
+            return 0
+
+    def get_bond_count_wrapping_cluster_pc(self):
+        if self.pc_bond_count_wrapping_cluster is not None:
+            return self.pc_bond_count_wrapping_cluster
+        else:
             return 0
 
     def get_order_param_wrapping_array(self):
@@ -572,7 +588,9 @@ class SitePercolation(Percolation):
                 # print("relative ", central_r_index, " - ", rss)
                 self.after_wrapping = True
                 self.wrapping_cluster_id = self.lattice_ref.get_site_by_id(self.selected_id).get_gid()
-                self.tc_occupied_site_count = self.occupied_site_count
+                self.pc_occupied_site_count = self.occupied_site_count
+                self.pc_bond_count_wrapping_cluster = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
+                self.pc_site_count_wrapping_cluster = self.cluster_pool_ref.get_cluster_site_count(self.wrapping_cluster_id)
                 return True
             pass
         return False
@@ -580,6 +598,9 @@ class SitePercolation(Percolation):
 
 
     def run_once(self):
+        """
+        Single realization
+        """
         # sq_lattice_p.viewLattice(3)
         # sq_lattice_p.viewCluster()
         # print("get_occupation_prob_array ", self.get_occupation_prob_array())

@@ -12,7 +12,7 @@ def run_ensemble_entropy_order(percolationClass, length, ensembleSize, interacti
 
     percolation = percolationClass(length=length)
     data = None
-    pcs = []
+    critical_data = []
     for en in range(ensembleSize):
         start_t = time.time()
 
@@ -20,7 +20,10 @@ def run_ensemble_entropy_order(percolationClass, length, ensembleSize, interacti
         # percolation.viewCluster()
         # percolation.viewLattice()
         percolation.run_once()
-        pcs.append(percolation.get_tc())
+        critical_data.append([percolation.get_pc(),
+                              percolation.get_site_count_wrapping_cluster_pc(),
+                              percolation.get_bond_count_wrapping_cluster_pc(),
+                              ])
         aaa = percolation.get_data_array()
         print(aaa[-1,:])
         if data is None:
@@ -43,7 +46,7 @@ def run_ensemble_entropy_order(percolationClass, length, ensembleSize, interacti
     print("current_time ", current_time)
 
     write_entropy_order(current_time, data, ensembleSize, length, now, signature)
-    write_pc_values(current_time, pcs, ensembleSize, length, now, signature)
+    write_critical_values(current_time, critical_data, ensembleSize, length, now, signature)
     pass
 
 
@@ -69,8 +72,8 @@ def write_entropy_order(current_time, data, ensembleSize, length, now, signature
     np.savetxt(filename, data, fmt="%.10e", header=header_str)
 
 
-def write_pc_values(current_time, data, ensembleSize, length, now, signature, thread_count=None):
-    signature += "_pc_values_L{}_".format(length)
+def write_critical_values(current_time, data, ensembleSize, length, now, signature, thread_count=None):
+    signature += "_critical_values_L{}_".format(length)
     filename = signature + current_time
     if thread_count is not None:
         filename += "_th{}".format(thread_count)
@@ -83,7 +86,7 @@ def write_pc_values(current_time, data, ensembleSize, length, now, signature, th
     head['En'] = ensembleSize
     head['date'] = now.strftime("%Y.%m.%d")
     head['time'] = now.strftime("%H:%M:%S")
-    head['columns'] = ["pc"]
+    head['columns'] = ["pc", "wrapping cluster site count at pc", "wrapping cluster bond count at pc"]
     head['desc'] = ["pc=critical ocupation probability"]
     header_str = json.dumps(head)
     filename = "./data/" + filename
@@ -164,7 +167,7 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
 
     percolation = percolationClass(length=length)
     data = None
-    pcs = []
+    critical_data = []
     for en in range(1, ensembleSize+1):
         start_t = time.time()
 
@@ -172,7 +175,10 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
         # percolation.viewCluster()
         # percolation.viewLattice()
         percolation.run_once()
-        pcs.append(percolation.get_tc())
+        critical_data.append([percolation.get_pc(),
+                              percolation.get_site_count_wrapping_cluster_pc(),
+                              percolation.get_bond_count_wrapping_cluster_pc(),
+                              ])
         aaa = percolation.get_data_array()
         if data is None:
             data = aaa
@@ -196,7 +202,7 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
     print("current_time ", current_time)
 
     write_entropy_order(current_time, data, ensembleSize, length, now, signature, thread_count=thread_count)
-    write_pc_values(current_time, pcs, ensembleSize, length, now, signature, thread_count=thread_count)
+    write_critical_values(current_time, critical_data, ensembleSize, length, now, signature, thread_count=thread_count)
     pass
 
 

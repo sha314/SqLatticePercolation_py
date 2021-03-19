@@ -657,8 +657,40 @@ class SitePercolation(Percolation):
         self.first_run = False
         pass
 
+    def test_run_once(self):
+        """
+        Single realization
+        """
+        # sq_lattice_p.viewLattice(3)
+        # sq_lattice_p.viewCluster()
+        # print("get_occupation_prob_array ", self.get_occupation_prob_array())
+        while self.place_one_site():
+            # print("self.selection_flag ", self.selection_flag)
+            if self.selection_flag == 0:
+                if self.detect_wrapping():
+                    # print("self.pc_occupied_site_count ", self.pc_occupied_site_count)
+                    # print("self.pc_site_count_wrapping_cluster ", self.pc_site_count_wrapping_cluster)
+                    assert self.pc_occupied_site_count > self.pc_site_count_wrapping_cluster
+                    break
+                p = self.occupation_prob()
+                # print("p = ", p)
+                H = self.entropy()
+                P1 = self.order_param_wrapping()
+                P2 = self.order_param_largest_clstr()
+                if self.first_run:
+                    self.occupation_prob_list.append(p)
+                    pass
+                self.entropy_list.append(H)
+                self.order_wrapping_list.append(P1)
+                self.order_largest_list.append(P2)
+
+        self.first_run = False
+        pass
+
     def test_clusters(self):
         # for unit test. At the end of a simulation
+        if self.occupied_site_count < self.lattice_ref.site_count:
+            return
 
 
         bond_ids_indices = list(range(0, 2*self.lattice_ref.length ** 2))
@@ -681,6 +713,10 @@ class SitePercolation(Percolation):
         assert self.largest_cluster_sz == len(bond_ids_indices)
 
     def test_lattice(self):
+
+        if self.occupied_site_count < self.lattice_ref.site_count:
+            print("Not in a stage for unit test")
+            return
         self.lattice_ref.test_lattice(self.wrapping_cluster_id)
         pass
 

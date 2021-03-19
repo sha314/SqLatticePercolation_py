@@ -157,7 +157,7 @@ def run_ensemble_entropy_order_threads(percolationClass, length, ensembleSize, t
     pass
 
 
-def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize, thread_count=0):
+def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize, thread_count=0, seed=None):
     """
     run simulation for site percolation on square lattice.
     """
@@ -166,6 +166,9 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
     # print("thread_count ", thread_count)
 
     percolation = percolationClass(length=length)
+    if seed is not None:
+        percolation = percolationClass(length=length, seed=seed)
+        pass
     data = None
     critical_data = []
     for en in range(1, ensembleSize+1):

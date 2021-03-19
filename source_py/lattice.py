@@ -357,6 +357,48 @@ class Lattice:
         for bb in self.bond_matrix:
             bb.test_bond()
             assert bb.get_gid() == gid
+            pass
+        # test relative index
+        prev_relative_index = None
+        relative_index = None
+        print("column scan")
+        for rr in range(self.length):
+            prev_relative_index = None
+            for cc in range(self.length):
+                idx = rr * self.length + cc
+                if prev_relative_index is None:
+                    prev_relative_index = self.get_site_by_id(idx).get_relative_index()
+                else:
+                    relative_index = self.get_site_by_id(idx).get_relative_index()
+                    dx = prev_relative_index.x_coord() - relative_index.x_coord()
+                    dy = prev_relative_index.y_coord() - relative_index.y_coord()
+                    print(prev_relative_index, " - ", relative_index)
+                    prev_relative_index = relative_index
+
+                    assert (abs(dy) == 1) or (abs(dy) == (self.length-1))
+                    # assert abs(dx) == 0
+                    pass
+                pass
+            pass
+        print("row scan")
+        for cc in range(self.length):
+            prev_relative_index=None
+            for rr in range(self.length):
+                idx = rr * self.length + cc
+                if prev_relative_index is None:
+                    prev_relative_index = self.get_site_by_id(idx).get_relative_index()
+                else:
+                    relative_index = self.get_site_by_id(idx).get_relative_index()
+                    dx = prev_relative_index.x_coord() - relative_index.x_coord()
+                    dy = prev_relative_index.y_coord() - relative_index.y_coord()
+                    print(prev_relative_index, " - ", relative_index)
+                    prev_relative_index = relative_index
+                    assert (abs(dx) == 1) or (abs(dx) == (self.length-1))
+                    # assert abs(dy) == 0
+                    pass
+
+                pass
+            pass
         pass
     pass
 

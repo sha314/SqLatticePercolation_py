@@ -4,10 +4,11 @@ import multiprocessing
 
 def test_L0():
     print("Unit Test using pytest")
-    # from test_py import test_percolation_L0
+    from test_py import test_percolation_L0
     # test_percolation_L0.test_simulation_L0_different_seeds()
     # test_percolation_L0.test_simulation_L0_different_lengths()
-    # test_percolation_L0.test_simulation_L0_seed()
+    test_percolation_L0.test_simulation_L0_seed()
+    test_percolation_L0.test_simulation_L0_reset()  # TODO
     pass
 
 

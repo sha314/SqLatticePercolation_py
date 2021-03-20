@@ -1,3 +1,12 @@
 # 2021.03.19
 For small length lattice it is possible for the wrapping cluster to contain all the sites at pc.
 This is very unlikely for large lattices.
+STATUS=not a serious issue.
+
+# 2021.03.20
+problem with reset() method?
+
+
+# 2021.03.20
+L=6, seed=41
+Relative index, relabeling ?

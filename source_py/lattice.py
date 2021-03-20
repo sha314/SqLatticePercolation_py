@@ -146,6 +146,7 @@ class Lattice:
             for cc in range(self.length):
                 s0_index = rr*self.length + cc
                 bonds = self.find_neighbor_bonds(s0_index)
+                assert len(bonds) == 4
                 self.site_matrix[s0_index].add_connecting_bond(bonds)
                 for bb in bonds:
                     self.bond_matrix[bb].add_connected_site(s0_index)
@@ -347,6 +348,34 @@ class Lattice:
         self.site_matrix[s_index].set_relative_index(relative_index)
         pass
 
+    def get_all_neighbor_sites(self, central_site_id):
+        bonds = self.get_neighbor_bonds(central_site_id)
+        four_neighbors = []
+        for bid in bonds:
+            connected_sites = self.get_neighbor_sites(bid)
+            tmp = connected_sites.copy()
+            if len(tmp) != 2:
+                print("func:get_all_neighbor_sites -> len(connected_sites) != 1")
+                print(self.get_bond_by_id(bid))
+                pass
+            print("connected_sites ", tmp)
+            tmp.remove(central_site_id)
+
+            four_neighbors.append(tmp[0])
+
+        return four_neighbors
+
+    def test_neighbor_count(self):
+        for ss in self.site_matrix:
+            bb = set(ss.connecting_bonds())
+            assert len(bb) == 4
+            pass
+        for bb in self.bond_matrix:
+            ss = bb.connected_sites()
+            if len(ss) < 2:
+                print(bb, " bond has ", ss, " sites ")
+            assert len(ss) == 2
+
     def test_lattice(self, gid):
         # for unit test. When the percolation is complete
         # print("test_lattice")
@@ -358,46 +387,104 @@ class Lattice:
             bb.test_bond()
             assert bb.get_gid() == gid
             pass
+        # self.test_rwo_col_scan()
+        self.test_relative_index()
+
+    def test_relative_index(self):
+
+        for site_central in self.site_matrix:
+            print("central site ", site_central, " neighbors {")
+            gid_c = site_central.get_gid()
+            if gid_c < 0:
+                continue
+            central_rel_index = site_central.get_relative_index()
+            four_neibhbors = self.get_all_neighbor_sites(site_central.get_id())
+            column_wise, row_wise = False, False
+            active_neighbor_count = 0
+            for nbors in four_neibhbors:
+                site = self.get_site_by_id(nbors)
+                print(site, end=",")
+                gid = site.get_gid()
+                if gid < 0:
+                    continue
+                active_neighbor_count += 1
+                relidx = site.get_relative_index()
+                dx = central_rel_index.x_coord() - relidx.x_coord()
+                dy = central_rel_index.y_coord() - relidx.y_coord()
+                if (abs(dy) == 1) or (abs(dy) == (self.length - 1)):
+                    column_wise = True
+                    pass
+                elif (abs(dx) == 1) or (abs(dx) == (self.length - 1)):
+                    row_wise = True
+                    pass
+                if column_wise or row_wise:
+                    break
+                pass
+            print("}")
+            print("active_neighbor_count ", active_neighbor_count)
+            if active_neighbor_count > 0:
+                assert column_wise or row_wise
+            pass
+
+    def test_rwo_col_scan(self):
+        ## difference between consecutive x or y values of the relative indices should be either 1 or (L-1)
         # test relative index
-        prev_relative_index = None
-        relative_index = None
+        site_prev = None
+        site = None
         print("column scan")
         for rr in range(self.length):
-            prev_relative_index = None
+            site_prev = None
             for cc in range(self.length):
                 idx = rr * self.length + cc
-                if prev_relative_index is None:
-                    prev_relative_index = self.get_site_by_id(idx).get_relative_index()
-                else:
-                    relative_index = self.get_site_by_id(idx).get_relative_index()
+                site = self.get_site_by_id(idx)
+                gid1 = site.get_gid()
+                if gid1 < 0:
+                    site_prev = None
+                    continue
+                if site_prev is None:
+                    site_prev = site
+                    continue
+                gid0 = site_prev.get_gid()
+                if gid1 == gid0 and gid0 >= 0 and gid1 >= 0:
+                    prev_relative_index = site_prev.get_relative_index()
+                    relative_index = site.get_relative_index()
                     dx = prev_relative_index.x_coord() - relative_index.x_coord()
                     dy = prev_relative_index.y_coord() - relative_index.y_coord()
                     print(prev_relative_index, " - ", relative_index)
-                    prev_relative_index = relative_index
 
-                    assert (abs(dy) == 1) or (abs(dy) == (self.length-1))
+                    assert (abs(dy) == 1) or (abs(dy) == (self.length - 1))
                     # assert abs(dx) == 0
                     pass
+                site_prev = site
                 pass
             pass
-        print("row scan")
-        for cc in range(self.length):
-            prev_relative_index=None
-            for rr in range(self.length):
-                idx = rr * self.length + cc
-                if prev_relative_index is None:
-                    prev_relative_index = self.get_site_by_id(idx).get_relative_index()
-                else:
-                    relative_index = self.get_site_by_id(idx).get_relative_index()
-                    dx = prev_relative_index.x_coord() - relative_index.x_coord()
-                    dy = prev_relative_index.y_coord() - relative_index.y_coord()
-                    print(prev_relative_index, " - ", relative_index)
-                    prev_relative_index = relative_index
-                    assert (abs(dx) == 1) or (abs(dx) == (self.length-1))
-                    # assert abs(dy) == 0
-                    pass
-
-                pass
+        # print("row scan")
+        # for cc in range(self.length):
+        #     site_prev = None
+        #     for rr in range(self.length):
+        #         idx = rr * self.length + cc
+        #         site = self.get_site_by_id(idx)
+        #         if site_prev is None:
+        #             site_prev = site
+        #             continue
+        #             pass
+        #         gid1, gid0 = site.get_gid(), site_prev.get_gid()
+        #         print(site)
+        #         print(site_prev)
+        #         if gid1 == gid0 and gid0 >= 0 and gid1 >= 0:
+        #
+        #             prev_relative_index = site_prev.get_relative_index()
+        #             relative_index = site.get_relative_index()
+        #             dx = prev_relative_index.x_coord() - relative_index.x_coord()
+        #             dy = prev_relative_index.y_coord() - relative_index.y_coord()
+        #             print(prev_relative_index, " - ", relative_index)
+        #
+        #             assert (abs(dx) == 1) or (abs(dx) == (self.length - 1))
+        #             # assert abs(dy) == 0
+        #             pass
+        #         site_prev = site
+        #
+        #         pass
             pass
         pass
     pass

@@ -1,17 +1,21 @@
 from source_py.percolation_sq_lattice_L0 import SitePercolationL0
 
 
-def test_simulation_L0_seed():
-    seed = 310
-    length = 6
+def test_simulation_L0_seed(length=6, seed=310):
     percolation = SitePercolationL0(length=length, seed=seed)
 
 
     # percolation.viewCluster()
     # percolation.viewLattice()
     P1 = -222
+    site_count = 1
+    percolation.test_lattice()
     while percolation.place_one_site():
         percolation.detect_wrapping()
+        print("occupied ", site_count, " sites")
+        percolation.viewLattice(3)
+        # percolation.viewLattice(1)
+        percolation.test_lattice()
         P1 = percolation.order_param_wrapping()
         # print("p= ", percolation.occupation_prob(),
         #       " entropy_v1 ", percolation.entropy_v1(),
@@ -23,11 +27,12 @@ def test_simulation_L0_seed():
         # if percolation.detect_wrapping():
         #     print("Wrapping detected")
         #     break
+        site_count += 1
         pass
     if P1 != 1.0:
         print("P1 should be 1.0")
     assert P1 == 1.0
-    percolation.viewLattice()
+    # percolation.viewLattice()
     percolation.viewLattice(3)
     percolation.test_clusters()
     percolation.test_lattice()
@@ -87,32 +92,12 @@ def test_simulation_L0_different_seeds():
         run simulation for site percolation on square lattice.
         """
 
-    length = 6
+
     seeded = 310
+    length = 6
     for seeded in range(1000):
-        print("seed ={:4}".format(seeded))
-        percolation = SitePercolationL0(length=length, seed=seeded)
-        data = None
-        pcs = []
-
-        percolation.reset()
-        # percolation.viewCluster()
-        # percolation.viewLattice()
-        # percolation.run_once()
-        percolation.test_run_once()
-        # pcs.append(percolation.get_tc())
-        # aaa = percolation.get_data_array()
-        # assert aaa[-1, -2] == 1.0
-        # if aaa[-1, -2] == 1:
-        #     break
-        # print(aaa[-1, -2])
-        percolation.test_clusters()
-        percolation.test_lattice()
+        test_simulation_L0_seed(length, seeded)
         pass
-    # print("seed ={:4}".format(seeded))
-
-
-    pass
 
 # pytest fails for L=6, seed=310 for L0
 def test_simulation_L0_different_lengths():

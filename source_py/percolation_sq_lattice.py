@@ -713,11 +713,18 @@ class SitePercolation(Percolation):
         assert self.largest_cluster_sz == len(bond_ids_indices)
 
     def test_lattice(self):
+        # self.lattice_ref.test_rwo_col_scan()
 
-        if self.occupied_site_count < self.lattice_ref.site_count:
-            print("Not in a stage for unit test")
-            return
-        self.lattice_ref.test_lattice(self.wrapping_cluster_id)
+        # self.lattice_ref.test_neighbor_count()
+        self.lattice_ref.test_relative_index()
+
+        if self.occupied_site_count == self.lattice_ref.site_count:
+
+            # self.lattice_ref.test_lattice(self.wrapping_cluster_id)
+            pass
+        else:
+            print("Not in a stage for all the unit tests")
+
         pass
 
 

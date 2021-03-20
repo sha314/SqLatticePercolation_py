@@ -54,7 +54,7 @@ def test_relative_index():
     sq_lattice_p = SitePercolation(length=6, seed=310)
     # sq_lattice_p.viewCluster()
     # sq_lattice_p.viewLattice(1)
-    sq_lattice_p.reset()
+    # sq_lattice_p.reset()
     while sq_lattice_p.place_one_site():
         sq_lattice_p.viewLattice(3)
         if sq_lattice_p.detect_wrapping():
@@ -137,6 +137,29 @@ def test_relative_index():
     # sq_lattice_p.viewLattice(4)
     # sq_lattice_p.viewLattice(1)
     # sq_lattice_p.viewCluster()
+    pass
+
+
+def test_reset_relative_index():
+    # take arguments from commandline
+    sq_lattice_p = SitePercolation(length=6, seed=41)
+
+    while sq_lattice_p.place_one_site():
+        sq_lattice_p.viewLattice(3)
+        if sq_lattice_p.detect_wrapping():
+
+            print("Wrapping detected")
+        pass
+
+    print("Resetting now ************** <<<<<<<<<<")
+    sq_lattice_p.reset()
+    while sq_lattice_p.place_one_site():
+        sq_lattice_p.viewLattice(3)
+        if sq_lattice_p.detect_wrapping():
+
+            print("Wrapping detected")
+        pass
+
     pass
 
 

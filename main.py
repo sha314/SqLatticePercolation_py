@@ -24,7 +24,8 @@ def print_hi():
 
     from source_py import percolation_sq_lattice_L0
     # percolation_sq_lattice_L0.test_detect_wrapping()
-    percolation_sq_lattice_L0.test_relative_index()
+    # percolation_sq_lattice_L0.test_relative_index()
+    percolation_sq_lattice_L0.test_reset_relative_index()
     # percolation_sq_lattice.test_detect_wrapping()
     # percolation_sq_lattice_L0.test_simulation_L0()
 

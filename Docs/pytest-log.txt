@@ -9,4 +9,5 @@ problem with reset() method?
 
 # 2021.03.20
 L=6, seed=41
-Relative index, relabeling ?
+Relative index, relabeling
+STATUS=no problem found. it was a bug in the test functions

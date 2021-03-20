@@ -358,7 +358,7 @@ class Lattice:
                 print("func:get_all_neighbor_sites -> len(connected_sites) != 1")
                 print(self.get_bond_by_id(bid))
                 pass
-            print("connected_sites ", tmp)
+            # print("connected_sites ", tmp)
             tmp.remove(central_site_id)
 
             four_neighbors.append(tmp[0])
@@ -387,13 +387,12 @@ class Lattice:
             bb.test_bond()
             assert bb.get_gid() == gid
             pass
-        # self.test_rwo_col_scan()
-        self.test_relative_index()
+        pass
 
     def test_relative_index(self):
 
         for site_central in self.site_matrix:
-            print("central site ", site_central, " neighbors {")
+            # print("central site ", site_central, " neighbors {")
             gid_c = site_central.get_gid()
             if gid_c < 0:
                 continue
@@ -403,7 +402,7 @@ class Lattice:
             active_neighbor_count = 0
             for nbors in four_neibhbors:
                 site = self.get_site_by_id(nbors)
-                print(site, end=",")
+                # print(site, end=",")
                 gid = site.get_gid()
                 if gid < 0:
                     continue
@@ -420,9 +419,10 @@ class Lattice:
                 if column_wise or row_wise:
                     break
                 pass
-            print("}")
-            print("active_neighbor_count ", active_neighbor_count)
+            # print("}")
+            # print("active_neighbor_count ", active_neighbor_count)
             if active_neighbor_count > 0:
+                print("made to assertion")
                 assert column_wise or row_wise
             pass
 

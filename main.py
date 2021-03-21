@@ -137,11 +137,11 @@ def print_duration(total_time_spent):
 if __name__ == '__main__':
     time_a = time.time()
 
-    print_hi()
+    # print_hi()
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v3(10, 100, 2)
+    run_simulation_threads_v3(10, 100, 2)
     # run_simulation_threads_v3(200, 5000, 20)
     # run_simulation_threads_v3(300, 5000, 20)
     # run_simulation_threads_v3(400, 5000, 20)

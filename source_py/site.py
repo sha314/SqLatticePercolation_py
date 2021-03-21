@@ -16,6 +16,7 @@ class Site(Element):
 
     def reset(self):
         super(Site, self).reset()
+        # self.connecting_bond_ids = []
         self.relative_index = RelativeIndex()
         self.first_nn_count = 4  # for L1 percolation
         self.second_directional_nn_count = 4  # for L2 percolation

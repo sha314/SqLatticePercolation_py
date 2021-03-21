@@ -18,6 +18,7 @@ class Bond(Element):
 
     def reset(self):
         super(Bond, self).reset()
+        # self.connected_site_ids = []
         pass
 
     def test_bond(self):

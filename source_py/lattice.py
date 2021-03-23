@@ -197,6 +197,18 @@ class Lattice:
         return self.site_matrix[s0_index]
         pass
 
+    def get_id_from_index(self, row, col):
+        s0_index = row * self.length + col
+        return s0_index
+
+    def get_site_gid_by_index(self, index):
+        if type(index) is Index:
+            # print("got Index ")
+            pass
+        s0_index = index.row() * self.length + index.column()
+        return self.site_matrix[s0_index].get_gid()
+        pass
+
     def get_bond_by_index(self, row, col, hv_flag=0):
         """
 

@@ -4,7 +4,7 @@ import multiprocessing
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from run_py.shortest_path import run_shortest_path
+from run_py.shortest_path import run_shortest_path, run_shortest_path_ensemble
 
 
 def print_hi():
@@ -153,7 +153,8 @@ if __name__ == '__main__':
     # run_simulation_threads_v3(2 ** 9, 5000, 20)  # 512
     # run_simulation_threads_v3(2 ** 10, 6000, 12)  # 1024
 
-    run_shortest_path()
+    # run_shortest_path()
+    run_shortest_path_ensemble(200, 10)
 
     print("No errors")
     total_time_spent = time.time() - time_a

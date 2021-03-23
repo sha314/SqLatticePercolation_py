@@ -295,7 +295,7 @@ class SitePercolation(Percolation):
             return -1
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
-        # print("selected id ", self.selected_id)
+        # print(">>>***>>>selected id ", self.selected_id, " site ", self.current_site)
         self.current_idx += 1
         self.occupied_site_count += 1
         return 0

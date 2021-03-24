@@ -122,11 +122,16 @@ class SitePercolation(Percolation):
         super(SitePercolation, self).__init__(**kwargs)
         self.signature = "SitePercolation"
         self.init_clusters()
+        # index runs from 0 to L^2 and also the values
+        # after randomization the values are shuffled
+        # How to find index of the randomized array from value?
         self.site_ids_indices = list(range(0, self.lattice_ref.length**2))
+        # use reverse_ids_indices to find index of the randomized array from value
         self.reverse_ids_indices = [0] * len(self.site_ids_indices)
         self.current_idx = 0
         self.occupied_site_count = 0  # for L1 and L2, current_idx is not a valid site counter
         self.pc_occupied_site_count = 0  # number of occupied sites at tc
+        self.mode_custome_site_id = False
         self.shuffle()
         self.current_site = None
         self.selected_id = None
@@ -142,6 +147,22 @@ class SitePercolation(Percolation):
         self.entropy_list = None
         self.order_wrapping_list = None
         self.order_largest_list = None
+        self.max_iteration_limit = self.lattice_ref.site_count
+        pass
+
+    def set_custome_site_id_list(self, site_id_list, do_shuffle=False):
+        """
+        site_id_list: list of sites.
+        """
+        max_index = self.lattice_ref.length**2 - 1
+        min_index = 0
+        if max(site_id_list) > max_index or min(site_id_list) < min_index:
+            print("Invalid site id list")
+            return
+        self.site_ids_indices = site_id_list
+        self.mode_custome_site_id = not do_shuffle
+        self.max_iteration_limit = len(site_id_list)
+
         pass
 
     def get_signature(self):
@@ -160,6 +181,9 @@ class SitePercolation(Percolation):
     #     pass
 
     def shuffle(self):
+        if self.mode_custome_site_id:
+            print("in mode_custome_site_id")
+            return
         # print("SitePercolation:shuffle")
         # print("warning ! shuffle off")
         random.shuffle(self.site_ids_indices)
@@ -290,7 +314,7 @@ class SitePercolation(Percolation):
                  1 -> sites are remaining but current site is not empty
                  -1 -> no remaining empty sites
         """
-        if self.current_idx >= self.lattice_ref.site_count:
+        if self.current_idx >= self.max_iteration_limit:
             # print("No sites to occupy")
             return -1
         self.selected_id = self.site_ids_indices[self.current_idx]

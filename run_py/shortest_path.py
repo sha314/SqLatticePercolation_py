@@ -2,10 +2,11 @@ from source_py.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
 
 
 def run_shortest_path():
-    seed = 310
-    length = 100
+    seed = 72
+    length = 6
     percolation = ShortestPathAfter_pc(length=length, seed=seed)
     percolation.run_once()
+    percolation.viewLattice(3)
     print(percolation.get_shortest_path_p())
     pass
 

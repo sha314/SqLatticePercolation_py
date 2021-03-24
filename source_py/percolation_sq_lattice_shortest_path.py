@@ -42,7 +42,7 @@ class ShortestPathAfter_pc(SitePercolation):
         # print("get_occupation_prob_array ", self.get_occupation_prob_array())
         while self.place_one_site():
             # print("self.selection_flag ", self.selection_flag)
-            self.viewLattice(3)
+            # self.viewLattice(3)
             if self.selection_flag == 0:
                 if self.detect_wrapping():
                     # self.viewLattice(3)
@@ -51,7 +51,7 @@ class ShortestPathAfter_pc(SitePercolation):
                     column_flag, row_flag = self.scan_row_col_of_selected_site(index)
 
                     if column_flag or row_flag:
-                        print("Got to the shortest path point by placing ", self.current_site)
+                        # print("Got to the shortest path point by placing ", self.current_site)
                         # self.viewLattice(1)
                         # self.viewLattice(2)
                         # self.viewLattice(3)

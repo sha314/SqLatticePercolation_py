@@ -4,8 +4,8 @@ import multiprocessing
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from run_py.shortest_path import run_shortest_path, run_shortest_path_ensemble
-
+from run_py.shortest_path_run import *
+from run_py.rsbd_percolatioin_run import *
 
 def print_hi():
     from source_py import lattice
@@ -42,88 +42,6 @@ def print_hi():
     # print(2 ** 10)
     pass
 
-def run_simulation_threads():
-    from source_py import ensemble
-    lengths = [200, 300, 400]
-    En = 500
-
-    from threading import Thread
-    from time import sleep
-
-    i = 0
-    all_threads = []
-    for LL in lengths:
-        # inargs = {'length':LL, "ensembleSize":En, "thread_count":i}
-        thread = Thread(target=ensemble.run_ensemble_entropy_order_threads, args=(LL, En, i))
-        i += 1
-        all_threads.append(thread)
-        thread.start()
-        pass
-    for thread in all_threads:
-        thread.join()
-        pass
-
-def run_simulation_threads_v2():
-    from source_py import ensemble
-    length = 10
-    thread_counts = 2
-    En = 1000
-    En_per_thread = En // thread_counts
-
-    from threading import Thread
-    from time import sleep
-
-    all_threads = []
-    for i in range(thread_counts):
-        # inargs = {'length':LL, "ensembleSize":En, "thread_count":i}
-        thread = Thread(target=ensemble.run_ensemble_entropy_order_threads, args=(length, En_per_thread, i))
-        all_threads.append(thread)
-        thread.start()
-        pass
-    for thread in all_threads:
-        thread.join()
-        pass
-
-def run_simulation_threads_v3(length, ensemble_count, thread):
-    from source_py import ensemble
-    from source_py import percolation_sq_lattice_L1L2
-    from source_py import percolation_sq_lattice_L0
-    percolationClass = percolation_sq_lattice_L0.SitePercolationL0
-    #percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
-    #percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
-    # length = 500
-    thread_counts = thread
-    En = ensemble_count
-    En_per_thread = En // thread_counts
-
-    from threading import Thread
-    from time import sleep
-
-    all_processes = []
-
-    for i in range(thread_counts):
-        # inargs = {'length':LL, "ensembleSize":En, "thread_count":i}
-        process = multiprocessing.Process(target=ensemble.run_ensemble_entropy_order_threads_v2,
-                                          args=(percolationClass, length, En_per_thread, i))
-        all_processes.append(process)
-        process.start()
-
-        pass
-    for process in all_processes:
-        process.join()
-        pass
-
-
-def run_simulations():
-    from source_py import ensemble
-    from source_py import percolation_sq_lattice_L0
-    from source_py import percolation_sq_lattice_L1L2
-    LL = 5
-    En = 100
-    # ensemble.run_ensemble_entorpy_order(percolation_sq_lattice_L0.SitePercolationL0, LL, En)
-    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
-    # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
-    ensemble.run_ensemble_entropy_order_threads_v2(percolation_sq_lattice_L0.SitePercolationL0, LL, En, seed=0)
 
 
 def print_duration(total_time_spent):
@@ -153,8 +71,9 @@ if __name__ == '__main__':
     # run_simulation_threads_v3(2 ** 9, 5000, 20)  # 512
     # run_simulation_threads_v3(2 ** 10, 6000, 12)  # 1024
 
-    run_shortest_path()
+    # run_shortest_path()
     # run_shortest_path_ensemble(200, 10)
+    run_simulation_shortest_path_threads(50, 100, thread=2)
 
     print("No errors")
     total_time_spent = time.time() - time_a

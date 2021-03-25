@@ -263,13 +263,13 @@ class SitePercolation(Percolation):
     def get_data_array(self):
         pp = self.get_occupation_prob_array()
         HH = self.get_entropy_array()
-        PP1 = self.get_order_param_wrapping_array()
-        PP2 = self.get_order_param_largest_array()
+        PP_wraping = self.get_order_param_wrapping_array()
+        PP_largest = self.get_order_param_largest_array()
         # print(len(pp))
         # print(len(HH))
         # print(len(PP1))
         # print(len(PP2))
-        return np.c_[pp, HH, PP1, PP2]
+        return np.c_[pp, HH, PP_largest, PP_wraping]
 
     def get_occupation_prob_array(self):
         return self.occupation_prob_list

@@ -147,7 +147,7 @@ def run_ensemble_entropy_order_threads(percolationClass, length, ensembleSize, t
     head['time'] = now.strftime("%H:%M:%S")
     head['columns'] = ["p", "H", "P1", "P2"]
     head['desc'] = ["p=occupation probability", "H=entropy",
-                    "P1=order parameter by wrapping cluster", "P2=order parameter by largest cluster"]
+                    "P2=order parameter by wrapping cluster", "P1=order parameter by largest cluster"]
     header_str = json.dumps(head)
 
     filename = "./data/" + filename

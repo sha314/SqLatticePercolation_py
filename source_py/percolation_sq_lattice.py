@@ -165,7 +165,7 @@ class SitePercolation(Percolation):
         self.mode_custome_site_id = True
         self.do_shuffle = do_shuffle
         self.max_iteration_limit = len(site_id_list)
-
+        self.shuffle()
         pass
 
     def get_signature(self):
@@ -184,13 +184,14 @@ class SitePercolation(Percolation):
     #     pass
 
     def shuffle(self):
-        if self.mode_custome_site_id:
+        if self.mode_custome_site_id and not self.do_shuffle:
             print("in mode_custome_site_id")
             return
         if self.do_shuffle:
             # print("SitePercolation:shuffle")
             # print("warning ! shuffle off")
             random.shuffle(self.site_ids_indices)
+            print("id order : ", self.site_ids_indices)
             for i in range(len(self.site_ids_indices)):
                 a = self.site_ids_indices[i]
                 self.reverse_ids_indices[a] = i

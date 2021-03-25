@@ -133,6 +133,7 @@ def test_simulation_L0_different_lengths():
 
 def custome_lattice_config_1():
     """
+    A wrapping in the end
     L=6
     full lattice
     0, 1, 2, 3, 4, 5,
@@ -160,16 +161,55 @@ def custome_lattice_config_1():
     seed = random.randint(0, 10000)
     percolation = SitePercolationL0(length=length, seed=seed)
     percolation.set_custome_site_id_list(ids, True)
-    percolation.run_once()
-    percolation.viewLattice(2)
+    while percolation.place_one_site():
+        pass
+    # percolation.viewLattice(2)
     percolation.viewLattice(3)
 
     ## enter the special site
     percolation.set_custome_site_id_list(ids + special_ids, False)  # since only the new ids will be placed
-    percolation.run_once()
-    percolation.viewLattice(2)
+    while percolation.place_one_site():
+        pass
+    # percolation.viewLattice(2)
     percolation.viewLattice(3)
     assert percolation.detect_wrapping()
+
+
+    pass
+
+def custome_lattice_config_2():
+    """
+    cluster labeling
+    L=6
+    full lattice
+    0, 1, 2, 3, 4, 5,
+    6, 7, 8, 9, 10, 11,
+    12, 13, 14, 15, 16, 17,
+    18, 19, 20, 21, 22, 23,
+    24, 25, 26, 27, 28, 29,
+    30, 31, 32, 33, 34, 35
+
+    selected ids
+    -, -, *, -, -, -,
+    -, -, *, -, -, -,
+    -, -, *, -, -, -,
+    -, *, *, -, -, -,
+    -, *, *, *, *, *,
+    -, -, -, -, *, *,
+
+    occupy the # site at last
+    """
+    length = 6
+    ids = [2, 8, 14, 19, 20, 25, 27, 28, 29, 34, 35, 26]
+
+    import random
+    seed = random.randint(0, 10000)
+    percolation = SitePercolationL0(length=length, seed=seed)
+    percolation.set_custome_site_id_list(ids, True)
+    while percolation.place_one_site():
+        pass
+    # percolation.viewLattice(2)
+    percolation.viewLattice(3)
 
 
     pass
@@ -177,6 +217,7 @@ def custome_lattice_config_1():
 def test_custome_lattices():
     for i in range(100):
         custome_lattice_config_1()
+    # custome_lattice_config_2()
 
 
     pass

@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     # run_shortest_path()
     # run_shortest_path_ensemble(200, 10)
-    run_simulation_shortest_path_threads(50, 100, thread=2)
+    # run_simulation_shortest_path_threads(50, 100, thread=2)
 
     print("No errors")
     total_time_spent = time.time() - time_a

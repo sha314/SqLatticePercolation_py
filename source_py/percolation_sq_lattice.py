@@ -131,8 +131,6 @@ class SitePercolation(Percolation):
         self.current_idx = 0
         self.occupied_site_count = 0  # for L1 and L2, current_idx is not a valid site counter
         self.pc_occupied_site_count = 0  # number of occupied sites at tc
-        self.mode_custome_site_id = False
-        self.shuffle()
         self.current_site = None
         self.selected_id = None
         self.cluster_count = self.lattice_ref.bond_count
@@ -143,11 +141,15 @@ class SitePercolation(Percolation):
         self.after_wrapping = False
         self.wrapping_cluster_id = -1
         self.first_run = True
-        self.occupation_prob_list = None
-        self.entropy_list = None
-        self.order_wrapping_list = None
-        self.order_largest_list = None
+        self.occupation_prob_list = list()
+        self.entropy_list = list()
+        self.order_wrapping_list = list()
+        self.order_largest_list = list()
         self.max_iteration_limit = self.lattice_ref.site_count
+        self.mode_custome_site_id = False
+        self.do_shuffle = True
+        # function calls
+        self.shuffle()
         pass
 
     def set_custome_site_id_list(self, site_id_list, do_shuffle=False):
@@ -160,7 +162,8 @@ class SitePercolation(Percolation):
             print("Invalid site id list")
             return
         self.site_ids_indices = site_id_list
-        self.mode_custome_site_id = not do_shuffle
+        self.mode_custome_site_id = True
+        self.do_shuffle = do_shuffle
         self.max_iteration_limit = len(site_id_list)
 
         pass
@@ -184,12 +187,17 @@ class SitePercolation(Percolation):
         if self.mode_custome_site_id:
             print("in mode_custome_site_id")
             return
-        # print("SitePercolation:shuffle")
-        # print("warning ! shuffle off")
-        random.shuffle(self.site_ids_indices)
-        for i in range(len(self.site_ids_indices)):
-            a = self.site_ids_indices[i]
-            self.reverse_ids_indices[a] = i
+        if self.do_shuffle:
+            # print("SitePercolation:shuffle")
+            # print("warning ! shuffle off")
+            random.shuffle(self.site_ids_indices)
+            for i in range(len(self.site_ids_indices)):
+                a = self.site_ids_indices[i]
+                self.reverse_ids_indices[a] = i
+                pass
+            pass
+        else:
+            print("Shuffling is turned off")
             pass
         pass
 

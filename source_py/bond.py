@@ -21,6 +21,9 @@ class Bond(Element):
         # self.connected_site_ids = []
         pass
 
+    def get_index_str(self):
+        return "({},{},{})".format(self.row, self.col, self.type)
+
     def test_bond(self):
         # for unit test
         # print("test_bond")

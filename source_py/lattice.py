@@ -7,10 +7,10 @@ class Lattice:
         self.length = length
         self.bond_count = 2*length**2
         self.site_count = length ** 2
-        self.site_matrix = [0] * length**2
-        self.site_ids = range(0, length**2)
-        self.bond_ids = range(0, 2*length ** 2)
-        self.bond_matrix = [0] * 2 * length ** 2
+        self.site_matrix = [0] * self.site_count
+        self.site_ids = range(0, self.site_count)
+        self.bond_ids = range(0, self.bond_count)
+        self.bond_matrix = [0] * self.bond_count
         self.init_lattice()
         self.init_ids()
         pass
@@ -39,6 +39,43 @@ class Lattice:
                 pass
             pass
         # print("self.bond_matrix ", self.bond_matrix)
+        pass
+
+    def list_all_sites(self):
+        print("id, gid, index, relative_index, connecting_bond_ids")
+        for ss in self.site_matrix:
+            print(ss.get_id(), " ", ss.get_gid(), " ", ss.get_index(), " ", ss.get_relative_index(), " ", ss.connecting_bonds())
+            pass
+
+    def list_all_bonds(self):
+        print("id, gid, index, connecting_site_ids")
+        for bb in self.bond_matrix:
+            print(bb.get_id(), " ", bb.get_gid(), " ", bb.get_index_str(), " ", bb.connected_sites())
+            pass
+
+    def scan_sites(self):
+        for ss in self.site_matrix:
+            id = ss.get_id()
+            bonds = ss.connecting_bonds()
+            assert len(bonds) == 4
+            for bb in bonds:
+                siteids = self.bond_matrix[bb].connected_sites()
+                assert id in siteids
+                pass
+            pass
+            pass
+        pass
+
+    def scan_bonds(self):
+        for bb in self.bond_matrix:
+            id = bb.get_id()
+            sites = bb.connected_sites()
+            assert len(sites) == 2
+            for ss in sites:
+                bondids = self.site_matrix[ss].connecting_bonds()
+                assert id in bondids
+                pass
+            pass
         pass
 
     def bottom_bond_of_site(self, s0_index):
@@ -502,27 +539,21 @@ class Lattice:
     pass
 
 
-def test(length):
+# def test(length):
+#     lattice = Lattice(length)
+#     lattice.view(0)
+#     lattice.view(1)
+#     lattice.view(2)
+#     # print(lattice.get_row_str(0))
+#
+#
+def mTest_neighbors():
+    length = 5
     lattice = Lattice(length)
     lattice.view(0)
     lattice.view(1)
     lattice.view(2)
-    # print(lattice.get_row_str(0))
 
-
-def test_neighbors(length):
-    lattice = Lattice(length)
-    # lattice.view(0)
-    lattice.view(1)
-    # lattice.view(2)
-
-    print(lattice.get_neighbor_bonds(0))
-    print(lattice.get_neighbor_bonds(2))
-    print(lattice.get_neighbor_bonds(5))
-    print(lattice.get_neighbor_bonds(13))
-    print(lattice.get_neighbor_bonds(19))
-    print(lattice.get_neighbor_sites(5))
-    print(lattice.get_neighbor_sites(8))
-    print(lattice.get_neighbor_sites(50))
-
-    # print(lattice.get_row_str(0))
+    lattice.list_all_sites()
+    lattice.list_all_bonds()
+    pass

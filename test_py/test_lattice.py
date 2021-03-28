@@ -8,7 +8,18 @@ import pytest
 #     lattice.view(2)
 #     # print(lattice.get_row_str(0))
 
+def test_index():
+    length = 5
+    lattice = Lattice(length)
+    index = (0, 1, 2)
+    id_calc = lattice.calculate_id_from_index(index)
+    print("index ", index, " id ", id_calc)
+    lattice.list_all_bonds()
 
+    index = (3, 2)
+    id_calc = lattice.calculate_id_from_index(index)
+    print("index ", index, " id ", id_calc)
+    lattice.list_all_sites()
 
 @pytest.mark.parametrize(
     'length',

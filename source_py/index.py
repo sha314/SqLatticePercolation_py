@@ -35,6 +35,9 @@ class Index:
     def column(self):
         return self.component_2
 
+    def as_list(self):
+        return self.component_1, self.component_2
+
     def normalize(self):
         if (self.component_1 == 0) and (self.component_2 != 0):
             self.component_2 = self.component_2 // abs(self.component_2)

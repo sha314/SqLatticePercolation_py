@@ -31,7 +31,7 @@ class Lattice:
                 self.site_matrix[s_index] = Site(rr, cc)
                 self.site_matrix[s_index].set_id(s_index)
 
-                self.bond_matrix[s_index] = Bond(rr, cc)
+                self.bond_matrix[s_index] = Bond(rr, cc, 0)
                 self.bond_matrix[s_index].set_id(s_index)
                 self.bond_matrix[v_bond_index] = Bond(rr, cc, 1)
                 self.bond_matrix[v_bond_index].set_id(v_bond_index)
@@ -40,6 +40,22 @@ class Lattice:
             pass
         # print("self.bond_matrix ", self.bond_matrix)
         pass
+
+    def calculate_id_from_index(self, index):
+        index_list = None
+        if type(index) is Index:
+            index_list = index.as_list()
+            pass
+        if index_list is None:
+            index_list = index
+            pass
+        multiplier_list = [self.length**k for k in range(len(index_list))]
+        multiplier_list.reverse()
+        prods = list(map(lambda a,b:a*b, multiplier_list, index_list))
+        # print(prods)
+        id_calc = sum(prods)
+        # print(id_calc)
+        return id_calc
 
     def list_all_sites(self):
         print("id, gid, index, relative_index, connecting_bond_ids")
@@ -50,12 +66,18 @@ class Lattice:
     def list_all_bonds(self):
         print("id, gid, index, connecting_site_ids")
         for bb in self.bond_matrix:
-            print(bb.get_id(), " ", bb.get_gid(), " ", bb.get_index_str(), " ", bb.connected_sites())
+            print(bb.get_id(), " ", bb.get_gid(), " ", bb.get_index(), " ", bb.connected_sites())
             pass
 
     def scan_sites(self):
+        """
+        written for pytest
+        """
         for ss in self.site_matrix:
             id = ss.get_id()
+            index = ss.get_index()
+            id_calc = self.calculate_id_from_index(index)
+            assert id == id_calc
             bonds = ss.connecting_bonds()
             assert len(bonds) == 4
             for bb in bonds:
@@ -67,8 +89,14 @@ class Lattice:
         pass
 
     def scan_bonds(self):
+        """
+        written for pytest
+        """
         for bb in self.bond_matrix:
             id = bb.get_id()
+            index = bb.get_index()
+            id_calc = self.calculate_id_from_index(index)
+            assert id == id_calc
             sites = bb.connected_sites()
             assert len(sites) == 2
             for ss in sites:

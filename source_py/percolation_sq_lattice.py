@@ -191,7 +191,7 @@ class SitePercolation(Percolation):
             # print("SitePercolation:shuffle")
             # print("warning ! shuffle off")
             random.shuffle(self.site_ids_indices)
-            print("id order : ", self.site_ids_indices)
+            # print("id order : ", self.site_ids_indices)
             for i in range(len(self.site_ids_indices)):
                 a = self.site_ids_indices[i]
                 self.reverse_ids_indices[a] = i

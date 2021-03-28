@@ -107,8 +107,10 @@ def test_simulation_L0_different_lengths():
     """
         run simulation for site percolation on square lattice.
         """
-    length, seeded = 310
-    for length in range(5, 50):
+    seeded = 310
+    import random
+    length_list = [random.randint(5, 50) for _ in range(10)]
+    for length in length_list:
         print("seed ={:4}".format(seeded))
         percolation = SitePercolationL0(length=length, seed=seeded)
         data = None

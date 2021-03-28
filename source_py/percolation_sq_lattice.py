@@ -750,7 +750,8 @@ class SitePercolation(Percolation):
 
         self.lattice_ref.test_neighbor_count()
         self.lattice_ref.test_relative_index()
-
+        self.lattice_ref.scan_bonds()
+        self.lattice_ref.scan_sites()
         if self.occupied_site_count == self.lattice_ref.site_count:
 
             self.lattice_ref.test_lattice(self.wrapping_cluster_id)

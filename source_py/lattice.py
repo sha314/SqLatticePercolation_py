@@ -499,7 +499,7 @@ class Lattice:
             # print("}")
             # print("active_neighbor_count ", active_neighbor_count)
             if active_neighbor_count > 0:
-                print("made to assertion")
+                # print("made to assertion")
                 assert column_wise or row_wise
             pass
 

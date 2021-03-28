@@ -1,5 +1,6 @@
+from source_py.lattice import Lattice
 from source_py.percolation_sq_lattice_L0 import SitePercolationL0
-
+import pytest
 
 def test_simulation_L0_seed(length=6, seed=310):
     percolation = SitePercolationL0(length=length, seed=seed)
@@ -95,7 +96,9 @@ def test_simulation_L0_different_seeds():
 
     seeded = 310
     length = 6
-    for seeded in range(1000):
+    import random
+    seed_list = [random.seed(0, 1000) for _ in range(20)]
+    for seeded in seed_list:
         test_simulation_L0_seed(length, seeded)
         pass
 
@@ -104,9 +107,7 @@ def test_simulation_L0_different_lengths():
     """
         run simulation for site percolation on square lattice.
         """
-
-    length = 10
-    seeded = 310
+    length, seeded = 310
     for length in range(5, 50):
         print("seed ={:4}".format(seeded))
         percolation = SitePercolationL0(length=length, seed=seeded)
@@ -130,6 +131,34 @@ def test_simulation_L0_different_lengths():
 
 
     pass
+
+
+@pytest.mark.parametrize(
+    "length, seeded",
+    ([(6, 310),
+      (7, 8),
+      (9, 10)])
+)
+def test_simulation_L0_different_lengths_parametrize(length, seeded):
+    """
+        run simulation for site percolation on square lattice.
+        """
+
+    print("seed ={:4}".format(seeded))
+    percolation = SitePercolationL0(length=length, seed=seeded)
+
+    percolation.run_once()
+    percolation.test_clusters()
+    percolation.test_lattice()
+
+    percolation.reset()
+
+    percolation.run_once()
+    percolation.test_clusters()
+    percolation.test_lattice()
+
+    pass
+    # print("seed ={:4}".format(seeded))
 
 def custome_lattice_config_1():
     """

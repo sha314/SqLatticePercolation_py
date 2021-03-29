@@ -1,12 +1,8 @@
-from source_py import lattice
-from source_py import cluster
+from source_py.simulation import lattice, cluster
 import random
-import math
-from source_py.index import *
-import gc
+from source_py.simulation.index import *
 
-from source_py.percolation_sq_lattice import SitePercolation
-from source_py.percolation_sq_lattice_L0 import SitePercolationL0
+from source_py.simulation.percolation_sq_lattice import SitePercolation
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool

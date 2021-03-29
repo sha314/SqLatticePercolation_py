@@ -1,6 +1,6 @@
-from source_py.site import Site
-from source_py.bond import Bond
-from source_py.index import Index
+from source_py.simulation.site import Site
+from source_py.simulation.bond import Bond
+from source_py.simulation.index import Index
 
 class Lattice:
     def __init__(self, length):

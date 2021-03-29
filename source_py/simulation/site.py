@@ -1,6 +1,6 @@
-from source_py.element import Element
-from source_py.index import RelativeIndex
-from source_py.index import Index
+from source_py.simulation.element import Element
+from source_py.simulation.index import RelativeIndex
+from source_py.simulation.index import Index
 
 class Site(Element):
     def __init__(self, row, col):

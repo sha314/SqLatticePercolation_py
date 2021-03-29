@@ -1,12 +1,10 @@
-from source_py import lattice
-from source_py import cluster
+from source_py.simulation import lattice, cluster
 import random
 import math
 import numpy as np
-from source_py.index import *
-import gc
+from source_py.simulation.index import *
+
 # import unittest
-import pytest
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -201,6 +199,9 @@ class SitePercolation(Percolation):
             print("Shuffling is turned off")
             pass
         pass
+
+    def get_site_id_sequence(self):
+        return self.site_ids_indices
 
     def swap_ids(self, id1, id2):
         if id1 == id2:

@@ -1,4 +1,4 @@
-from source_py.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
+from source_py.simulation.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
 import pytest
 
 def test_custome_lattice():

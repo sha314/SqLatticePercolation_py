@@ -1,5 +1,4 @@
 # from source_py.percolation_sq_lattice import SitePercolationL0
-from source_py.percolation_sq_lattice_L0 import SitePercolationL0
 from datetime import datetime
 import json
 import numpy as np

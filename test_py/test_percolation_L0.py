@@ -1,5 +1,4 @@
-from source_py.lattice import Lattice
-from source_py.percolation_sq_lattice_L0 import SitePercolationL0
+from source_py.simulation.percolation_sq_lattice_L0 import SitePercolationL0
 import pytest
 
 def test_simulation_L0_seed(length=6, seed=310):

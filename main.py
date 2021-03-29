@@ -1,14 +1,13 @@
-import time
-from datetime import datetime
-import multiprocessing
-
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from run_py.rsbd_percolatioin_run import run_simulation_threads_v3, run_simulation_threads_v4, run_simulations, \
+    single_realization
 from run_py.shortest_path_run import *
-from run_py.rsbd_percolatioin_run import *
+from source_py.simulation import percolation_sq_lattice_L0
+
 
 def print_hi():
-    from source_py import lattice
+    from source_py.simulation import lattice
     lattice.test(5)
     lattice.test_neighbors(6)
 
@@ -23,7 +22,7 @@ def print_hi():
     # end_t = time.time()
     # print("time required ", (end_t - start_t), " sec")
 
-    from source_py import percolation_sq_lattice_L0
+    from source_py.simulation import percolation_sq_lattice_L0
     # percolation_sq_lattice_L0.test_detect_wrapping()
     # percolation_sq_lattice_L0.test_relative_index()
     percolation_sq_lattice_L0.test_reset_relative_index()
@@ -60,11 +59,27 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v3(10, 100, 2)
-    # run_simulation_threads_v3(200, 5000, 20)
-    # run_simulation_threads_v3(300, 5000, 20)
-    # run_simulation_threads_v3(400, 5000, 20)
-    # run_simulation_threads_v3(500, 5000, 20)
+    # run_simulation_threads_v4(10, 100, 2, interaction=2)
+
+    # run_simulation_threads_v4(200, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=1)
+    #
+    # run_simulation_threads_v4(200, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=1)
+    #
+    # run_simulation_threads_v4(200, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=2)
+    #
+    # run_simulation_threads_v4(200, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=2)
 
     # run_simulation_threads_v3(2 ** 7, 5000, 20)  # 128
     # run_simulation_threads_v3(2 ** 8, 5000, 20)  # 256
@@ -74,6 +89,8 @@ if __name__ == '__main__':
     # run_shortest_path()
     # run_shortest_path_ensemble(200, 10)
     # run_simulation_shortest_path_threads(50, 100, thread=2)
+
+    single_realization(percolation_sq_lattice_L0.SitePercolationL0, 50)
 
     print("No errors")
     total_time_spent = time.time() - time_a

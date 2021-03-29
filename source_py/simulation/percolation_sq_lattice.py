@@ -166,6 +166,23 @@ class SitePercolation(Percolation):
         self.shuffle()
         pass
 
+    def set_custome_site_index_list(self, site_index_list, do_shuffle=False):
+        """
+        site_id_list: list of sites.
+        """
+        max_index = self.lattice_ref.length**2 - 1
+        min_index = 0
+        site_index_list = [self.lattice_ref.calculate_id_from_index(idx) for idx in site_index_list]
+        if max(site_index_list) > max_index or min(site_index_list) < min_index:
+            print("Invalid site id list")
+            return
+        self.site_ids_indices = site_index_list
+        self.mode_custome_site_id = True
+        self.do_shuffle = do_shuffle
+        self.max_iteration_limit = len(self.site_ids_indices)
+        self.shuffle()
+        pass
+
     def get_signature(self):
         return self.signature
 
@@ -202,6 +219,14 @@ class SitePercolation(Percolation):
 
     def get_site_id_sequence(self):
         return self.site_ids_indices
+
+    def get_index_sequence(self):
+        indices = []
+        for id in self.site_ids_indices:
+            idx = self.lattice_ref.get_site_by_id(id).get_index()
+            indices.append(idx.as_list())
+            pass
+        return indices
 
     def swap_ids(self, id1, id2):
         if id1 == id2:

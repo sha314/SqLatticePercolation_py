@@ -37,6 +37,7 @@ def single_realization(percolationClass, length):
     head['length'] = length
     head['L'] = length
     head['site_id_sequence'] = percolation.get_site_id_sequence()
+    head['site_index_sequence'] = percolation.get_index_sequence()
     head['pc'] = percolation.get_pc()
     head['site_count_wrapping_cluster_pc'] = percolation.get_site_count_wrapping_cluster_pc()
     head['bond_count_wrapping_cluster_pc'] = percolation.get_bond_count_wrapping_cluster_pc()

@@ -8,7 +8,7 @@ from source_py.simulation.percolation_sq_lattice_L0 import SitePercolationL0
 
 
 def get_file_list():
-    data_dir = "../data/"
+    data_dir = "../data_pytest/"
     print(os.listdir(data_dir))
     signature = "SitePercolationL0__percolation_cross_check_data_L*"
     files = glob.glob(data_dir + signature)
@@ -25,7 +25,8 @@ def test_L0_for_all_files():
             pass
         print(header)
         LL = header["length"]
-        site_sequence = header["site_id_sequence"]
+        site_id_sequence = header["site_id_sequence"]
+        site_index_sequence = header["site_index_sequence"]
         pc = header["pc"]
         site_count_wrapping_cluster_pc = header["site_count_wrapping_cluster_pc"]
         bond_count_wrapping_cluster_pc = header['bond_count_wrapping_cluster_pc']
@@ -35,7 +36,8 @@ def test_L0_for_all_files():
 
         percolation = SitePercolationL0(length=LL)
 
-        percolation.set_custome_site_id_list(site_sequence)
+        # percolation.set_custome_site_id_list(site_id_sequence)
+        percolation.set_custome_site_index_list(site_index_sequence)
         # percolation.viewCluster()
         # percolation.viewLattice()
         percolation.run_once()

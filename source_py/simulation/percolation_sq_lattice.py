@@ -5,6 +5,7 @@ import numpy as np
 from source_py.simulation.index import *
 
 # import unittest
+from source_py.simulation.states import SelectionState
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -351,18 +352,18 @@ class SitePercolation(Percolation):
         """
         if self.current_idx >= self.max_iteration_limit:
             # print("No sites to occupy")
-            return -1
+            return SelectionState.EMPTY_SITE_LIST
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         # print(">>>***>>>selected id ", self.selected_id, " site ", self.current_site)
         self.current_idx += 1
         self.occupied_site_count += 1
-        return 0
+        return SelectionState.SUCESS
 
     def place_one_site(self):
         # print("************************ place_one_site. count ", self.current_idx + 1)
         self.selection_flag = self.select_site()
-        if self.selection_flag == 0:
+        if self.selection_flag == SelectionState.SUCESS:
 
             # print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
             self.lattice_ref.init_relative_index(self.selected_id)  # initialize relative index
@@ -380,10 +381,10 @@ class SitePercolation(Percolation):
             # self.cluster_pool_ref.add_sites(merged_cluster_index, selected_id)
 
             pass
-        elif self.selection_flag == 1:
+        elif self.selection_flag == SelectionState.CURRENT_SITE_NOT_EMPTY:
             # print("current site is not empty but there are empty sites in the lattice")
             pass
-        elif self.selection_flag == -1:
+        elif self.selection_flag == SelectionState.EMPTY_SITE_LIST:
             # print("No remaining empty sites")
             return False
         return True
@@ -665,7 +666,7 @@ class SitePercolation(Percolation):
         # print("get_occupation_prob_array ", self.get_occupation_prob_array())
         while self.place_one_site():
             # print("self.selection_flag ", self.selection_flag)
-            if self.selection_flag == 0:
+            if self.selection_flag == SelectionState.SUCESS:
                 self.detect_wrapping()
                 p = self.occupation_prob()
                 # print("p = ", p)
@@ -725,7 +726,7 @@ class SitePercolation(Percolation):
         # print("get_occupation_prob_array ", self.get_occupation_prob_array())
         while self.place_one_site():
             # print("self.selection_flag ", self.selection_flag)
-            if self.selection_flag == 0:
+            if self.selection_flag == SelectionState.SUCESS:
                 if self.detect_wrapping():
                     # print("self.pc_occupied_site_count ", self.pc_occupied_site_count)
                     # print("self.pc_site_count_wrapping_cluster ", self.pc_site_count_wrapping_cluster)

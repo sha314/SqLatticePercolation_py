@@ -3,6 +3,7 @@ import random
 from source_py.simulation.index import *
 
 from source_py.simulation.percolation_sq_lattice import SitePercolation
+from source_py.simulation.states import SelectionState
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -55,7 +56,7 @@ class SitePercolationL1(SitePercolation):
         # print("SitePercolationL1.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return -1
+            return SelectionState.EMPTY_SITE_LIST
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
         central_X = self.site_ids_indices[rnd]
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
@@ -78,7 +79,7 @@ class SitePercolationL1(SitePercolation):
                     self.current_idx += 1
                     # return False
                     pass
-                return 1
+                return SelectionState.CURRENT_SITE_NOT_EMPTY
 
             # self.swap_ids(central, central2)
             # print("number of usable nn ", self.lattice_ref.get_site_by_id(central_X).get_nn_count())
@@ -92,7 +93,7 @@ class SitePercolationL1(SitePercolation):
         # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
 
-        return 0
+        return SelectionState.SUCESS
 
 
 
@@ -162,7 +163,7 @@ class SitePercolationL2(SitePercolation):
         # print("SitePercolationL2.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return -1
+            return SelectionState.EMPTY_SITE_LIST
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
         central_X = self.site_ids_indices[rnd]
         Z_id = central_X
@@ -197,7 +198,7 @@ class SitePercolationL2(SitePercolation):
 
                         self.current_idx += 1
                         pass
-                    return 1
+                    return SelectionState.CURRENT_SITE_NOT_EMPTY
 
 
             pass
@@ -207,7 +208,7 @@ class SitePercolationL2(SitePercolation):
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
-        return 0
+        return SelectionState.SUCESS
 
 
 

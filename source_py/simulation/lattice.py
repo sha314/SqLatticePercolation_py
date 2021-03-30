@@ -434,6 +434,7 @@ class Lattice:
             if len(tmp) != 2:
                 print("func:get_all_neighbor_sites -> len(connected_sites) != 1")
                 print(self.get_bond_by_id(bid))
+                assert len(tmp) == 2
                 pass
             # print("connected_sites ", tmp)
             tmp.remove(central_site_id)
@@ -441,6 +442,17 @@ class Lattice:
             four_neighbors.append(tmp[0])
             pass
         assert len(four_neighbors) == 4
+
+        ### << pytest BEGIN. check distance between sites
+        # central_site = self.get_site_by_id(central_site_id)
+        # print("central_site ", central_site.get_index())
+        # for ss in four_neighbors:
+        #     ss_site = self.get_site_by_id(ss)
+        #     print("ss_site ", ss_site.get_index())
+        #     dx, dy = self.distance_btn_sites(ss_site, central_site)
+        #     print("dx=", dx, " dy=", dy)
+        #     assert dx == 1 or dy == 1
+        ### pytest END>>
 
         return four_neighbors
 

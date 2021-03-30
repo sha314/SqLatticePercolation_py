@@ -99,7 +99,7 @@ def test_simulation_L1_different_seeds():
     seeded = 310
     length = 6
     import random
-    seed_list = [random.seed(0, 1000) for _ in range(20)]
+    seed_list = [random.seed(0, 1000) for _ in range(10)]
     for seeded in seed_list:
         test_simulation_L1_seed(length, seeded)
         pass

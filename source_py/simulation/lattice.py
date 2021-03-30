@@ -439,8 +439,28 @@ class Lattice:
             tmp.remove(central_site_id)
 
             four_neighbors.append(tmp[0])
+            pass
+        assert len(four_neighbors) == 4
 
         return four_neighbors
+
+    def distance_btn_sites(self, site1, site2):
+        index1 = site1
+        index2 = site2
+        if type(site1) is Site:
+            index1 = site1.get_index()
+        if type(site2) is Site:
+            index2 = site2.get_index()
+            pass
+        d_row = abs(index1.row() - index2.row())
+        if d_row == (self.length - 1):
+            d_row = 1
+        # print("d_row ", d_row)
+        # print("d_row % L ", d_row % (self.length - 1))
+        d_col = abs(index1.column() - index2.column())
+        if d_col == (self.length - 1):
+            d_col = 1
+        return d_row, d_col
 
     def test_neighbor_count(self):
         for ss in self.site_matrix:

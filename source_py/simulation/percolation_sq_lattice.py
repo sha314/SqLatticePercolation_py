@@ -355,6 +355,7 @@ class SitePercolation(Percolation):
             return SelectionState.EMPTY_SITE_LIST
         self.selected_id = self.site_ids_indices[self.current_idx]
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
+        assert self.current_site.get_gid() == -1  # must be unoccupied
         # print(">>>***>>>selected id ", self.selected_id, " site ", self.current_site)
         self.current_idx += 1
         self.occupied_site_count += 1

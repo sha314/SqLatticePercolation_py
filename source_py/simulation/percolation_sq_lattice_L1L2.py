@@ -32,6 +32,11 @@ class SitePercolationL1(SitePercolation):
         print("  1st neighor selected ", self.x_occupied, " times")
 
     def get_four_neighbor_sites(self, central):
+        """
+        pytest unsuccessful. use similar method from lattice class.
+        @param central:
+        @return:
+        """
         bonds = self.lattice_ref.get_neighbor_bonds(central)
         sites = []
         for bb in bonds:
@@ -42,7 +47,17 @@ class SitePercolationL1(SitePercolation):
             if ss == central:
                 sites.remove(ss)
                 pass
-        #
+        assert len(sites) == 4
+        # pytest. check distance between sites
+        central_site = self.lattice_ref.get_site_by_id(central)
+        print("central_site ", central_site.get_index())
+        for ss in sites:
+            ss_site = self.lattice_ref.get_site_by_id(ss)
+            print("ss_site ", ss_site.get_index())
+            dx, dy = self.lattice_ref.distance_btn_sites(ss_site, central_site)
+            print("dx=", dx, " dy=", dy)
+            assert dx == 1 or dy == 1
+
         # sites.remove(central)
         # print(central, " has four neighbor sites : ", sites)
         return sites
@@ -63,7 +78,8 @@ class SitePercolationL1(SitePercolation):
             # print("X is occupied")
             self.x_occupied += 1
 
-            sites = self.get_four_neighbor_sites(central_X)
+            # sites = self.get_four_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
             # print("four neighbors ", sites)
             central2 = sites[random.randint(0, len(sites)-1)]
             if self.lattice_ref.get_site_by_id(central2).is_occupied():
@@ -90,6 +106,7 @@ class SitePercolationL1(SitePercolation):
         self.selected_id = central_X
 
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
+        assert self.current_site.get_gid() == -1   # must be unoccupied
         # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
 
@@ -206,6 +223,7 @@ class SitePercolationL2(SitePercolation):
         # print("central ", Z_id)
         self.selected_id = Z_id
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
+        assert self.current_site.get_gid() == -1  # must be unoccupied
         # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
         return SelectionState.SUCESS

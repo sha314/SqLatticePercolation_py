@@ -1,8 +1,11 @@
 from source_py.simulation.percolation_sq_lattice_L0 import SitePercolationL0
 import pytest
 
-def test_simulation_L0_seed(length=6, seed=310):
-    percolation = SitePercolationL0(length=length, seed=seed)
+from source_py.simulation.percolation_sq_lattice_L1L2 import SitePercolationL2
+
+
+def test_simulation_L1_seed(length=6, seed=310):
+    percolation = SitePercolationL2(length=length, seed=seed)
 
 
     # percolation.viewCluster()
@@ -46,10 +49,10 @@ def test_simulation_L0_seed(length=6, seed=310):
     #     break
     # print(aaa[-1, -2])
 
-def test_simulation_L0_reset():
+def test_simulation_L1_reset():
     seed = 310
     length = 6
-    percolation = SitePercolationL0(length=length, seed=seed)
+    percolation = SitePercolationL2(length=length, seed=seed)
 
     percolation.reset()  # must be tested  <<<<< TODO
     # percolation.viewCluster()
@@ -87,7 +90,7 @@ def test_simulation_L0_reset():
     # print(aaa[-1, -2])
 
 # pytest fails for L=6, seed=310 for L0
-def test_simulation_L0_different_seeds():
+def test_simulation_L1_different_seeds():
     """
         run simulation for site percolation on square lattice.
         """
@@ -98,11 +101,11 @@ def test_simulation_L0_different_seeds():
     import random
     seed_list = [random.seed(0, 1000) for _ in range(10)]
     for seeded in seed_list:
-        test_simulation_L0_seed(length, seeded)
+        test_simulation_L1_seed(length, seeded)
         pass
 
 # pytest fails for L=6, seed=310 for L0
-def test_simulation_L0_different_lengths():
+def test_simulation_L1_different_lengths():
     """
         run simulation for site percolation on square lattice.
         """
@@ -111,7 +114,7 @@ def test_simulation_L0_different_lengths():
     length_list = [random.randint(5, 50) for _ in range(10)]
     for length in length_list:
         print("seed ={:4}".format(seeded))
-        percolation = SitePercolationL0(length=length, seed=seeded)
+        percolation = SitePercolationL2(length=length, seed=seeded)
         data = None
         pcs = []
 
@@ -140,13 +143,13 @@ def test_simulation_L0_different_lengths():
       (7, 8),
       (9, 10)])
 )
-def test_simulation_L0_different_lengths_parametrize(length, seeded):
+def test_simulation_L1_different_lengths_parametrize(length, seeded):
     """
         run simulation for site percolation on square lattice.
         """
 
     print("seed ={:4}".format(seeded))
-    percolation = SitePercolationL0(length=length, seed=seeded)
+    percolation = SitePercolationL2(length=length, seed=seeded)
 
     percolation.run_once()
     percolation.test_clusters()
@@ -234,7 +237,7 @@ def custome_lattice_config_2():
 
     import random
     seed = random.randint(0, 10000)
-    percolation = SitePercolationL0(length=length, seed=seed)
+    percolation = SitePercolationL2(length=length, seed=seed)
     percolation.set_custome_site_id_list(ids, True)
     while percolation.place_one_site():
         pass

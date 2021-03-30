@@ -44,11 +44,13 @@ class Site(Element):
 
     def reduce_1st_nn(self):
         if self.first_nn_count <=0:
+            assert self.first_nn_count >= 0
             return
         self.first_nn_count -= 1
 
     def reduce_2st_directional_nn(self):
         if self.second_directional_nn_count <=0:
+            assert self.second_directional_nn_count >= 0
             return
         self.second_directional_nn_count -= 1
 

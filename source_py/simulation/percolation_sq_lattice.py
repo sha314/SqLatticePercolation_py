@@ -774,6 +774,7 @@ class SitePercolation(Percolation):
         assert self.largest_cluster_sz == len(bond_ids_indices)
 
     def test_lattice(self):
+        print("test_lattice method")
         # self.lattice_ref.test_rwo_col_scan()
 
         self.lattice_ref.test_neighbor_count()

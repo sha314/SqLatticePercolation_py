@@ -444,14 +444,14 @@ class Lattice:
         assert len(four_neighbors) == 4
 
         ### << pytest BEGIN. check distance between sites
-        # central_site = self.get_site_by_id(central_site_id)
-        # print("central_site ", central_site.get_index())
-        # for ss in four_neighbors:
-        #     ss_site = self.get_site_by_id(ss)
-        #     print("ss_site ", ss_site.get_index())
-        #     dx, dy = self.distance_btn_sites(ss_site, central_site)
-        #     print("dx=", dx, " dy=", dy)
-        #     assert dx == 1 or dy == 1
+        central_site = self.get_site_by_id(central_site_id)
+        print("central_site ", central_site.get_index())
+        for ss in four_neighbors:
+            ss_site = self.get_site_by_id(ss)
+            print("ss_site ", ss_site.get_index())
+            dx, dy = self.distance_btn_sites(ss_site, central_site)
+            print("dx=", dx, " dy=", dy)
+            assert dx == 1 or dy == 1
         ### pytest END>>
 
         return four_neighbors

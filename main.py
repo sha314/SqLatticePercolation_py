@@ -90,7 +90,10 @@ if __name__ == '__main__':
     # run_shortest_path_ensemble(200, 10)
     # run_simulation_shortest_path_threads(50, 100, thread=2)
 
-    single_realization(percolation_sq_lattice_L0.SitePercolationL0, 5)
+    # single_realization(percolation_sq_lattice_L0.SitePercolationL0, 5)
+
+    from test_py import test_percolation_L1
+    test_percolation_L1.test_simulation_L1_seed()
 
     print("No errors")
     total_time_spent = time.time() - time_a

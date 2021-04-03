@@ -16,6 +16,9 @@ class SitePercolationL1(SitePercolation):
         self.signature += "L1_"
 
         self.x_occupied = 0
+
+        # Once the sequece is recorded, we can use it in regular site percolation. To check the outcomes.
+        self.site_id_sequence_record = []
         print("SitePercolationL1.init")
         pass
 
@@ -23,6 +26,15 @@ class SitePercolationL1(SitePercolation):
         super(SitePercolationL1, self).reset()
         self.site_ids_indices = list(range(0, self.lattice_ref.length ** 2))
         self.x_occupied = 0
+        self.site_id_sequence_record = []
+
+    def get_index_sequence(self):
+        indices = []
+        for id in self.site_id_sequence_record:
+            idx = self.lattice_ref.get_site_by_id(id).get_index()
+            indices.append(idx.as_list())
+            pass
+        return indices
 
     def get_signature(self):
         return self.signature
@@ -73,6 +85,7 @@ class SitePercolationL1(SitePercolation):
             # print("No sites to occupy")
             return SelectionState.EMPTY_SITE_LIST
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
+        print("randomly_selected_site ", rnd)
         central_X = self.site_ids_indices[rnd]
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
             # print("X is occupied")
@@ -104,7 +117,7 @@ class SitePercolationL1(SitePercolation):
 
             pass
         self.selected_id = central_X
-
+        self.site_id_sequence_record.append(self.selected_id)
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
         assert self.current_site.get_gid() == -1   # must be unoccupied
         # print("selected id ", self.selected_id)

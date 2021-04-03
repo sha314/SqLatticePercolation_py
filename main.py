@@ -52,15 +52,19 @@ def print_duration(total_time_spent):
     print("Total time elapsed {}h {}m {:.4f}s".format(hhh, mmm, sss))
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    time_a = time.time()
-
+def init_logging():
     # logging to a file
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H%M%S")
     filename = "./logs/" + "run_simulation_threads_v4-log-" + current_time + ".txt"
     logging.basicConfig(filename=filename, level=logging.DEBUG)
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    time_a = time.time()
+
+    init_logging()
 
     # print_hi()
     # run_simulations()

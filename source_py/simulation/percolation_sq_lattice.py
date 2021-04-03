@@ -3,7 +3,7 @@ import random
 import math
 import numpy as np
 from source_py.simulation.index import *
-
+import logging
 # import unittest
 from source_py.simulation.states import SelectionState
 
@@ -13,7 +13,9 @@ ClusterPool = cluster.ClusterPool
 
 class Percolation:
     def __init__(self, **kwargs):
-        print("kwargs ", kwargs)
+        log_str = "kwargs " + kwargs.__str__()
+        # print(log_str)
+        logging.info(log_str)
         length = kwargs['length']
         if "seed" in kwargs.keys():
             print("Custom seeding. Testing mode")

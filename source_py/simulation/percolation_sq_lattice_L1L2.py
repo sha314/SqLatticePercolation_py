@@ -1,7 +1,7 @@
 from source_py.simulation import lattice, cluster
 import random
 from source_py.simulation.index import *
-
+import logging
 from source_py.simulation.percolation_sq_lattice import SitePercolation
 from source_py.simulation.states import SelectionState
 
@@ -19,7 +19,8 @@ class SitePercolationL1(SitePercolation):
 
         # Once the sequece is recorded, we can use it in regular site percolation. To check the outcomes.
         self.site_id_sequence_record = []
-        print("SitePercolationL1.init")
+        # print("SitePercolationL1.init")
+        logging.info("SitePercolationL1.init")
         pass
 
     def reset(self):
@@ -146,7 +147,8 @@ class SitePercolationL2(SitePercolation):
         self.signature += "L2_"
         self.x_occupied = 0
         self.y_occupied = 0
-        print("SitePercolationL2.init")
+        # print("SitePercolationL2.init")
+        logging.info("SitePercolationL2.init")
         pass
 
     def reset(self):

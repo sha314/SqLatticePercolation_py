@@ -4,6 +4,7 @@ from run_py.rsbd_percolatioin_run import run_simulation_threads_v3, run_simulati
     single_realization
 from run_py.shortest_path_run import *
 from source_py.simulation import percolation_sq_lattice_L0
+import logging
 
 
 def print_hi():
@@ -55,11 +56,17 @@ def print_duration(total_time_spent):
 if __name__ == '__main__':
     time_a = time.time()
 
+    # logging to a file
+    now = datetime.now()
+    current_time = now.strftime("%Y%m%d_%H%M%S")
+    filename = "./logs/" + "run_simulation_threads_v4-log-" + current_time + ".txt"
+    logging.basicConfig(filename=filename, level=logging.DEBUG)
+
     # print_hi()
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v4(10, 100, 2, interaction=2)
+    run_simulation_threads_v4(10, 100, 2, interaction=0)
 
     # run_simulation_threads_v4(200, 5000, 20, interaction=1)
     # run_simulation_threads_v4(300, 5000, 20, interaction=1)
@@ -92,17 +99,22 @@ if __name__ == '__main__':
 
     # single_realization(percolation_sq_lattice_L0.SitePercolationL0, 5)
 
-    from test_py import test_percolation_L1
-    test_percolation_L1.test_simulation_L1_seed()
+    # from test_py import test_percolation_L1
+    # test_percolation_L1.test_simulation_L1_seed()
 
-    print("No errors")
+    # print("No errors")
+    logging.info("No errors")
     total_time_spent = time.time() - time_a
     if total_time_spent < 10:
-        print("Total time elapsed {:2.6f} sec".format(total_time_spent))
+        log_str = "Total time elapsed {:2.6f} sec".format(total_time_spent)
+        # print(log_str)
+        logging.info(log_str)
         pass
     else:
         print_duration(total_time_spent)
     now = datetime.now()
     current_time = now.strftime("%Y.%m.%d %H:%M:%S")
-    print("Current Time ", current_time)
+    log_str = "Current Time " + current_time
+    # print(log_str)
+    logging.info(log_str)
 

@@ -1,6 +1,6 @@
-from source_py.element import Element
-from source_py.index import RelativeIndex
-from source_py.index import Index
+from source_py.simulation.element import Element
+from source_py.simulation.index import RelativeIndex
+from source_py.simulation.index import Index
 
 class Site(Element):
     def __init__(self, row, col):
@@ -44,11 +44,13 @@ class Site(Element):
 
     def reduce_1st_nn(self):
         if self.first_nn_count <=0:
+            assert self.first_nn_count >= 0
             return
         self.first_nn_count -= 1
 
     def reduce_2st_directional_nn(self):
         if self.second_directional_nn_count <=0:
+            assert self.second_directional_nn_count >= 0
             return
         self.second_directional_nn_count -= 1
 

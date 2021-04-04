@@ -1,4 +1,4 @@
-from source_py.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
+from source_py.simulation.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
 import time
 from datetime import datetime
 import json
@@ -89,8 +89,7 @@ def ensemble_shortest_path_v2_thread(percolationClass, length, ensembleSize, thr
     pass
 
 def run_simulation_shortest_path_threads(length, ensemble_count, thread=2):
-    from run_py import ensemble
-    from source_py import percolation_sq_lattice_shortest_path
+    from source_py.simulation import percolation_sq_lattice_shortest_path
     percolationClass = percolation_sq_lattice_shortest_path.ShortestPathAfter_pc
     # length = 500
     thread_counts = thread

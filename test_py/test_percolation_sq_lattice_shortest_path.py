@@ -1,5 +1,5 @@
-from source_py.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
-
+from source_py.simulation.percolation_sq_lattice_shortest_path import ShortestPathAfter_pc
+import pytest
 
 def test_custome_lattice():
     length = 6
@@ -50,7 +50,10 @@ def test_multiple_seeds():
         print("current seed ", seed)
         test_large_lattice(length, seed)
 
-
+@pytest.mark.parametrize(
+    'length, seed',
+    ([(20, 363), (25, 0), (50, 200)])
+)
 def test_large_lattice(length, seed):
 
     percolation = ShortestPathAfter_pc(length=length, seed=seed)

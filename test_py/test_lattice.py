@@ -1,4 +1,4 @@
-from source_py.lattice import Lattice
+from source_py.simulation.lattice import Lattice
 import pytest
 
 # def test(length):

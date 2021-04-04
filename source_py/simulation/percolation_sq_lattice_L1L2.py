@@ -1,12 +1,9 @@
-from source_py import lattice
-from source_py import cluster
+from source_py.simulation import lattice, cluster
 import random
-import math
-from source_py.index import *
-import gc
-
-from source_py.percolation_sq_lattice import SitePercolation
-from source_py.percolation_sq_lattice_L0 import SitePercolationL0
+from source_py.simulation.index import *
+import logging
+from source_py.simulation.percolation_sq_lattice import SitePercolation
+from source_py.simulation.states import SelectionState
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -19,13 +16,26 @@ class SitePercolationL1(SitePercolation):
         self.signature += "L1_"
 
         self.x_occupied = 0
-        print("SitePercolationL1.init")
+
+        # Once the sequece is recorded, we can use it in regular site percolation. To check the outcomes.
+        self.site_id_sequence_record = []
+        # print("SitePercolationL1.init")
+        logging.info("SitePercolationL1.init")
         pass
 
     def reset(self):
         super(SitePercolationL1, self).reset()
         self.site_ids_indices = list(range(0, self.lattice_ref.length ** 2))
         self.x_occupied = 0
+        self.site_id_sequence_record = []
+
+    def get_index_sequence(self):
+        indices = []
+        for id in self.site_id_sequence_record:
+            idx = self.lattice_ref.get_site_by_id(id).get_index()
+            indices.append(idx.as_list())
+            pass
+        return indices
 
     def get_signature(self):
         return self.signature
@@ -35,6 +45,11 @@ class SitePercolationL1(SitePercolation):
         print("  1st neighor selected ", self.x_occupied, " times")
 
     def get_four_neighbor_sites(self, central):
+        """
+        pytest unsuccessful. use similar method from lattice class.
+        @param central:
+        @return:
+        """
         bonds = self.lattice_ref.get_neighbor_bonds(central)
         sites = []
         for bb in bonds:
@@ -45,7 +60,17 @@ class SitePercolationL1(SitePercolation):
             if ss == central:
                 sites.remove(ss)
                 pass
-        #
+        assert len(sites) == 4
+        # pytest. check distance between sites
+        # central_site = self.lattice_ref.get_site_by_id(central)
+        # print("central_site ", central_site.get_index())
+        # for ss in sites:
+        #     ss_site = self.lattice_ref.get_site_by_id(ss)
+        #     print("ss_site ", ss_site.get_index())
+        #     dx, dy = self.lattice_ref.distance_btn_sites(ss_site, central_site)
+        #     print("dx=", dx, " dy=", dy)
+        #     assert dx == 1 or dy == 1
+
         # sites.remove(central)
         # print(central, " has four neighbor sites : ", sites)
         return sites
@@ -59,14 +84,16 @@ class SitePercolationL1(SitePercolation):
         # print("SitePercolationL1.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return -1
+            return SelectionState.EMPTY_SITE_LIST
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
+        # print("randomly_selected_site ", rnd)
         central_X = self.site_ids_indices[rnd]
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
             # print("X is occupied")
             self.x_occupied += 1
 
-            sites = self.get_four_neighbor_sites(central_X)
+            # sites = self.get_four_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
             # print("four neighbors ", sites)
             central2 = sites[random.randint(0, len(sites)-1)]
             if self.lattice_ref.get_site_by_id(central2).is_occupied():
@@ -82,7 +109,7 @@ class SitePercolationL1(SitePercolation):
                     self.current_idx += 1
                     # return False
                     pass
-                return 1
+                return SelectionState.CURRENT_SITE_NOT_EMPTY
 
             # self.swap_ids(central, central2)
             # print("number of usable nn ", self.lattice_ref.get_site_by_id(central_X).get_nn_count())
@@ -91,12 +118,13 @@ class SitePercolationL1(SitePercolation):
 
             pass
         self.selected_id = central_X
-
+        self.site_id_sequence_record.append(self.selected_id)
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
+        assert self.current_site.get_gid() == -1   # must be unoccupied
         # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
 
-        return 0
+        return SelectionState.SUCESS
 
 
 
@@ -119,7 +147,8 @@ class SitePercolationL2(SitePercolation):
         self.signature += "L2_"
         self.x_occupied = 0
         self.y_occupied = 0
-        print("SitePercolationL2.init")
+        # print("SitePercolationL2.init")
+        logging.info("SitePercolationL2.init")
         pass
 
     def reset(self):
@@ -136,21 +165,21 @@ class SitePercolationL2(SitePercolation):
         print("  1st neighor selected ", self.x_occupied, " times")
         print("  2nd neighor selected ", self.y_occupied, " times")
 
-    def get_four_neighbor_sites(self, central):
-        bonds = self.lattice_ref.get_neighbor_bonds(central)
-        sites = []
-        for bb in bonds:
-            tmp = self.lattice_ref.get_neighbor_sites(bb)
-            sites += tmp
-            pass
-        for ss in sites:
-            if ss == central:
-                sites.remove(ss)
-                pass
-        #
-        # sites.remove(central)
-        # print(central, " has four neighbor sites : ", sites)
-        return sites
+    # def get_four_neighbor_sites(self, central):
+    #     bonds = self.lattice_ref.get_neighbor_bonds(central)
+    #     sites = []
+    #     for bb in bonds:
+    #         tmp = self.lattice_ref.get_neighbor_sites(bb)
+    #         sites += tmp
+    #         pass
+    #     for ss in sites:
+    #         if ss == central:
+    #             sites.remove(ss)
+    #             pass
+    #     #
+    #     # sites.remove(central)
+    #     # print(central, " has four neighbor sites : ", sites)
+    #     return sites
 
     def correct_index_for_periodicity(self, index):
         row = index.row() % self.lattice_ref.length
@@ -166,12 +195,12 @@ class SitePercolationL2(SitePercolation):
         # print("SitePercolationL2.select_site")
         if self.current_idx >= self.lattice_ref.site_count:
             # print("No sites to occupy")
-            return -1
+            return SelectionState.EMPTY_SITE_LIST
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
         central_X = self.site_ids_indices[rnd]
         Z_id = central_X
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
-            sites = self.get_four_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
             Y_id = sites[random.randint(0, len(sites) - 1)]
             Z_id = Y_id
             # print("X is occupied")
@@ -201,7 +230,7 @@ class SitePercolationL2(SitePercolation):
 
                         self.current_idx += 1
                         pass
-                    return 1
+                    return SelectionState.CURRENT_SITE_NOT_EMPTY
 
 
             pass
@@ -209,9 +238,10 @@ class SitePercolationL2(SitePercolation):
         # print("central ", Z_id)
         self.selected_id = Z_id
         self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
+        assert self.current_site.get_gid() == -1  # must be unoccupied
         # print("selected id ", self.selected_id)
         self.occupied_site_count += 1
-        return 0
+        return SelectionState.SUCESS
 
 
 

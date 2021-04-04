@@ -1,14 +1,14 @@
-import time
-from datetime import datetime
-import multiprocessing
-
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from run_py.rsbd_percolatioin_run import run_simulation_threads_v3, run_simulation_threads_v4, run_simulations, \
+    single_realization
 from run_py.shortest_path_run import *
-from run_py.rsbd_percolatioin_run import *
+from source_py.simulation import percolation_sq_lattice_L0
+import logging
+
 
 def print_hi():
-    from source_py import lattice
+    from source_py.simulation import lattice
     lattice.test(5)
     lattice.test_neighbors(6)
 
@@ -23,7 +23,7 @@ def print_hi():
     # end_t = time.time()
     # print("time required ", (end_t - start_t), " sec")
 
-    from source_py import percolation_sq_lattice_L0
+    from source_py.simulation import percolation_sq_lattice_L0
     # percolation_sq_lattice_L0.test_detect_wrapping()
     # percolation_sq_lattice_L0.test_relative_index()
     percolation_sq_lattice_L0.test_reset_relative_index()
@@ -52,19 +52,45 @@ def print_duration(total_time_spent):
     print("Total time elapsed {}h {}m {:.4f}s".format(hhh, mmm, sss))
 
 
+def init_logging():
+    # logging to a file
+    now = datetime.now()
+    current_time = now.strftime("%Y%m%d_%H%M%S")
+    filename = "./logs/" + "run_simulation_threads_v4-log-" + current_time + ".txt"
+    logging.basicConfig(filename=filename, level=logging.DEBUG)
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     time_a = time.time()
+
+    init_logging()
 
     # print_hi()
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v3(10, 100, 2)
-    # run_simulation_threads_v3(200, 5000, 20)
-    # run_simulation_threads_v3(300, 5000, 20)
-    # run_simulation_threads_v3(400, 5000, 20)
-    # run_simulation_threads_v3(500, 5000, 20)
+    run_simulation_threads_v4(10, 100, 2, interaction=1)
+
+    # run_simulation_threads_v4(200, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=1)
+    #
+    # run_simulation_threads_v4(200, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=1)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=1)
+    #
+    # run_simulation_threads_v4(200, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=2)
+    #
+    # run_simulation_threads_v4(200, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(300, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(400, 5000, 20, interaction=2)
+    # run_simulation_threads_v4(500, 5000, 20, interaction=2)
 
     # run_simulation_threads_v3(2 ** 7, 5000, 20)  # 128
     # run_simulation_threads_v3(2 ** 8, 5000, 20)  # 256
@@ -75,14 +101,24 @@ if __name__ == '__main__':
     # run_shortest_path_ensemble(200, 10)
     # run_simulation_shortest_path_threads(50, 100, thread=2)
 
-    print("No errors")
+    # single_realization(percolation_sq_lattice_L0.SitePercolationL0, 5)
+
+    # from test_py import test_percolation_L1
+    # test_percolation_L1.test_simulation_L1_seed()
+
+    # print("No errors")
+    logging.info("No errors")
     total_time_spent = time.time() - time_a
     if total_time_spent < 10:
-        print("Total time elapsed {:2.6f} sec".format(total_time_spent))
+        log_str = "Total time elapsed {:2.6f} sec".format(total_time_spent)
+        # print(log_str)
+        logging.info(log_str)
         pass
     else:
         print_duration(total_time_spent)
     now = datetime.now()
     current_time = now.strftime("%Y.%m.%d %H:%M:%S")
-    print("Current Time ", current_time)
+    log_str = "Current Time " + current_time
+    # print(log_str)
+    logging.info(log_str)
 

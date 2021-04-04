@@ -1,6 +1,6 @@
-from source_py.site import Site
-from source_py.bond import Bond
-from source_py.index import Index
+from source_py.simulation.site import Site
+from source_py.simulation.bond import Bond
+from source_py.simulation.index import Index
 
 class Lattice:
     def __init__(self, length):
@@ -434,13 +434,45 @@ class Lattice:
             if len(tmp) != 2:
                 print("func:get_all_neighbor_sites -> len(connected_sites) != 1")
                 print(self.get_bond_by_id(bid))
+                assert len(tmp) == 2
                 pass
             # print("connected_sites ", tmp)
             tmp.remove(central_site_id)
 
             four_neighbors.append(tmp[0])
+            pass
+        assert len(four_neighbors) == 4
+
+        ### << pytest BEGIN. check distance between sites
+        # central_site = self.get_site_by_id(central_site_id)
+        # print("central_site ", central_site.get_index())
+        # for ss in four_neighbors:
+        #     ss_site = self.get_site_by_id(ss)
+        #     print("ss_site ", ss_site.get_index())
+        #     dx, dy = self.distance_btn_sites(ss_site, central_site)
+        #     print("dx=", dx, " dy=", dy)
+        #     assert dx == 1 or dy == 1
+        ### pytest END>>
 
         return four_neighbors
+
+    def distance_btn_sites(self, site1, site2):
+        index1 = site1
+        index2 = site2
+        if type(site1) is Site:
+            index1 = site1.get_index()
+        if type(site2) is Site:
+            index2 = site2.get_index()
+            pass
+        d_row = abs(index1.row() - index2.row())
+        if d_row == (self.length - 1):
+            d_row = 1
+        # print("d_row ", d_row)
+        # print("d_row % L ", d_row % (self.length - 1))
+        d_col = abs(index1.column() - index2.column())
+        if d_col == (self.length - 1):
+            d_col = 1
+        return d_row, d_col
 
     def test_neighbor_count(self):
         for ss in self.site_matrix:

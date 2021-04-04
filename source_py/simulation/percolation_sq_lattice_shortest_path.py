@@ -1,14 +1,8 @@
-from source_py import lattice
-from source_py import cluster
-import random
-import math
-import numpy as np
-from source_py.index import *
-import gc
+from source_py.simulation import lattice, cluster
 # import unittest
-import pytest
 
-from source_py.percolation_sq_lattice import SitePercolation
+from source_py.simulation.percolation_sq_lattice import SitePercolation
+from source_py.simulation.states import SelectionState
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -43,7 +37,7 @@ class ShortestPathAfter_pc(SitePercolation):
         while self.place_one_site():
             # print("self.selection_flag ", self.selection_flag)
             # self.viewLattice(3)
-            if self.selection_flag == 0:
+            if self.selection_flag == SelectionState.SUCESS:
                 if self.detect_wrapping():
                     # self.viewLattice(3)
                     # scan rows and columns of the current site to find the shortest path of same gid

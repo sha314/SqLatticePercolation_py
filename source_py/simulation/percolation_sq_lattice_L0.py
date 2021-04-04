@@ -1,13 +1,10 @@
-from source_py import lattice
-from source_py import cluster
-import random
-import numpy as np
+from source_py.simulation import lattice, cluster
 
-from source_py.percolation_sq_lattice import SitePercolation
+from source_py.simulation.percolation_sq_lattice import SitePercolation
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
-
+import logging
 
 class SitePercolationL0(SitePercolation):
     def __init__(self, **kwargs):
@@ -19,6 +16,8 @@ class SitePercolationL0(SitePercolation):
         # self.entropy_list = None
         # self.order_wrapping_list = None
         # self.order_largest_list = None
+        # print("SitePercolationL0.init")
+        logging.info("SitePercolationL0.init")
         pass
 
     def get_signature(self):

@@ -62,14 +62,14 @@ class SitePercolationL1(SitePercolation):
                 pass
         assert len(sites) == 4
         # pytest. check distance between sites
-        central_site = self.lattice_ref.get_site_by_id(central)
-        print("central_site ", central_site.get_index())
-        for ss in sites:
-            ss_site = self.lattice_ref.get_site_by_id(ss)
-            print("ss_site ", ss_site.get_index())
-            dx, dy = self.lattice_ref.distance_btn_sites(ss_site, central_site)
-            print("dx=", dx, " dy=", dy)
-            assert dx == 1 or dy == 1
+        # central_site = self.lattice_ref.get_site_by_id(central)
+        # print("central_site ", central_site.get_index())
+        # for ss in sites:
+        #     ss_site = self.lattice_ref.get_site_by_id(ss)
+        #     print("ss_site ", ss_site.get_index())
+        #     dx, dy = self.lattice_ref.distance_btn_sites(ss_site, central_site)
+        #     print("dx=", dx, " dy=", dy)
+        #     assert dx == 1 or dy == 1
 
         # sites.remove(central)
         # print(central, " has four neighbor sites : ", sites)
@@ -86,7 +86,7 @@ class SitePercolationL1(SitePercolation):
             # print("No sites to occupy")
             return SelectionState.EMPTY_SITE_LIST
         rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
-        print("randomly_selected_site ", rnd)
+        # print("randomly_selected_site ", rnd)
         central_X = self.site_ids_indices[rnd]
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
             # print("X is occupied")

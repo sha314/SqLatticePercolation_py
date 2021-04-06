@@ -44,6 +44,11 @@ class SitePercolationL1(SitePercolation):
         print("SitePercolationL1.occupied_summary")
         print("  1st neighor selected ", self.x_occupied, " times")
 
+    def get_current_site_info(self):
+        print("current site ", self.current_site, " : ",
+              self.lattice_ref.get_neighbor_sites_indices(self.selected_id))
+        pass
+
     def get_four_neighbor_sites(self, central):
         """
         pytest unsuccessful. use similar method from lattice class.
@@ -93,7 +98,7 @@ class SitePercolationL1(SitePercolation):
             self.x_occupied += 1
 
             # sites = self.get_four_neighbor_sites(central_X)
-            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_neighbor_sites_ids(central_X)
             # print("four neighbors ", sites)
             central2 = sites[random.randint(0, len(sites)-1)]
             if self.lattice_ref.get_site_by_id(central2).is_occupied():
@@ -200,7 +205,7 @@ class SitePercolationL2(SitePercolation):
         central_X = self.site_ids_indices[rnd]
         Z_id = central_X
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
-            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_neighbor_sites_ids(central_X)
             Y_id = sites[random.randint(0, len(sites) - 1)]
             Z_id = Y_id
             # print("X is occupied")
@@ -258,7 +263,7 @@ class SitePercolationL2(SitePercolation):
 
 
 
-def test_L1():
+def mTest_L1():
     # take arguments from commandline
     sq_lattice_p = SitePercolationL1(length=6, seed=0)
     # sq_lattice_p.viewCluster()

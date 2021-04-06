@@ -254,3 +254,38 @@ def test_custome_lattices():
 
 
     pass
+
+@pytest.mark.parametrize(
+    "length, seeded",
+    ([(5, 310),
+      (6, 310)])
+)
+def test_simulation_L1_neighbors(length, seeded):
+    percolation = SitePercolationL1(length=length, seed=seeded)
+
+    # percolation.viewCluster()
+    # percolation.viewLattice()
+    P1 = -222
+    site_count = 1
+    percolation.test_lattice()
+    while percolation.place_one_site():
+        percolation.get_current_site_info()
+        percolation.detect_wrapping()
+        # print("occupied ", site_count, " sites")
+        # percolation.viewLattice(3)
+        # percolation.viewLattice(1)
+        # percolation.test_lattice()
+        # P1 = percolation.order_param_wrapping()
+        # print("p= ", percolation.occupation_prob(),
+        #       " entropy_v1 ", percolation.entropy_v1(),
+        #       " entropy_v2 ", percolation.entropy_v2(),
+        #       " order wrapping ", percolation.order_param_wrapping(),
+        #       " order largest ", percolation.order_param_largest_clstr())
+        # percolation.viewLattice(3)
+        # percolation.viewCluster()
+        # if percolation.detect_wrapping():
+        #     print("Wrapping detected")
+        #     break
+        site_count += 1
+        pass
+

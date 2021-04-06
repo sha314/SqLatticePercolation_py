@@ -42,7 +42,12 @@ def print_hi():
     # print(2 ** 10)
     pass
 
-
+def mTests():
+    # from source_py.simulation import lattice
+    # lattice.mTest_hilight()
+    from source_py.simulation import percolation_sq_lattice_L1L2
+    percolation_sq_lattice_L1L2.mTest_L1()
+    pass
 
 def print_duration(total_time_spent):
     hhh = int(total_time_spent) // 3600
@@ -70,7 +75,7 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    run_simulation_threads_v4(10, 100, 2, interaction=1)
+    # run_simulation_threads_v4(10, 100, 2, interaction=1)
 
     # run_simulation_threads_v4(200, 5000, 20, interaction=1)
     # run_simulation_threads_v4(300, 5000, 20, interaction=1)
@@ -105,6 +110,8 @@ if __name__ == '__main__':
 
     # from test_py import test_percolation_L1
     # test_percolation_L1.test_simulation_L1_seed()
+
+    mTests()
 
     # print("No errors")
     logging.info("No errors")

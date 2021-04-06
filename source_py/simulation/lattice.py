@@ -297,6 +297,47 @@ class Lattice:
         return self.bond_ids
         pass
 
+    def highlight_sites(self, site_ids):
+        # only show the sites from the provided list. Even if it's diactivated. For debugging purposes
+        print("to right > +y axis")
+        print("to down  _ +x axis")
+        print("first column and row are for index reference only")
+        print("format : ")
+        print("{Site gid, Site id}")
+        str_format_1 = " {:8}  |"
+        str_format_2 = " ({:3},{:3}) |"
+        self.print_row_separator(15)
+        for rr in range(self.length):
+
+            if rr == 0:
+                print(str_format_1.format("x_ y>"), end="")
+                for cc in range(self.length):
+                    print(str_format_1.format(cc), end="")
+                print()
+                self.print_row_separator(15)
+                pass
+            print(str_format_1.format(rr), end="")
+            for cc in range(self.length):
+
+
+                id = self.get_id_from_index(rr, cc)
+                if id in site_ids:
+                    gid = self.get_site_gid_by_id(id)
+                    print(str_format_2.format(gid, id), end="")
+
+                    pass
+                else:
+                    empty = ""
+                    for c in "{}".format(id):
+                        empty = empty + " "
+                        pass
+                    print(str_format_2.format(empty, empty), end="")
+                    pass
+                pass
+            print()
+            self.print_row_separator(15)
+        pass
+
     def view(self, formatt=0):
         print("format : ")
         print("{site}           {horizontal bond}")
@@ -425,7 +466,7 @@ class Lattice:
         self.site_matrix[s_index].set_relative_index(relative_index)
         pass
 
-    def get_all_neighbor_sites(self, central_site_id):
+    def get_neighbor_sites_ids(self, central_site_id):
         bonds = self.get_neighbor_bonds(central_site_id)
         four_neighbors = []
         for bid in bonds:
@@ -453,8 +494,26 @@ class Lattice:
         #     print("dx=", dx, " dy=", dy)
         #     assert dx == 1 or dy == 1
         ### pytest END>>
+        # print("highlight")
+        # self.highlight_sites(four_neighbors + [central_site_id])
 
         return four_neighbors
+
+    def get_neighbor_sites_indices(self, central_site_id):
+        site_ids = self.get_neighbor_sites_ids(central_site_id)
+        site_indices = []
+        for ss in site_ids:
+            site = self.get_site_by_id(ss)
+            # print("site ", site)
+            index = site.get_index()
+            # print("index ", index)
+            site_indices.append(index.as_list())
+            pass
+        # print("site_indices ", site_indices)
+        assert len(site_indices) == 4
+        print("highlight")
+        self.highlight_sites(site_ids + [central_site_id])
+        return site_indices
 
     def distance_btn_sites(self, site1, site2):
         index1 = site1
@@ -506,7 +565,7 @@ class Lattice:
             if gid_c < 0:
                 continue
             central_rel_index = site_central.get_relative_index()
-            four_neibhbors = self.get_all_neighbor_sites(site_central.get_id())
+            four_neibhbors = self.get_neighbor_sites_ids(site_central.get_id())
             column_wise, row_wise = False, False
             active_neighbor_count = 0
             for nbors in four_neibhbors:
@@ -617,3 +676,9 @@ def mTest_neighbors():
     lattice.list_all_sites()
     lattice.list_all_bonds()
     pass
+
+def mTest_hilight():
+    length = 5
+    lattice = Lattice(length)
+    sieids = [0, 1, 5, 6]
+    lattice.highlight_sites(sieids)

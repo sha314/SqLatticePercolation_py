@@ -48,6 +48,9 @@ class Percolation:
             self.lattice_ref.view(formatt)
         pass
 
+    def highlight_sites(self, sites):
+        self.lattice_ref.highlight_sites(sites)
+
     def viewCluster(self):
         self.cluster_pool_ref.view()
         pass

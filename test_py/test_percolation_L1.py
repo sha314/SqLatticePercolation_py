@@ -269,10 +269,11 @@ def test_simulation_L1_neighbors(length, seeded):
     site_count = 1
     percolation.test_lattice()
     while percolation.place_one_site():
-        percolation.get_current_site_info()
+        print("*****************<>******************<>****************<>****************<>****************")
+        # percolation.get_current_site_info()
         percolation.detect_wrapping()
         # print("occupied ", site_count, " sites")
-        # percolation.viewLattice(3)
+        percolation.viewLattice(3)
         # percolation.viewLattice(1)
         # percolation.test_lattice()
         # P1 = percolation.order_param_wrapping()

@@ -149,6 +149,7 @@ class Lattice:
         pass
 
     def get_neighbor_bonds(self, s0_index):
+        # print("s0_index ", s0_index)
         return self.site_matrix[s0_index].connecting_bonds()
         pass
 
@@ -511,8 +512,8 @@ class Lattice:
             pass
         # print("site_indices ", site_indices)
         assert len(site_indices) == 4
-        print("highlight")
-        self.highlight_sites(site_ids + [central_site_id])
+        # print("highlight")
+        # self.highlight_sites(site_ids + [central_site_id])
         return site_indices
 
     def distance_btn_sites(self, site1, site2):

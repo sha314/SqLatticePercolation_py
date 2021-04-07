@@ -56,17 +56,26 @@ def print_duration(total_time_spent):
     sss = total_time_spent - mmm * 60
     print("Total time elapsed {}h {}m {:.4f}s".format(hhh, mmm, sss))
 
+def init_directories():
+    import os
+    log_dir = "./logs/"
+    if not os.path.isdir(log_dir):
+        # print("log directory created")
+        os.mkdir(log_dir)
+        pass
+
+    data_dir = "./data/"
+    if not os.path.isdir(data_dir):
+        # print("data directory created")
+        os.mkdir(data_dir)
+        pass
 
 def init_logging():
     # logging to a file
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H%M%S")
     log_dir = "./logs/"
-    import os
-    if not os.path.isdir(log_dir):
-        print("log directory created")
-        os.mkdir(log_dir)
-        pass
+
     filename = log_dir + "run_simulation_threads_v4-log-" + current_time + ".txt"
     logging.basicConfig(filename=filename, level=logging.DEBUG)
 
@@ -75,6 +84,7 @@ def init_logging():
 if __name__ == '__main__':
     time_a = time.time()
 
+    init_directories()
     init_logging()
 
     # print_hi()

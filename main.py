@@ -61,7 +61,13 @@ def init_logging():
     # logging to a file
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H%M%S")
-    filename = "./logs/" + "run_simulation_threads_v4-log-" + current_time + ".txt"
+    log_dir = "./logs/"
+    import os
+    if not os.path.isdir(log_dir):
+        print("log directory created")
+        os.mkdir(log_dir)
+        pass
+    filename = log_dir + "run_simulation_threads_v4-log-" + current_time + ".txt"
     logging.basicConfig(filename=filename, level=logging.DEBUG)
 
 

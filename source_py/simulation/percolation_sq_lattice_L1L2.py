@@ -13,7 +13,7 @@ class SitePercolationL1(SitePercolation):
     def __init__(self, **kwargs):
         super(SitePercolationL1, self).__init__(**kwargs)
         self.signature = super(SitePercolationL1, self).get_signature()
-        self.signature += "L1_"
+        self.signature += "L1_test_"
 
         self.x_occupied = 0
 
@@ -145,7 +145,7 @@ class SitePercolationL1(SitePercolation):
 
     def place_one_site(self):
         # print("************************ place_one_site. count ", self.current_idx + 1)
-        self.selection_flag = self.select_site_v2()
+        self.selection_flag = self.select_site_v3()
         if self.selection_flag == SelectionState.SUCESS:
 
             # print("selected site ", self.current_site.get_index(), " id ", self.current_site.get_id())
@@ -222,6 +222,49 @@ class SitePercolationL1(SitePercolation):
             # print("number of usable nn ", self.lattice_ref.get_site_by_id(central_X).get_nn_count())
 
             central_X = central2
+
+            pass
+        self.selected_id = central_X
+        self.site_id_sequence_record.append(self.selected_id)
+        self.current_site = self.lattice_ref.get_site_by_id(self.selected_id)
+        assert self.current_site.get_gid() == -1   # must be unoccupied
+        # print("selected_id ", self.selected_id)
+        self.occupied_site_count += 1
+
+        return SelectionState.SUCESS
+
+    def select_site_v3(self):
+
+        """
+        Essentially L0 percolation
+        return : 0 -> successfully chosen an empty site
+                 1 -> sites are remaining but current site is not empty
+                 -1 -> no remaining empty sites
+
+                 deleting a site from the site list later than might change the probability.
+
+        """
+        # print("SitePercolationL1.select_site_v2")
+        if self.current_idx >= self.lattice_ref.site_count:
+            # print("No sites to occupy")
+            return SelectionState.EMPTY_SITE_LIST
+        rnd = random.randint(self.current_idx, len(self.site_ids_indices) - 1)
+
+        central_X = self.site_ids_indices[rnd]
+        site_X = self.lattice_ref.get_site_by_id(central_X)
+        ## << DEBUG BEGIN
+        # print("randomly_selected_site self.site_ids_indices[{}]={} and index=".format(rnd, central_X), site_X.get_index())
+        # self.get_current_site_info(central_X)
+        ## DEBUG END>>
+        if site_X.is_occupied():
+            # print("X is occupied")
+            self.x_occupied += 1
+
+            self.site_ids_indices[rnd] = self.site_ids_indices[self.current_idx]
+            self.current_idx += 1
+            # return False
+            pass
+            return SelectionState.CURRENT_SITE_NOT_EMPTY
 
             pass
         self.selected_id = central_X

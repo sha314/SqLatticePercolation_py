@@ -77,7 +77,12 @@ def init_logging():
     log_dir = "./logs/"
 
     filename = log_dir + "run_simulation_threads_v4-log-" + current_time + ".txt"
-    logging.basicConfig(filename=filename, level=logging.DEBUG)
+
+    FORMAT = '[%(asctime)s] %(message)s'
+    logging.basicConfig(filename=filename, format=FORMAT, level=logging.DEBUG)
+
+    # logging.info("Testing")
+    pass
 
 
 # Press the green button in the gutter to run the script.

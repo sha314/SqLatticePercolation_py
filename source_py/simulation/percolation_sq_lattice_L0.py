@@ -28,6 +28,7 @@ class SitePercolationL0(SitePercolation):
         # print("Number of unreachable objects collected by GC:", n)
         # print("Uncollectable garbage:", gc.garbage)
         super(SitePercolationL0, self).reset()
+        # print("current sequence ", self.site_ids_indices)
 
 
 

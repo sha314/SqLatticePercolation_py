@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v4(10, 100, 2, interaction=1)
+    # run_simulation_threads_v4(10, 100, 2, interaction=0)
 
     run_simulation_threads_v4(200, 5000, 20, interaction=1)
     run_simulation_threads_v4(300, 5000, 20, interaction=1)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     # print("No errors")
     logging.info("No errors")
     total_time_spent = time.time() - time_a
-    if total_time_spent < 10:
+    if total_time_spent > 10:
         log_str = "Total time elapsed {:2.6f} sec".format(total_time_spent)
         # print(log_str)
         logging.info(log_str)

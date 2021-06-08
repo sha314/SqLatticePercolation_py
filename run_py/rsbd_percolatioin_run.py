@@ -75,3 +75,59 @@ def run_simulations():
     # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL1, LL, En)
     # ensemble.run_ensemble_entropy_order(percolation_sq_lattice_L1L2.SitePercolationL2, LL, En)
     ensemble.run_ensemble_entropy_order_threads_v2(percolation_sq_lattice_L0.SitePercolationL0, LL, En, seed=0)
+
+
+def single_realization(percolationClass, length):
+    """
+    single realization for storing data for future.
+    pytest will test using it as reference.
+    """
+    import json
+    from datetime import datetime
+    # print("length ", ensembleSize)
+    # print("ensembleSize ", ensembleSize)
+    # print("thread_count ", thread_count)
+
+
+    percolation = percolationClass(length=length)
+
+    percolation.reset()
+    # percolation.viewCluster()
+    # percolation.viewLattice()
+    percolation.run_once()
+
+    # print(data)
+    signature = percolation.get_signature()
+    now = datetime.now()
+    current_time = now.strftime("%Y%m%d_%H%M%S")
+    print("current_time ", current_time)
+
+    signature += "_percolation_cross_check_data_L{}_".format(length)
+    filename = signature + current_time
+
+    filename += ".txt"
+    head = dict()
+    head['length'] = length
+    head['L'] = length
+    head['site_id_sequence'] = percolation.get_site_id_sequence()
+    head['site_index_sequence'] = percolation.get_index_sequence()
+    head['pc'] = percolation.get_pc()
+    head['site_count_wrapping_cluster_pc'] = percolation.get_site_count_wrapping_cluster_pc()
+    head['bond_count_wrapping_cluster_pc'] = percolation.get_bond_count_wrapping_cluster_pc()
+    head['entropy_list'] = percolation.get_entropy_array()
+    head['order_largest_list'] = percolation.get_order_param_largest_array()
+    head['order_wrapping_list'] = percolation.get_order_param_wrapping_array()
+    head['date'] = now.strftime("%Y.%m.%d")
+    head['time'] = now.strftime("%H:%M:%S")
+    head['columns'] = ["p", "H", "P1", "P2"]
+    head['desc'] = ["p=occupation probability", "H=entropy",
+                    "P1=order parameter by wrapping cluster", "P2=order parameter by largest cluster"]
+    header_str = json.dumps(head)
+    filename = "./data/" + filename
+    with open(filename, 'w') as f:
+        f.write(header_str)
+        pass
+
+
+
+    pass

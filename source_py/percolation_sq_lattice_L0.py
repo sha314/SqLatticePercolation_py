@@ -19,6 +19,7 @@ class SitePercolationL0(SitePercolation):
         # self.entropy_list = None
         # self.order_wrapping_list = None
         # self.order_largest_list = None
+        print("SitePercolationL0.init")
         pass
 
     def get_signature(self):

@@ -6,6 +6,8 @@ import logging
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from run_py.shortest_path_run import *
 from run_py.rsbd_percolatioin_run import *
+from source_py.percolation_sq_lattice_L0 import SitePercolationL0
+
 
 def print_hi():
     from source_py import lattice
@@ -71,7 +73,12 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    run_simulation_threads_v3(10, 100, 2)
+    # run_simulation_threads_v3(10, 100, 2)
+    # run_simulation_threads_v3(200, 5000, 20)
+    # run_simulation_threads_v3(300, 5000, 20)
+    # run_simulation_threads_v3(400, 5000, 20)
+    # run_simulation_threads_v3(500, 5000, 20)
+
     # run_simulation_threads_v3(200, 5000, 20)
     # run_simulation_threads_v3(300, 5000, 20)
     # run_simulation_threads_v3(400, 5000, 20)
@@ -86,10 +93,12 @@ if __name__ == '__main__':
     # run_shortest_path_ensemble(200, 10)
     # run_simulation_shortest_path_threads(50, 100, thread=2)
 
+    single_realization(SitePercolationL0, 10)
+
     # print("No errors")
     logging.info("No errors")
     total_time_spent = time.time() - time_a
-    if total_time_spent < 10:
+    if total_time_spent > 10:
         log_str = "Total time elapsed {:2.6f} sec".format(total_time_spent)
         # print(log_str)
         logging.info(log_str)

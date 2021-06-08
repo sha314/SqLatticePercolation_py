@@ -4,6 +4,8 @@ from datetime import datetime
 import json
 import numpy as np
 import time
+import logging
+
 
 def run_ensemble_entropy_order(percolationClass, length, ensembleSize, interaction=0):
     """
@@ -193,8 +195,10 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
         # print(aaa)
         del aaa
         end_t = time.time() - start_t
-        print("Iteration {:4} | Time elapsed {:.5f} sec | thread {:2} "
-              .format(en*(thread_count+1), end_t, thread_count))
+        log_str = "Iteration {:4} | Time elapsed {:.5f} sec | thread {:2} ".format(
+            en*(thread_count+1), end_t, thread_count)
+        # print(log_str)
+        logging.info(log_str)
         pass
 
     data /= ensembleSize  # taking average
@@ -202,7 +206,9 @@ def run_ensemble_entropy_order_threads_v2(percolationClass, length, ensembleSize
     signature = percolation.get_signature()
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H%M%S")
-    print("current_time ", current_time)
+    log_str = "current_time ", current_time
+    # print(log_str)
+    logging.info(log_str)
 
     write_entropy_order(current_time, data, ensembleSize, length, now, signature, thread_count=thread_count)
     write_critical_values(current_time, critical_data, ensembleSize, length, now, signature, thread_count=thread_count)

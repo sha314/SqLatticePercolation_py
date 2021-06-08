@@ -8,6 +8,7 @@ import gc
 # import unittest
 import pytest
 from source_py.simulation.states import SelectionState
+import logging
 
 Lattice = lattice.Lattice
 ClusterPool = cluster.ClusterPool
@@ -15,7 +16,9 @@ ClusterPool = cluster.ClusterPool
 
 class Percolation:
     def __init__(self, **kwargs):
-        print("kwargs ", kwargs)
+        log_str = "kwargs {}".format(kwargs)
+        # print(log_str)
+        logging.info(log_str)
         length = kwargs['length']
         if "seed" in kwargs.keys():
             print("Custom seeding. Testing mode")

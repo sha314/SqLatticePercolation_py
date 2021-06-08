@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 import multiprocessing
+import logging
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -56,11 +57,18 @@ def print_duration(total_time_spent):
 if __name__ == '__main__':
     time_a = time.time()
 
+    # initiate logging into a file
+    now = datetime.now()
+    current_time = now.strftime("%Y%m%d_%H%M%S")
+    filename = "./logs/" + "run_simulation_threads-log-" + current_time + ".txt"
+    logging.basicConfig(filename=filename, level=logging.DEBUG)
+
+
     # print_hi()
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v3(10, 100, 2)
+    run_simulation_threads_v3(10, 100, 2)
     # run_simulation_threads_v3(200, 5000, 20)
     # run_simulation_threads_v3(300, 5000, 20)
     # run_simulation_threads_v3(400, 5000, 20)
@@ -75,14 +83,19 @@ if __name__ == '__main__':
     # run_shortest_path_ensemble(200, 10)
     # run_simulation_shortest_path_threads(50, 100, thread=2)
 
-    print("No errors")
+    # print("No errors")
+    logging.info("No errors")
     total_time_spent = time.time() - time_a
     if total_time_spent < 10:
-        print("Total time elapsed {:2.6f} sec".format(total_time_spent))
+        log_str = "Total time elapsed {:2.6f} sec".format(total_time_spent)
+        # print(log_str)
+        logging.info(log_str)
         pass
     else:
         print_duration(total_time_spent)
     now = datetime.now()
     current_time = now.strftime("%Y.%m.%d %H:%M:%S")
-    print("Current Time ", current_time)
+    log_str = "Current Time {}".format(current_time)
+    # print(log_str)
+    logging.info(log_str)
 

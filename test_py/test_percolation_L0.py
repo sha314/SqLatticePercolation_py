@@ -1,6 +1,7 @@
 from source_py.lattice import Lattice
 from source_py.percolation_sq_lattice_L0 import SitePercolationL0
 import pytest
+import random
 
 def test_simulation_L0_seed(length=6, seed=310):
     percolation = SitePercolationL0(length=length, seed=seed)
@@ -107,8 +108,9 @@ def test_simulation_L0_different_lengths():
     """
         run simulation for site percolation on square lattice.
         """
-    length, seeded = 310
-    for length in range(5, 50):
+    seeded = 310
+    length_list = [random.randint(5, 50) for _ in range(10)]
+    for length in length_list:
         print("seed ={:4}".format(seeded))
         percolation = SitePercolationL0(length=length, seed=seeded)
         data = None

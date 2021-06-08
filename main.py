@@ -2,7 +2,6 @@ import time
 from datetime import datetime
 import multiprocessing
 import logging
-
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from run_py.shortest_path_run import *
@@ -58,6 +57,10 @@ if __name__ == '__main__':
     time_a = time.time()
 
     # initiate logging into a file
+    import os
+    if not os.path.isdir("./logs/"):
+        os.mkdir("./logs/")
+        pass
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H%M%S")
     filename = "./logs/" + "run_simulation_threads-log-" + current_time + ".txt"

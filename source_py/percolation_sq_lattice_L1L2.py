@@ -49,9 +49,11 @@ class SitePercolationL1(SitePercolation):
             if ss == central:
                 sites.remove(ss)
                 pass
+
         #
         # sites.remove(central)
         # print(central, " has four neighbor sites : ", sites)
+        assert len(sites) == 4
         return sites
 
     def select_site(self):
@@ -70,7 +72,8 @@ class SitePercolationL1(SitePercolation):
             # print("X is occupied")
             self.x_occupied += 1
 
-            sites = self.get_four_neighbor_sites(central_X)
+            # sites = self.get_four_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
             # print("four neighbors ", sites)
             central2 = sites[random.randint(0, len(sites)-1)]
             if self.lattice_ref.get_site_by_id(central2).is_occupied():

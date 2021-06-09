@@ -439,7 +439,8 @@ class Lattice:
             tmp.remove(central_site_id)
 
             four_neighbors.append(tmp[0])
-
+            pass
+        assert len(four_neighbors) == 4
         return four_neighbors
 
     def test_neighbor_count(self):

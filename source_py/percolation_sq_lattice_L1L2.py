@@ -4,6 +4,7 @@ import random
 import math
 from source_py.index import *
 import gc
+import logging
 from source_py.simulation.states import SelectionState
 
 from source_py.percolation_sq_lattice import SitePercolation
@@ -20,7 +21,9 @@ class SitePercolationL1(SitePercolation):
         self.signature += "L1_"
 
         self.x_occupied = 0
-        print("SitePercolationL1.init")
+        log_str = "SitePercolationL1.init"
+        # print(log_str)
+        logging.info(log_str)
         pass
 
     def reset(self):
@@ -120,7 +123,9 @@ class SitePercolationL2(SitePercolation):
         self.signature += "L2_"
         self.x_occupied = 0
         self.y_occupied = 0
-        print("SitePercolationL2.init")
+        log_str = "SitePercolationL2.init"
+        # print(log_str)
+        logging.info(log_str)
         pass
 
     def reset(self):

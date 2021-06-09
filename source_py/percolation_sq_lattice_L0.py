@@ -2,6 +2,7 @@ from source_py import lattice
 from source_py import cluster
 import random
 import numpy as np
+import logging
 
 from source_py.percolation_sq_lattice import SitePercolation
 
@@ -19,7 +20,9 @@ class SitePercolationL0(SitePercolation):
         # self.entropy_list = None
         # self.order_wrapping_list = None
         # self.order_largest_list = None
-        print("SitePercolationL0.init")
+        log_str = "SitePercolationL0.init"
+        # print(log_str)
+        logging.info(log_str)
         pass
 
     def get_signature(self):

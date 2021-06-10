@@ -145,21 +145,22 @@ class SitePercolationL2(SitePercolation):
         print("  1st neighor selected ", self.x_occupied, " times")
         print("  2nd neighor selected ", self.y_occupied, " times")
 
-    def get_four_neighbor_sites(self, central):
-        bonds = self.lattice_ref.get_neighbor_bonds(central)
-        sites = []
-        for bb in bonds:
-            tmp = self.lattice_ref.get_neighbor_sites(bb)
-            sites += tmp
-            pass
-        for ss in sites:
-            if ss == central:
-                sites.remove(ss)
-                pass
-        #
-        # sites.remove(central)
-        # print(central, " has four neighbor sites : ", sites)
-        return sites
+    # def get_four_neighbor_sites(self, central):
+    #     bonds = self.lattice_ref.get_neighbor_bonds(central)
+    #     sites = []
+    #     for bb in bonds:
+    #         tmp = self.lattice_ref.get_neighbor_sites(bb)
+    #         sites += tmp
+    #         pass
+    #     for ss in sites:
+    #         if ss == central:
+    #             sites.remove(ss)
+    #             pass
+    #     #
+    #     # sites.remove(central)
+    #     # print(central, " has four neighbor sites : ", sites)
+    #     assert len(sites) == 4
+    #     return sites
 
     def correct_index_for_periodicity(self, index):
         row = index.row() % self.lattice_ref.length
@@ -180,7 +181,8 @@ class SitePercolationL2(SitePercolation):
         central_X = self.site_ids_indices[rnd]
         Z_id = central_X
         if self.lattice_ref.get_site_by_id(central_X).is_occupied():
-            sites = self.get_four_neighbor_sites(central_X)
+            # sites = self.get_four_neighbor_sites(central_X)
+            sites = self.lattice_ref.get_all_neighbor_sites(central_X)
             Y_id = sites[random.randint(0, len(sites) - 1)]
             Z_id = Y_id
             # print("X is occupied")

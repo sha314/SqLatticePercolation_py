@@ -15,10 +15,11 @@ def test_simulation_L0_seed(length=6, seed=310):
     while percolation.place_one_site():
         percolation.detect_wrapping()
         print("occupied ", site_count, " sites")
-        percolation.viewLattice(3)
+        # percolation.viewLattice(3)
         # percolation.viewLattice(1)
         percolation.test_lattice()
         percolation.test_clusters()
+        percolation.test_entropy()
         P1 = percolation.order_param_wrapping()
         # print("p= ", percolation.occupation_prob(),
         #       " entropy_v1 ", percolation.entropy_v1(),
@@ -36,7 +37,7 @@ def test_simulation_L0_seed(length=6, seed=310):
         print("P1 should be 1.0")
     assert P1 == 1.0
     # percolation.viewLattice()
-    percolation.viewLattice(3)
+    # percolation.viewLattice(3)
     percolation.test_clusters()
     percolation.test_lattice()
     # percolation.viewCluster()
@@ -89,6 +90,18 @@ def test_simulation_L0_reset():
     #     break
     # print(aaa[-1, -2])
 
+
+def test_simulation_L0_seed_and_L_sets():
+    count = 10
+    seed_list = [random.randint(0, 1000) for _ in range(count)]
+    length_list = [random.randint(5, 10) for _ in range(count)]
+
+    for seed, length in zip(seed_list, length_list):
+        print("============= Testing with L={},s={}===========".format(length, seed))
+        test_simulation_L0_seed(length, seed)
+
+    pass
+
 # pytest fails for L=6, seed=310 for L0
 def test_simulation_L0_different_seeds():
     """
@@ -99,7 +112,7 @@ def test_simulation_L0_different_seeds():
     seeded = 310
     length = 6
     import random
-    seed_list = [random.seed(0, 1000) for _ in range(20)]
+    seed_list = [random.randint(0, 1000) for _ in range(20)]
     for seeded in seed_list:
         test_simulation_L0_seed(length, seeded)
         pass

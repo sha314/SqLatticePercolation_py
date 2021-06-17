@@ -349,6 +349,17 @@ class SitePercolation(Percolation):
         return neighbor_sites
         pass
 
+    def get_cluster_size(self, cluster_id):
+        """
+        In new definition of site percolation, cluter size id defined by the number of bonds in the cluster.
+        Initially all cluster contains exactly 1 bonds.
+
+        Just changing this definition will change the definition of cluster and hence the definition of site percolation itself
+
+        """
+        b_count = self.cluster_pool_ref.get_cluster_bond_count(cluster_id)
+        return b_count
+
     def select_site(self):
         """
         return : 0 -> successfully chosen an empty site
@@ -395,7 +406,8 @@ class SitePercolation(Percolation):
         return True
 
     def track_largest_cluster(self, new_cluster):
-        new_size = self.cluster_pool_ref.get_cluster_bond_count(new_cluster)
+        # new_size = self.cluster_pool_ref.get_cluster_bond_count(new_cluster)
+        new_size = self.get_cluster_size(new_cluster)
         # self.cluster_pool_ref.get_cluster_site_count(new_cluster)
         if new_size > self.largest_cluster_sz:
             self.largest_cluster_id = new_cluster
@@ -416,7 +428,8 @@ class SitePercolation(Percolation):
         # print("gids ", gids)
         H = 0
         for gg in gids:
-            b_count = self.cluster_pool_ref.get_cluster_bond_count(gg)
+            # b_count = self.cluster_pool_ref.get_cluster_bond_count(gg)
+            b_count = self.get_cluster_size(gg)
             if b_count == 0:
                 continue
                 pass
@@ -431,7 +444,8 @@ class SitePercolation(Percolation):
 
     def entropy_add(self, new_cluster_id):
         # print("entropy_add")
-        b_count = self.cluster_pool_ref.get_cluster_bond_count(new_cluster_id)
+        # b_count = self.cluster_pool_ref.get_cluster_bond_count(new_cluster_id)
+        b_count = self.get_cluster_size(new_cluster_id)
         mu = b_count / self.lattice_ref.bond_count
         # print(mu)
         # print("before ", self.entropy_value)
@@ -452,7 +466,8 @@ class SitePercolation(Percolation):
     def entropy_v1(self):
         H = 0
         for i in range(self.cluster_count):
-            b_count = self.cluster_pool_ref.get_cluster_bond_count(i)
+            # b_count = self.cluster_pool_ref.get_cluster_bond_count(i)
+            b_count = self.get_cluster_size(i)
             mu = b_count / self.lattice_ref.bond_count
             if mu == 0:
                 # print("empty cluster")
@@ -473,7 +488,8 @@ class SitePercolation(Percolation):
     def order_param_wrapping(self):
         if self.after_wrapping:
             # print("wrapping cluster id ", self.wrapping_cluster_id)
-            count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
+            # count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
+            count = self.get_cluster_size(self.wrapping_cluster_id)
             ret_val = count / self.lattice_ref.bond_count
             # print("wrapping cluster size ", count, " P = ", ret_val)
             return ret_val
@@ -487,7 +503,8 @@ class SitePercolation(Percolation):
         ref_sz = 0
         root_clstr = 0
         for bb in bond_gids:
-            sz = self.cluster_pool_ref.get_cluster_bond_count(bb)
+            # sz = self.cluster_pool_ref.get_cluster_bond_count(bb)
+            sz = self.get_cluster_size(bb)
             if sz >= ref_sz:
                 root_clstr = bb
                 ref_sz = sz
@@ -537,7 +554,8 @@ class SitePercolation(Percolation):
                 # print("After wrapping, the wrapping cluster is the root cluster even if other involved clusters are larger")
                 root_clstr = self.wrapping_cluster_id
                 break
-            sz = self.cluster_pool_ref.get_cluster_bond_count(bbg)
+            # sz = self.cluster_pool_ref.get_cluster_bond_count(bbg)
+            sz = self.get_cluster_size(bbg)
             if sz >= ref_sz:
                 root_clstr = bbg
                 ref_sz = sz
@@ -751,6 +769,12 @@ class SitePercolation(Percolation):
                 self.order_largest_list.append(P2)
 
         self.first_run = False
+        pass
+
+    def test_entropy(self):
+        v1entropy = self.entropy_v1()
+        v2entropy = self.entropy_v2()
+        assert abs(v1entropy - v2entropy) < 1e-9
         pass
 
     def test_clusters(self):

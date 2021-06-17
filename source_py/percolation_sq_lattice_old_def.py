@@ -23,6 +23,13 @@ class SitePercolation_old_def(SitePercolation):
         self.entropy_value = 0
         pass
 
+    def reset(self):
+        """
+        reset for next
+        """
+        super(SitePercolation_old_def, self).reset()
+        self.entropy_value = 0
+
     def get_cluster_size(self, cluster_id):
         """
         In new definition of site percolation, cluter size id defined by the number of bonds in the cluster.
@@ -32,21 +39,22 @@ class SitePercolation_old_def(SitePercolation):
 
         """
         s_count = self.cluster_pool_ref.get_cluster_site_count(cluster_id)
-        return s_count
+        return s_count, self.lattice_ref.site_count
 
     def order_param_largest_clstr(self):
-        return self.largest_cluster_sz / self.lattice_ref.site_count
+        _, normalizer = self.get_cluster_size(0)
+        return self.largest_cluster_sz / normalizer
 
-    def order_param_wrapping(self):
-        if self.after_wrapping:
-            # print("wrapping cluster id ", self.wrapping_cluster_id)
-            # count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
-            count = self.get_cluster_size(self.wrapping_cluster_id)
-            ret_val = count / self.lattice_ref.site_count
-            # print("wrapping cluster size ", count, " P = ", ret_val)
-            return ret_val
-        return 0.
-        pass
+    # def order_param_wrapping(self):
+    #     if self.after_wrapping:
+    #         # print("wrapping cluster id ", self.wrapping_cluster_id)
+    #         # count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
+    #         count = self.get_cluster_size(self.wrapping_cluster_id)
+    #         ret_val = count / self.lattice_ref.site_count
+    #         # print("wrapping cluster size ", count, " P = ", ret_val)
+    #         return ret_val
+    #     return 0.
+    #     pass
 
     def test_clusters(self):
         # for unit test. At the end of a simulation

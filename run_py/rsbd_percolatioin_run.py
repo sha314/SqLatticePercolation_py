@@ -46,7 +46,9 @@ def run_simulation_threads_v2():
 def run_simulation_threads_v3(length, ensemble_count, thread):
     from run_py import ensemble
     from source_py import percolation_sq_lattice_L0
-    percolationClass = percolation_sq_lattice_L0.SitePercolationL0
+    from source_py import percolation_sq_lattice_old_def
+    # percolationClass = percolation_sq_lattice_L0.SitePercolationL0
+    percolationClass = percolation_sq_lattice_old_def.SitePercolation_old_def
     # percolationClass = percolation_sq_lattice_L1L2.SitePercolationL1
     # percolationClass = percolation_sq_lattice_L1L2.SitePercolationL2
     # length = 500

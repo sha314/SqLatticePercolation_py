@@ -14,6 +14,7 @@ def test_simulation_L0OldDef_seed(length=6, seed=310):
     P1 = -222
     site_count = 1
     percolation.test_lattice()
+    entropy_list = []
     while percolation.place_one_site():
         percolation.detect_wrapping()
         print("occupied ", site_count, " sites")
@@ -22,6 +23,8 @@ def test_simulation_L0OldDef_seed(length=6, seed=310):
         percolation.test_lattice()
         percolation.test_clusters()
         percolation.test_entropy()
+        H = percolation.entropy()
+        entropy_list.append(H)
         P1 = percolation.order_param_wrapping()
         # print("p= ", percolation.occupation_prob(),
         #       " entropy_v1 ", percolation.entropy_v1(),
@@ -51,6 +54,20 @@ def test_simulation_L0OldDef_seed(length=6, seed=310):
     # if aaa[-1, -2] == 1:
     #     break
     # print(aaa[-1, -2])
+    print("entropy_list ", entropy_list)
+    percolation.reset()
+    percolation.run_once()
+    arr = percolation.get_data_array()
+    print("data array")
+    print(arr)
+
+    rnd = random.randint(0, len(entropy_list)-1)
+    rnd = 0
+    a = arr[rnd, 1]
+    b = entropy_list[rnd]
+    print(a)
+    print(b)
+    assert abs(a - b) < 1e-6
 
 
 def test_simulation_L0OldDef_seed_and_L_sets():

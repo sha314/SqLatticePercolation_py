@@ -304,6 +304,7 @@ class SitePercolation(Percolation):
     def get_data_array(self):
         pp = self.get_occupation_prob_array()
         HH = self.get_entropy_array()
+        # print("entropy list ", HH )
         PP_wraping = self.get_order_param_wrapping_array()
         PP_largest = self.get_order_param_largest_array()
         # print(len(pp))
@@ -358,7 +359,7 @@ class SitePercolation(Percolation):
 
         """
         b_count = self.cluster_pool_ref.get_cluster_bond_count(cluster_id)
-        return b_count
+        return b_count, self.lattice_ref.bond_count
 
     def select_site(self):
         """
@@ -407,7 +408,7 @@ class SitePercolation(Percolation):
 
     def track_largest_cluster(self, new_cluster):
         # new_size = self.cluster_pool_ref.get_cluster_bond_count(new_cluster)
-        new_size = self.get_cluster_size(new_cluster)
+        new_size = self.get_cluster_size(new_cluster)[0]
         # self.cluster_pool_ref.get_cluster_site_count(new_cluster)
         if new_size > self.largest_cluster_sz:
             self.largest_cluster_id = new_cluster
@@ -429,11 +430,11 @@ class SitePercolation(Percolation):
         H = 0
         for gg in gids:
             # b_count = self.cluster_pool_ref.get_cluster_bond_count(gg)
-            b_count = self.get_cluster_size(gg)
+            b_count, normalizer = self.get_cluster_size(gg)
             if b_count == 0:
                 continue
                 pass
-            mu = b_count / self.lattice_ref.bond_count
+            mu = b_count / normalizer
             H += mu * math.log(mu)
             pass
         # print("before ", self.entropy_value)
@@ -445,8 +446,8 @@ class SitePercolation(Percolation):
     def entropy_add(self, new_cluster_id):
         # print("entropy_add")
         # b_count = self.cluster_pool_ref.get_cluster_bond_count(new_cluster_id)
-        b_count = self.get_cluster_size(new_cluster_id)
-        mu = b_count / self.lattice_ref.bond_count
+        b_count, normalizer = self.get_cluster_size(new_cluster_id)
+        mu = b_count / normalizer
         # print(mu)
         # print("before ", self.entropy_value)
         self.entropy_value -= mu*math.log(mu)
@@ -467,8 +468,8 @@ class SitePercolation(Percolation):
         H = 0
         for i in range(self.cluster_count):
             # b_count = self.cluster_pool_ref.get_cluster_bond_count(i)
-            b_count = self.get_cluster_size(i)
-            mu = b_count / self.lattice_ref.bond_count
+            b_count, normalizer = self.get_cluster_size(i)
+            mu = b_count / normalizer
             if mu == 0:
                 # print("empty cluster")
                 continue
@@ -489,8 +490,8 @@ class SitePercolation(Percolation):
         if self.after_wrapping:
             # print("wrapping cluster id ", self.wrapping_cluster_id)
             # count = self.cluster_pool_ref.get_cluster_bond_count(self.wrapping_cluster_id)
-            count = self.get_cluster_size(self.wrapping_cluster_id)
-            ret_val = count / self.lattice_ref.bond_count
+            count, normalizer = self.get_cluster_size(self.wrapping_cluster_id)
+            ret_val = count / normalizer
             # print("wrapping cluster size ", count, " P = ", ret_val)
             return ret_val
         return 0.
@@ -504,7 +505,7 @@ class SitePercolation(Percolation):
         root_clstr = 0
         for bb in bond_gids:
             # sz = self.cluster_pool_ref.get_cluster_bond_count(bb)
-            sz = self.get_cluster_size(bb)
+            sz = self.get_cluster_size(bb)[0]
             if sz >= ref_sz:
                 root_clstr = bb
                 ref_sz = sz
@@ -555,7 +556,7 @@ class SitePercolation(Percolation):
                 root_clstr = self.wrapping_cluster_id
                 break
             # sz = self.cluster_pool_ref.get_cluster_bond_count(bbg)
-            sz = self.get_cluster_size(bbg)
+            sz = self.get_cluster_size(bbg)[0]
             if sz >= ref_sz:
                 root_clstr = bbg
                 ref_sz = sz
@@ -774,6 +775,7 @@ class SitePercolation(Percolation):
     def test_entropy(self):
         v1entropy = self.entropy_v1()
         v2entropy = self.entropy_v2()
+        print("entropy v1 = ", v1entropy, " , v2 = ", v2entropy)
         assert abs(v1entropy - v2entropy) < 1e-9
         pass
 

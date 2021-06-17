@@ -40,9 +40,15 @@ class OneCluster:
         # print("set_gid ", self.gid)
 
     def get_id(self):
+        """"
+        ID of each cluster is fixed once it's created
+        """
         return self.id
 
     def get_gid(self):
+        """
+        Gid of a cluster can change when it merges with other cluster
+        """
         return self.gid
 
     def add_sites(self, site_ids):
@@ -98,6 +104,7 @@ class ClusterPool:
     def __init__(self):
         self.cluster_list = []
         self.cluster_id=0
+        self.lattice_ref = None
         pass
 
     def reset(self):
@@ -111,7 +118,27 @@ class ClusterPool:
     def get_cluster_site_count(self, id):
         return self.cluster_list[id].get_site_count()
 
+    def test_cluster(self):
+        """
+        For UNIT test
+        """
+        for clstr in self.cluster_list:
+            sitelist = clstr.get_sites()
+            bondlist = clstr.get_bonds()
+            gid = clstr.get_gid()
+            for ss in sitelist:
+                gidtmp = self.lattice_ref.get_site_gid_by_id(ss)
+                assert gidtmp == gid
+            for bb in bondlist:
+                gidtmp = self.lattice_ref.get_bond_gid_by_id(bb)
+                assert gidtmp == gid
+                pass
+            pass
+        pass
+
     def create_new_cluster(self, site_ids=[], bond_ids=[], lattice_ref=None):
+        if self.lattice_ref is None:
+            self.lattice_ref = lattice_ref
         # print("method : create_new_cluster")
         clsstr = OneCluster()
         clsstr.add_sites(site_ids)

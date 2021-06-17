@@ -433,6 +433,7 @@ class SitePercolation(Percolation):
         # print("entropy_add")
         b_count = self.cluster_pool_ref.get_cluster_bond_count(new_cluster_id)
         mu = b_count / self.lattice_ref.bond_count
+        # print(mu)
         # print("before ", self.entropy_value)
         self.entropy_value -= mu*math.log(mu)
         # print("after ", self.entropy_value)
@@ -776,6 +777,8 @@ class SitePercolation(Percolation):
         assert bsum == 0
         assert ssum == 0
         assert self.largest_cluster_sz == len(bond_ids_indices)
+
+        self.cluster_pool_ref.test_cluster()
 
     def test_lattice(self):
         # self.lattice_ref.test_rwo_col_scan()

@@ -73,16 +73,17 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    # run_simulation_threads_v3(10, 100, 2)
-    run_simulation_threads_v3(200, 5000, 20)
-    run_simulation_threads_v3(300, 5000, 20)
-    run_simulation_threads_v3(400, 5000, 20)
-    run_simulation_threads_v3(500, 5000, 20)
-
-    # run_simulation_threads_v3(200, 5000, 20)
-    # run_simulation_threads_v3(300, 5000, 20)
-    # run_simulation_threads_v3(400, 5000, 20)
-    # run_simulation_threads_v3(500, 5000, 20)
+    run_simulation_threads_v3(10, 100, 2)
+#     run_simulation_threads_v3(100, 5000, 20)
+#     run_simulation_threads_v3(150, 5000, 20)
+#     run_simulation_threads_v3(200, 5000, 20)
+#     run_simulation_threads_v3(250, 5000, 20)
+#     run_simulation_threads_v3(300, 5000, 20)
+#
+#     run_simulation_threads_v3(200, 5000, 20)
+#     run_simulation_threads_v3(300, 5000, 20)
+#     run_simulation_threads_v3(400, 5000, 20)
+#     run_simulation_threads_v3(500, 5000, 20)
 
     # run_simulation_threads_v3(2 ** 7, 5000, 20)  # 128
     # run_simulation_threads_v3(2 ** 8, 5000, 20)  # 256
@@ -93,7 +94,7 @@ if __name__ == '__main__':
     # run_shortest_path_ensemble(200, 10)
     # run_simulation_shortest_path_threads(50, 100, thread=2)
 
-    single_realization(SitePercolationL0, 10)
+    # single_realization(SitePercolationL0, 10)
 
     # print("No errors")
     logging.info("No errors")

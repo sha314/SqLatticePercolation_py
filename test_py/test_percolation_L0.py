@@ -18,6 +18,7 @@ def test_simulation_L0_seed(length=6, seed=310):
         percolation.viewLattice(3)
         # percolation.viewLattice(1)
         percolation.test_lattice()
+        percolation.test_clusters()
         P1 = percolation.order_param_wrapping()
         # print("p= ", percolation.occupation_prob(),
         #       " entropy_v1 ", percolation.entropy_v1(),

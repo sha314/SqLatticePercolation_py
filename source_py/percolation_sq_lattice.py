@@ -465,19 +465,26 @@ class SitePercolation(Percolation):
         return self.entropy_value
 
     def entropy_v1(self):
+        # print("Entry : entropy_v1 <<< ")
         H = 0
+        mu_sum = 0
         for i in range(self.cluster_count):
             # b_count = self.cluster_pool_ref.get_cluster_bond_count(i)
             b_count, normalizer = self.get_cluster_size(i)
             mu = b_count / normalizer
+            mu_sum += mu
             if mu == 0:
                 # print("empty cluster")
                 continue
+            # print("v1mu = ", mu)
+            # self.cluster_pool_ref.get_cluster(i).view()
             log_mu = math.log(mu)
             H += mu * log_mu
             pass
         # self.entropy_value = -H
         # return self.entropy_value
+        assert abs(mu_sum - 1) < 1e-6
+        # print("Exit : entropy_v1 >>>")
         return -H
 
     def largest_cluster(self):

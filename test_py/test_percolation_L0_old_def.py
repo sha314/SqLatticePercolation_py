@@ -22,7 +22,6 @@ def test_simulation_L0OldDef_seed(length=6, seed=310):
         # percolation.viewLattice(1)
         percolation.test_lattice()
         percolation.test_clusters()
-        percolation.test_entropy()
         H = percolation.entropy()
         entropy_list.append(H)
         P1 = percolation.order_param_wrapping()
@@ -68,6 +67,7 @@ def test_simulation_L0OldDef_seed(length=6, seed=310):
     print(a)
     print(b)
     assert abs(a - b) < 1e-6
+    assert abs(entropy_list[-1]) < 1e-6
 
 
 def test_simulation_L0OldDef_seed_and_L_sets():

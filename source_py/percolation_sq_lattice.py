@@ -531,6 +531,10 @@ class SitePercolation(Percolation):
         pass
 
     def uniqe_gid_bond_neighbors(self, bond_neighbors):
+        """
+        get ids of the bonds
+        take id once if more than one bond have same gid
+        """
         gids = []
         unique_bond_ids = []
         for bb in bond_neighbors:
@@ -548,8 +552,8 @@ class SitePercolation(Percolation):
         """
         merging with relabeling relative indices
         """
-        bond_neighbors = self.uniqe_gid_bond_neighbors(bond_neighbors)
-        bond_gids = self.get_bond_gids(bond_neighbors)
+        bond_neighbors_unique = self.uniqe_gid_bond_neighbors(bond_neighbors)
+        bond_gids = self.get_bond_gids(bond_neighbors_unique)
         # site_gids = self.get_site_gids(site_neighbors)
         # print("site_gids ", site_gids)
         # print("bond_gids ", bond_gids)
@@ -571,7 +575,7 @@ class SitePercolation(Percolation):
             pass
         # print("root cluster is ", root_clstr)
         # print("Assign and relabel currently selected site")
-        for bb in bond_neighbors:
+        for bb in bond_neighbors_unique:
             bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
             if bbg == root_clstr:
                 # print("bb ", bbg, " is a root cluster")
@@ -598,7 +602,8 @@ class SitePercolation(Percolation):
             pass
         pass
         # print("Relabel all cluster according to root cluster and selected site")
-        for bb in bond_neighbors:
+        # print("bond_neighbors size ", len(bond_neighbors))
+        for bb in bond_neighbors_unique:
             bbg = self.lattice_ref.get_bond_by_id(bb).get_gid()
             if bbg == root_clstr:
 
@@ -609,11 +614,11 @@ class SitePercolation(Percolation):
             self.cluster_pool_ref.merge_cluster_with(root_clstr, bbg, self.lattice_ref)
             pass
 
-        for bbg in bond_gids:
-            if bbg == root_clstr:
-                # print("bb ", bbg, " is a root cluster")
-                continue
-            self.cluster_pool_ref.clear_cluster(bbg)
+        # for bbg in bond_gids:
+        #     if bbg == root_clstr:
+        #         # print("bb ", bbg, " is a root cluster")
+        #         continue
+        #     self.cluster_pool_ref.clear_cluster(bbg)
 
         return root_clstr
         pass

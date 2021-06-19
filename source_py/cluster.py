@@ -208,7 +208,7 @@ class ClusterPool:
         # print("adding ", self.cluster_list[cluster_B_id].site_ids)
         self.cluster_list[cluster_A_id].site_ids += self.cluster_list[cluster_B_id].site_ids
         # print("after ", self.cluster_list[cluster_A_id].site_ids)
-        # self.cluster_list[cluster_B_id].clear()
+        self.cluster_list[cluster_B_id].clear()
 
 
         pass

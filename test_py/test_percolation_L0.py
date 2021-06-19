@@ -40,7 +40,7 @@ def test_simulation_L0_seed(length=6, seed=310):
     # percolation.viewLattice(3)
     percolation.test_clusters()
     percolation.test_lattice()
-    # percolation.viewCluster()
+    percolation.viewCluster()
     # percolation.viewLattice()
     # pcs.append(percolation.get_tc())
     # aaa = percolation.get_data_array()

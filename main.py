@@ -73,7 +73,7 @@ if __name__ == '__main__':
     # run_simulations()
     # run_simulation_threads()
     # run_simulation_threads_v2()
-    run_simulation_threads_v3(20, 100, 4)
+    run_simulation_threads_v3(50, 2, 1)
     # run_simulation_threads_v3(100, 2000, 20)
     # run_simulation_threads_v3(150, 2000, 20)
     # run_simulation_threads_v3(200, 2000, 10)

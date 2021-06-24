@@ -70,11 +70,12 @@ class SitePercolation_old_def(SitePercolation):
         """
         fast entropy method will not work in old definition
         """
-        # with tf.device('/GPU:0'):
-        #     H = self.entropy_v3(self.cluster_sizes)
-        # return H.numpy()
+        with tf.device('/GPU:0'):
+            H = self.entropy_v3()
+            # H = self.entropy_v3()
+        return H.numpy()
 
-        return self.entropy_v4_numpy()
+        # return self.entropy_v4_numpy()
 
     def entropy_time(self):
         t = time.time()
@@ -91,45 +92,61 @@ class SitePercolation_old_def(SitePercolation):
 
         pass
 
-    # @tf.function
-    def entropy_v3(self, cluster_sizes):
+    @tf.function
+    def entropy_v3(self):
         """
         tensorflow version. runs on the gpu.
 
         For L=100 and one realization it tool ~10 sec for V3 but ~100 sec for V1.
         TF made it 10X faster.
         """
-        # print("Entry : entropy_v1 <<< ")
-        H = 0
-        mu_sum = 0
-        normalizer = tf.math.reduce_sum(cluster_sizes)
-        # _, normt = self.get_cluster_size(0)
+        normalizer = np.sum(self.cluster_sizes)
+        clustersizes = np.array(self.cluster_sizes)
+        mu_list = clustersizes[clustersizes > 0]/normalizer
+        Hlist = np.log(mu_list)*mu_list
+        H = -np.sum(Hlist)
+        tf.print("entropy ", H)
+        return H
 
-        # tf.print("normalizer = ", normalizer, " normTemp ", normt)
-        # if normalizer != normt:
-        #     self.viewCluster()
-        #     print(cluster_sizes)
-        #     exit(-1)
-        #     pass
-        # cluster_sizes_non_zero = cluster_sizes[cluster_sizes > 0]
-        for b_count in cluster_sizes:
-            mu = b_count / normalizer
-            if mu == 0:
-                # print("empty cluster")
-                continue
-            # print("v1mu = ", mu)
-            # tf.print("mu = ", mu)
-            # self.cluster_pool_ref.get_cluster(i).view()
-            mu_sum += mu
-            log_mu = tf.math.log(mu)
-            H += mu * log_mu
-            pass
-        # tf.print("mu_sum = ", mu_sum)
-        # self.entropy_value = -H
-        # return self.entropy_value
-        # assert abs(mu_sum - 1) < 1e-6
-        # print("Exit : entropy_v1 >>>")
-        return -H
+    # @tf.function
+    # def entropy_v3(self, cluster_sizes):
+    #     """
+    #     tensorflow version. runs on the gpu.
+    #
+    #     For L=100 and one realization it tool ~10 sec for V3 but ~100 sec for V1.
+    #     TF made it 10X faster.
+    #     """
+    #     # print("Entry : entropy_v1 <<< ")
+    #     H = 0
+    #     mu_sum = 0
+    #     normalizer = tf.math.reduce_sum(cluster_sizes)
+    #     # _, normt = self.get_cluster_size(0)
+    #
+    #     # tf.print("normalizer = ", normalizer, " normTemp ", normt)
+    #     # if normalizer != normt:
+    #     #     self.viewCluster()
+    #     #     print(cluster_sizes)
+    #     #     exit(-1)
+    #     #     pass
+    #     # cluster_sizes_non_zero = cluster_sizes[cluster_sizes > 0]
+    #     for b_count in cluster_sizes:
+    #         mu = b_count / normalizer
+    #         if mu == 0:
+    #             # print("empty cluster")
+    #             continue
+    #         # print("v1mu = ", mu)
+    #         # tf.print("mu = ", mu)
+    #         # self.cluster_pool_ref.get_cluster(i).view()
+    #         mu_sum += mu
+    #         log_mu = tf.math.log(mu)
+    #         H += mu * log_mu
+    #         pass
+    #     # tf.print("mu_sum = ", mu_sum)
+    #     # self.entropy_value = -H
+    #     # return self.entropy_value
+    #     # assert abs(mu_sum - 1) < 1e-6
+    #     # print("Exit : entropy_v1 >>>")
+    #     return -H
 
     def entropy_v4_numpy(self):
         """
